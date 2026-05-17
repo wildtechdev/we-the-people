@@ -1068,7 +1068,7 @@ function GlossaryView() {
         Glossary
       </h1>
       <p className="fade-in-up visible" style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-        50 essential terms in plain language.
+        240+ essential terms in plain language.
       </p>
 
       {/* Search */}

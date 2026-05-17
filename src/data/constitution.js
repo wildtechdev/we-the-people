@@ -78,7 +78,7 @@ export const constitution = {
           ],
           references: [
             { text: "Boumediene v. Bush (2008) -- Guantanamo detainees have habeas corpus rights. Congress cannot strip courts of this jurisdiction.", source: "553 U.S. 723" },
-            { text: "Lincoln suspended habeas corpus during the Civil War. Ex parte Merryman (1861) challenged this, but Lincoln ignored the court.", source: "17 F. Cas. 144" }
+            { text: "Ex parte Merryman (1861) -- Lincoln suspended habeas corpus during the Civil War. Chief Justice Taney ruled only Congress could do so, but Lincoln ignored the court.", source: "17 F. Cas. 144" }
           ]
         },
         {

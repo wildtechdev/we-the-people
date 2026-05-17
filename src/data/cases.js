@@ -1,7 +1,106 @@
-// Landmark court cases referenced throughout the app.
-// Each case has a summary, key facts, and a link to official records.
+// Landmark court cases and legal documents referenced throughout the app.
+// Each entry has a summary, key facts, and a link to official records.
+// type: "case" (default), "statute", "report", "book"
 
 export const cases = {
+  // ============================================================
+  // STATUTES, ACTS & LEGAL DOCUMENTS
+  // ============================================================
+
+  "National Emergencies Act (1976)": {
+    name: "National Emergencies Act",
+    year: 1976,
+    citation: "50 U.S.C. ch. 34",
+    amendment: "Art. I",
+    type: "statute",
+    summary: "A federal law enacted to limit the President's power to declare national emergencies. Before this act, presidents could declare emergencies with virtually no oversight or expiration. The law requires the President to specify which statutory powers are being activated, and it gives Congress the ability to review and terminate emergency declarations. It was a direct response to decades of unchecked emergency powers.",
+    outcome: "Established procedural requirements for national emergencies: presidential declarations must be published, Congress must be notified, and emergencies must be reviewed by Congress every six months. Congress can terminate an emergency by joint resolution.",
+    significance: "Despite its intent to rein in emergency powers, the Act has been criticized as largely ineffective. Dozens of national emergencies remain active for years or decades. The six-month review requirement is routinely ignored. Presidents have used emergency declarations to bypass normal legislative processes on issues from sanctions to border security.",
+    url: "https://uscode.house.gov/view.xhtml?path=/prelim@title50/chapter34&edition=prelim"
+  },
+  "Posse Comitatus Act (1878)": {
+    name: "Posse Comitatus Act",
+    year: 1878,
+    citation: "18 U.S.C. § 1385",
+    amendment: "Art. I",
+    type: "statute",
+    summary: "A federal law that prohibits the use of the United States military to enforce domestic civil laws. Enacted after Reconstruction, when federal troops were used extensively in the South to enforce laws and oversee elections, the Act was designed to prevent the military from becoming a tool of domestic law enforcement and political control.",
+    outcome: "Made it a federal crime to use the Army or Air Force (later extended to all branches) to execute civilian laws, except where expressly authorized by the Constitution or Congress. Violations can result in fines and imprisonment.",
+    significance: "The Act draws a critical line between military and civilian authority. However, exceptions have grown over time: the Insurrection Act allows the President to deploy troops domestically, and military assistance to civilian law enforcement for drug interdiction and border security has expanded significantly. The increasing militarization of police forces blurs this line from the other direction.",
+    url: "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title18-section1385&num=0&edition=prelim"
+  },
+  "War Powers Resolution (1973)": {
+    name: "War Powers Resolution",
+    year: 1973,
+    citation: "50 U.S.C. ch. 33",
+    amendment: "Art. I",
+    type: "statute",
+    summary: "A federal law passed over President Nixon's veto to reassert Congress's constitutional authority to declare war. After Presidents Truman, Johnson, and Nixon committed troops to extended conflicts without Congressional declarations of war, Congress enacted this resolution to require presidential consultation with and reporting to Congress before and during military operations.",
+    outcome: "Requires the President to notify Congress within 48 hours of committing armed forces to military action and prohibits forces from remaining deployed for more than 60 days (with a 30-day withdrawal period) without Congressional authorization or a formal declaration of war.",
+    significance: "Despite its intent, the War Powers Resolution has been largely ineffective. Presidents of both parties have either ignored it, claimed it is unconstitutional, or found workarounds. The U.S. has engaged in military operations in Libya, Syria, Yemen, and elsewhere with minimal Congressional involvement. No president has ever conceded the law's constitutionality.",
+    url: "https://uscode.house.gov/view.xhtml?path=/prelim@title50/chapter33&edition=prelim"
+  },
+  "DOJ Ferguson Report (2015)": {
+    name: "DOJ Investigation of the Ferguson Police Department",
+    year: 2015,
+    citation: "U.S. Department of Justice, Civil Rights Division",
+    amendment: "8th",
+    type: "report",
+    summary: "Following the shooting of Michael Brown in 2014, the Department of Justice conducted a comprehensive investigation of the Ferguson, Missouri police department and municipal court system. The report revealed a pattern of constitutional violations: the city used its police and courts primarily as revenue generators, imposing excessive fines and fees on residents, particularly Black residents, to fund city operations.",
+    outcome: "The investigation found that Ferguson's police department engaged in a pattern of unconstitutional conduct including: using traffic stops and arrests as revenue tools, imposing excessive fines for minor offenses, issuing arrest warrants for unpaid fines, and maintaining a system with severe racial disparities. The city entered into a consent decree requiring sweeping reforms.",
+    significance: "Became a landmark document in understanding how municipal court systems can become tools of oppression. Ferguson's model of funding government through aggressive fines and fees was found across the country. The report demonstrated how the Excessive Fines Clause (8th Amendment) and Equal Protection Clause (14th Amendment) are violated when justice systems prioritize revenue over rights.",
+    url: "https://www.justice.gov/sites/default/files/opa/press-releases/attachments/2015/03/04/ferguson_police_department_report.pdf"
+  },
+  "ACLU Report: War Comes Home (2014)": {
+    name: "War Comes Home: The Excessive Militarization of American Policing",
+    year: 2014,
+    citation: "American Civil Liberties Union",
+    amendment: "4th",
+    type: "report",
+    summary: "A comprehensive investigation by the ACLU documenting the dramatic increase in militarized policing across the United States. The report analyzed over 800 SWAT deployments and found that the vast majority were used for routine law enforcement purposes like drug searches, not the emergency situations they were designed for. It detailed how the Department of Defense's 1033 Program transferred billions of dollars worth of military equipment to local police.",
+    outcome: "The report found that 79% of SWAT deployments were for searching homes (usually for drugs), not active shooter or hostage situations. It documented that SWAT raids disproportionately targeted communities of color and that military equipment and tactics were being used against civilians with little oversight or accountability.",
+    significance: "The report drew a direct line from the Declaration of Independence's grievance about 'rendering the Military independent of and superior to the Civil power' to modern police militarization. It helped spark a national debate about police use of military equipment and influenced President Obama's Executive Order 13688 restricting transfer of certain military equipment to police.",
+    url: "https://www.aclu.org/publications/war-comes-home-excessive-militarization-american-police"
+  },
+  "John Locke, Second Treatise of Government (1689)": {
+    name: "Second Treatise of Government",
+    year: 1689,
+    citation: "John Locke",
+    amendment: "Preamble",
+    type: "book",
+    summary: "One of the most influential political philosophy texts in history, written by English philosopher John Locke. The treatise argues that all people possess natural rights to life, liberty, and property, that government exists only by the consent of the governed, and that when government fails to protect these rights, the people have the right to overthrow it. Thomas Jefferson drew heavily from Locke when drafting the Declaration of Independence.",
+    outcome: "Established the philosophical foundations of liberal democracy: natural rights, government by consent, separation of powers, and the right of revolution. These ideas became the intellectual bedrock of both the American and French Revolutions.",
+    significance: "The Declaration of Independence's most famous passage -- 'Life, Liberty and the pursuit of Happiness' -- is a direct adaptation of Locke's 'life, liberty, and property.' The entire structure of American government, from consent of the governed to the right to alter or abolish government, traces back to this text. It remains the most important philosophical source for understanding American constitutional principles.",
+    url: "https://www.gutenberg.org/ebooks/7370"
+  },
+  "Military Commissions Act (2006)": {
+    name: "Military Commissions Act",
+    year: 2006,
+    citation: "Pub.L. 109-366, 120 Stat. 2600",
+    amendment: "Art. I",
+    type: "statute",
+    summary: "A federal law enacted in response to the Supreme Court's decision in Hamdan v. Rumsfeld, which struck down the original military commission system at Guantanamo Bay. The Act authorized military commissions to try 'unlawful enemy combatants' and attempted to strip federal courts of habeas corpus jurisdiction over detainees held at Guantanamo.",
+    outcome: "Established military commissions with modified procedures for trying terrorism suspects. Stripped federal courts of jurisdiction to hear habeas corpus petitions from enemy combatants. However, the Supreme Court struck down the habeas-stripping provisions in Boumediene v. Bush (2008).",
+    significance: "Represented one of the most significant attempts to limit habeas corpus since the Civil War. The Supreme Court's rejection of its habeas-stripping provisions reaffirmed that the constitutional right to challenge detention cannot be eliminated by Congress without providing an adequate substitute, even during the war on terror.",
+    url: "https://www.congress.gov/109/plaws/publ366/PLAW-109publ366.htm"
+  },
+  "Ex parte Merryman (1861)": {
+    name: "Ex parte Merryman",
+    year: 1861,
+    citation: "17 F. Cas. 144",
+    amendment: "Art. I",
+    type: "case",
+    summary: "During the Civil War, President Lincoln suspended habeas corpus and authorized military detention of civilians suspected of aiding the Confederacy. John Merryman, a Maryland state legislator and Confederate sympathizer, was arrested by the military and held at Fort McHenry. Chief Justice Roger Taney, sitting as a circuit judge, ruled that only Congress -- not the President -- has the power to suspend habeas corpus.",
+    outcome: "Taney ordered Merryman's release, but Lincoln and the military ignored the order. The President argued that the emergency of civil war justified his actions and that the Constitution's habeas suspension clause does not specify which branch can invoke it.",
+    significance: "A dramatic test of constitutional limits during wartime. Lincoln's refusal to obey the court's order remains one of the most significant confrontations between executive power and judicial authority in American history. Congress eventually passed legislation retroactively authorizing Lincoln's suspensions in 1863.",
+    url: "https://www.loc.gov/item/llst017/"
+  },
+
+  // ============================================================
+  // COURT CASES
+  // ============================================================
+
+
   "Miranda v. Arizona (1966)": {
     name: "Miranda v. Arizona",
     year: 1966,

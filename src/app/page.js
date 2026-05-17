@@ -554,6 +554,15 @@ function CaseModal({ caseKey, onClose }) {
   const caseData = cases[caseKey];
   if (!caseData) return null;
 
+  const docType = caseData.type || 'case';
+  const typeLabels = {
+    case: { badge: 'Court Case', outcome: 'Outcome', link: 'Read Full Court Opinion' },
+    statute: { badge: 'Federal Law', outcome: 'Key Provisions', link: 'Read Official Text' },
+    report: { badge: 'Official Report', outcome: 'Key Findings', link: 'Read Full Report' },
+    book: { badge: 'Source Text', outcome: 'Core Ideas', link: 'Read Full Text' },
+  };
+  const labels = typeLabels[docType] || typeLabels.case;
+
   return (
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center" onClick={onClose}>
       <div className="absolute inset-0" style={{ background: 'rgba(27,42,74,0.5)', backdropFilter: 'blur(4px)' }} />
@@ -569,6 +578,11 @@ function CaseModal({ caseKey, onClose }) {
               <div className="flex items-center gap-2 mb-1">
                 <span className="amendment-badge" style={{ width: '24px', height: '24px', fontSize: '9px' }}>{caseData.amendment}</span>
                 <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{caseData.year}</span>
+                {docType !== 'case' && (
+                  <span style={{ fontSize: '9px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.05em', background: 'var(--crimson-bg)', padding: '2px 6px', borderRadius: '4px' }}>
+                    {labels.badge}
+                  </span>
+                )}
               </div>
               <h3 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif", lineHeight: '1.3' }}>
                 {caseData.name}
@@ -588,9 +602,9 @@ function CaseModal({ caseKey, onClose }) {
             {caseData.summary}
           </p>
 
-          {/* Outcome */}
+          {/* Outcome / Key Provisions / Key Findings */}
           <div className="p-4 rounded-xl mb-3" style={{ background: 'var(--navy-bg)', border: '1px solid var(--navy-lighter)' }}>
-            <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--navy)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Outcome</p>
+            <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--navy)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>{labels.outcome}</p>
             <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>{caseData.outcome}</p>
           </div>
 
@@ -611,7 +625,7 @@ function CaseModal({ caseKey, onClose }) {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
             </svg>
-            Read Full Court Opinion
+            {labels.link}
           </a>
         </div>
       </div>

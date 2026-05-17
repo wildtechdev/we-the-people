@@ -531,5 +531,425 @@ export const cases = {
     outcome: "Both prosecutions were allowed to stand. The dual sovereignty doctrine was upheld 7-2.",
     significance: "Confirmed that double jeopardy does not prevent successive state and federal prosecutions for the same act. This is often used in civil rights cases where state courts fail to convict -- the federal government can bring separate charges.",
     url: "https://supreme.justia.com/cases/federal/us/587/678/"
+  },
+  "Texas v. White (1869)": {
+    name: "Texas v. White",
+    year: 1869,
+    citation: "74 U.S. 700",
+    amendment: "Art. IV",
+    summary: "After the Civil War, the Reconstruction government of Texas sued to recover U.S. bonds that the Confederate state legislature had sold to finance the rebellion. The Supreme Court had to decide whether Texas was even a state at that point. Chief Justice Chase ruled that the Constitution created 'an indestructible Union, composed of indestructible States' -- secession was never legally valid.",
+    outcome: "Texas was deemed to have never left the Union. The bond sales by the Confederate legislature were void.",
+    significance: "Established that states cannot unilaterally secede from the Union. The Constitution creates a permanent union. However, the Court acknowledged that revolution or consent of the states could alter this relationship.",
+    url: "https://supreme.justia.com/cases/federal/us/74/700/"
+  },
+  "Griswold v. Connecticut (1965)": {
+    name: "Griswold v. Connecticut",
+    year: 1965,
+    citation: "381 U.S. 479",
+    amendment: "9th",
+    summary: "Connecticut law made it a crime to use contraceptives or to counsel others in their use. Estelle Griswold, director of a Planned Parenthood clinic, was convicted for providing contraceptive advice to married couples. The Supreme Court struck down the law, holding that the Bill of Rights contains implicit guarantees that create 'zones of privacy.'",
+    outcome: "The Connecticut contraceptive ban was struck down as unconstitutional.",
+    significance: "First recognized a constitutional right to privacy. Justice Douglas wrote that specific Bill of Rights guarantees have 'penumbras' -- implied protections that extend beyond their literal text. This became the foundation for privacy rights in American law.",
+    url: "https://supreme.justia.com/cases/federal/us/381/479/"
+  },
+  "Obergefell v. Hodges (2015)": {
+    name: "Obergefell v. Hodges",
+    year: 2015,
+    citation: "576 U.S. 644",
+    amendment: "14th",
+    summary: "James Obergefell married John Arthur in Maryland, but their home state of Ohio refused to recognize the marriage. Arthur was terminally ill and Obergefell wanted to be listed as the surviving spouse on the death certificate. The Supreme Court ruled 5-4 that the fundamental right to marry is guaranteed to same-sex couples under the Due Process and Equal Protection Clauses of the 14th Amendment.",
+    outcome: "Same-sex marriage became legal nationwide. All states must both license and recognize same-sex marriages.",
+    significance: "Extended the fundamental right to marry to same-sex couples. The Court declared that the right to marry is inherent in the liberty of the person and that same-sex couples 'ask for equal dignity in the eyes of the law.'",
+    url: "https://supreme.justia.com/cases/federal/us/576/644/"
+  },
+  "Youngstown Sheet & Tube Co. v. Sawyer (1952)": {
+    name: "Youngstown Sheet & Tube Co. v. Sawyer",
+    year: 1952,
+    citation: "343 U.S. 579",
+    amendment: "Art. II",
+    summary: "During the Korean War, President Truman ordered the seizure of steel mills to prevent a nationwide strike that he said would jeopardize national defense. The Supreme Court ruled 6-3 that the President lacked authority to seize private property without Congressional authorization, even during wartime.",
+    outcome: "The steel seizure was struck down. The mills were returned to their owners.",
+    significance: "The most important case on presidential power. Justice Jackson's concurrence created the three-category framework for evaluating executive authority that courts still use today: strongest when acting with Congress's support, uncertain in a 'zone of twilight,' and weakest when defying Congress.",
+    url: "https://supreme.justia.com/cases/federal/us/343/579/"
+  },
+  "West Virginia v. EPA (2022)": {
+    name: "West Virginia v. EPA",
+    year: 2022,
+    citation: "597 U.S. 697",
+    amendment: "Art. I",
+    summary: "The EPA issued a rule under the Clean Air Act that would have required power plants to shift electricity generation from coal to natural gas and renewables. West Virginia and other states challenged it. The Supreme Court ruled 6-3 that agencies cannot make decisions of such vast economic and political significance without clear Congressional authorization.",
+    outcome: "The EPA's Clean Power Plan was struck down.",
+    significance: "Established the 'major questions doctrine' as a formal rule: when an agency claims authority to make decisions of major economic or political significance, it must point to clear Congressional authorization. Congress, not agencies, must make the big calls.",
+    url: "https://supreme.justia.com/cases/federal/us/597/697/"
+  },
+  "U.S. Term Limits v. Thornton (1995)": {
+    name: "U.S. Term Limits v. Thornton",
+    year: 1995,
+    citation: "514 U.S. 779",
+    amendment: "Art. I",
+    summary: "Arkansas amended its state constitution to impose term limits on its Congressional representatives. The Supreme Court ruled 5-4 that states cannot add qualifications for Congress beyond those specified in the Constitution (age, citizenship, residency).",
+    outcome: "State-imposed Congressional term limits were struck down as unconstitutional.",
+    significance: "Only a constitutional amendment can change who is eligible to serve in Congress. States cannot unilaterally add requirements like term limits, wealth thresholds, or other qualifications beyond what the Constitution specifies.",
+    url: "https://supreme.justia.com/cases/federal/us/514/779/"
+  },
+  "Wickard v. Filburn (1942)": {
+    name: "Wickard v. Filburn",
+    year: 1942,
+    citation: "317 U.S. 111",
+    amendment: "Art. I",
+    summary: "Roscoe Filburn, an Ohio farmer, grew wheat on his own farm for his own consumption, exceeding his federal allotment under the Agricultural Adjustment Act. The Supreme Court unanimously ruled that even wheat grown for personal use affects interstate commerce in the aggregate, because it reduces the amount the farmer would buy on the open market.",
+    outcome: "Filburn's penalty was upheld. Even purely local, personal activity can be regulated by Congress.",
+    significance: "Represents the maximum expansion of the Commerce Clause. If growing wheat in your own backyard for your own chickens is 'interstate commerce,' virtually everything is. This case is why the federal government can regulate almost any economic activity.",
+    url: "https://supreme.justia.com/cases/federal/us/317/111/"
+  },
+  "Loper Bright Enterprises v. Raimondo (2024)": {
+    name: "Loper Bright Enterprises v. Raimondo",
+    year: 2024,
+    citation: "144 S. Ct. 2244",
+    amendment: "Art. III",
+    summary: "Fishing companies challenged a federal rule requiring them to pay for on-board monitors. The case became the vehicle for overturning Chevron deference -- the 40-year-old doctrine that courts should defer to agency interpretations of ambiguous statutes. The Supreme Court ruled 6-3 that courts must exercise independent judgment in interpreting statutes, not defer to agencies.",
+    outcome: "Chevron deference was overruled. Courts no longer automatically defer to agency interpretations.",
+    significance: "One of the most consequential administrative law decisions in decades. Shifted power from executive agencies back to courts and Congress. Agencies can no longer fill in gaps in legislation with their own preferred interpretations and expect judicial deference.",
+    url: "https://supreme.justia.com/cases/federal/us/603/369/"
+  },
+  "Boumediene v. Bush (2008)": {
+    name: "Boumediene v. Bush",
+    year: 2008,
+    citation: "553 U.S. 723",
+    amendment: "Art. I",
+    summary: "Lakhdar Boumediene, a Bosnian citizen detained at Guantanamo Bay, challenged his imprisonment. Congress had passed the Military Commissions Act stripping federal courts of jurisdiction to hear habeas corpus petitions from Guantanamo detainees. The Supreme Court ruled 5-4 that detainees at Guantanamo have a constitutional right to habeas corpus.",
+    outcome: "The habeas-stripping provisions of the Military Commissions Act were struck down.",
+    significance: "Established that the constitutional right to habeas corpus extends to Guantanamo Bay and cannot be suspended by Congress without providing an adequate substitute. Even in the war on terror, the government cannot hold people indefinitely without judicial review.",
+    url: "https://supreme.justia.com/cases/federal/us/553/723/"
+  },
+  "Home Building & Loan Assn. v. Blaisdell (1934)": {
+    name: "Home Building & Loan Assn. v. Blaisdell",
+    year: 1934,
+    citation: "290 U.S. 398",
+    amendment: "Art. I",
+    summary: "During the Great Depression, Minnesota passed a mortgage moratorium law allowing courts to extend the period homeowners had to redeem foreclosed properties. The Home Building & Loan Association challenged it as impairing the obligation of contracts. The Supreme Court upheld the law 5-4, ruling that states can exercise emergency powers to modify contract obligations temporarily during genuine crises.",
+    outcome: "The Minnesota mortgage moratorium was upheld as a valid exercise of state emergency power.",
+    significance: "Established that the Contract Clause is not absolute -- states can temporarily modify private contracts during genuine emergencies to protect the public welfare. However, the modification must be temporary, reasonable, and proportional to the emergency.",
+    url: "https://supreme.justia.com/cases/federal/us/290/398/"
+  },
+  "Trump v. United States (2024)": {
+    name: "Trump v. United States",
+    year: 2024,
+    citation: "144 S. Ct. 2312",
+    amendment: "Art. II",
+    summary: "Former President Trump was indicted on federal charges related to efforts to overturn the 2020 election. He claimed presidential immunity. The Supreme Court ruled 6-3 that presidents have absolute immunity from criminal prosecution for official acts within their core constitutional authority, and presumptive immunity for other official acts.",
+    outcome: "The case was sent back to determine which of Trump's actions were 'official' versus 'unofficial.'",
+    significance: "First time the Supreme Court addressed presidential criminal immunity. Created a framework distinguishing between official acts (immune) and unofficial acts (not immune). Critics argue it places the president above the law; supporters say it protects the presidency from politically motivated prosecution.",
+    url: "https://supreme.justia.com/cases/federal/us/603/593/"
+  },
+  "NLRB v. Noel Canning (2014)": {
+    name: "NLRB v. Noel Canning",
+    year: 2014,
+    citation: "573 U.S. 513",
+    amendment: "Art. II",
+    summary: "President Obama made recess appointments to the National Labor Relations Board while the Senate was holding pro forma sessions every three days. The Supreme Court unanimously ruled these appointments invalid because the Senate was not truly in recess -- it was holding brief sessions specifically to block recess appointments.",
+    outcome: "The recess appointments were invalidated. Actions taken by the improperly constituted NLRB were void.",
+    significance: "Limited presidential recess appointment power. The Senate determines whether it is in session, and pro forma sessions count as sessions. Presidents cannot circumvent Senate confirmation by declaring the Senate to be in recess when it says it isn't.",
+    url: "https://supreme.justia.com/cases/federal/us/573/513/"
+  },
+  "Nixon v. United States (1993)": {
+    name: "Nixon v. United States",
+    year: 1993,
+    citation: "506 U.S. 224",
+    amendment: "Art. I",
+    summary: "Federal Judge Walter Nixon was impeached by the House and convicted by the Senate using a committee procedure rather than a trial before the full Senate. Nixon (no relation to President Nixon) argued the Senate had to conduct a full trial. The Supreme Court ruled that the question of how the Senate conducts impeachment trials is a 'political question' not reviewable by courts.",
+    outcome: "Nixon's challenge was dismissed. The Senate's impeachment procedures are unreviewable by courts.",
+    significance: "Established that impeachment is entirely a political process. Courts cannot second-guess how Congress conducts impeachment proceedings. The Constitution gives the House 'sole' power to impeach and the Senate 'sole' power to try -- 'sole' means courts stay out.",
+    url: "https://supreme.justia.com/cases/federal/us/506/224/"
+  },
+  "Marbury v. Madison (1803)": {
+    name: "Marbury v. Madison",
+    year: 1803,
+    citation: "5 U.S. 137",
+    amendment: "Art. III",
+    summary: "William Marbury was appointed as a justice of the peace by outgoing President Adams, but incoming Secretary of State James Madison refused to deliver his commission. Marbury sued. Chief Justice Marshall ruled that while Marbury had a right to his commission, the Court lacked jurisdiction to order its delivery -- and more importantly, that the Judiciary Act provision Marbury relied on was unconstitutional.",
+    outcome: "Marbury lost his commission, but the Court gained something far greater: the power of judicial review.",
+    significance: "The most important case in American constitutional law. Established judicial review -- the power of courts to declare laws unconstitutional. This power is not explicitly in the Constitution; the Supreme Court claimed it for itself and it has been the foundation of constitutional law ever since.",
+    url: "https://supreme.justia.com/cases/federal/us/5/137/"
+  },
+  "Saenz v. Roe (1999)": {
+    name: "Saenz v. Roe",
+    year: 1999,
+    citation: "526 U.S. 489",
+    amendment: "14th",
+    summary: "California limited new residents to the welfare benefits they would have received in their prior state of residence for their first year. The Supreme Court struck down the law, ruling that the right to travel includes the right of newly arrived citizens to be treated the same as longer-term residents.",
+    outcome: "California's durational residency requirement for welfare benefits was struck down.",
+    significance: "Confirmed three components of the right to travel: the right to enter and leave any state, the right to be treated as a welcome visitor when temporarily present, and the right to be treated like all other citizens upon establishing residency.",
+    url: "https://supreme.justia.com/cases/federal/us/526/489/"
+  },
+  "Cooper v. Aaron (1958)": {
+    name: "Cooper v. Aaron",
+    year: 1958,
+    citation: "358 U.S. 1",
+    amendment: "Art. VI",
+    summary: "After Brown v. Board of Education ordered school desegregation, the Little Rock, Arkansas school board sought to delay integration, citing public hostility and violence. Governor Faubus had called in the National Guard to block Black students. The Supreme Court unanimously and emphatically rejected the delay, with all nine justices individually signing the opinion.",
+    outcome: "The delay was denied. Desegregation could not be postponed because of public opposition.",
+    significance: "Established that state officials are bound by Supreme Court decisions and cannot nullify them. The Constitution is the supreme law as interpreted by the Supreme Court, and no state official can defy it -- not a governor, not a legislature, not a school board.",
+    url: "https://supreme.justia.com/cases/federal/us/358/1/"
+  },
+  "Cramer v. United States (1945)": {
+    name: "Cramer v. United States",
+    year: 1945,
+    citation: "325 U.S. 1",
+    amendment: "Art. III",
+    summary: "Anthony Cramer, a German-born U.S. citizen, met with two Nazi saboteurs who had landed by submarine during World War II. He was convicted of treason. The Supreme Court reversed the conviction, ruling that the 'two-witness' requirement for treason means both witnesses must testify to the same overt act, and the act itself must be unambiguously treasonous.",
+    outcome: "Cramer's treason conviction was reversed due to insufficient evidence of an overt treasonous act.",
+    significance: "Set an extremely high bar for treason convictions. Meeting with enemy agents, without more, is not enough. The Founders deliberately made treason very hard to prove because governments historically used treason charges to silence political opponents.",
+    url: "https://supreme.justia.com/cases/federal/us/325/1/"
+  },
+  "New York Times v. Sullivan (1964)": {
+    name: "New York Times v. Sullivan",
+    year: 1964,
+    citation: "376 U.S. 254",
+    amendment: "1st",
+    summary: "L.B. Sullivan, a Montgomery, Alabama city commissioner, sued the New York Times over an advertisement that contained minor factual errors about civil rights protests. An Alabama jury awarded $500,000 in damages. The Supreme Court reversed, holding that public officials cannot recover for defamation unless they prove 'actual malice' -- knowledge that the statement was false or reckless disregard for its truth.",
+    outcome: "The verdict was reversed. The 'actual malice' standard was established for public official defamation cases.",
+    significance: "The most important press freedom case in American history. Without this protection, a single defamation lawsuit could bankrupt a newspaper, creating a powerful tool for officials to silence criticism. The ruling ensures robust public debate about government officials can continue even when reporting contains honest mistakes.",
+    url: "https://supreme.justia.com/cases/federal/us/376/254/"
+  },
+  "Katz v. United States (1967)": {
+    name: "Katz v. United States",
+    year: 1967,
+    citation: "389 U.S. 347",
+    amendment: "4th",
+    summary: "FBI agents attached a listening device to the outside of a public phone booth used by Charles Katz to transmit illegal gambling wagers. The government argued no search occurred because they didn't physically enter the booth. The Supreme Court rejected this, ruling that the 4th Amendment 'protects people, not places' and that Katz had a reasonable expectation of privacy in his phone conversation.",
+    outcome: "The wiretap evidence was suppressed. Electronic surveillance is a 'search' under the 4th Amendment.",
+    significance: "Revolutionized Fourth Amendment law by shifting from a property-based analysis to a privacy-based one. Justice Harlan's concurrence created the 'reasonable expectation of privacy' test that courts still use today: you must have a subjective expectation of privacy that society recognizes as reasonable.",
+    url: "https://supreme.justia.com/cases/federal/us/389/347/"
+  },
+  "Crawford v. Washington (2004)": {
+    name: "Crawford v. Washington",
+    year: 2004,
+    citation: "541 U.S. 36",
+    amendment: "6th",
+    summary: "Michael Crawford was convicted of assault. At trial, the prosecution played a tape-recorded statement from his wife to police, but she didn't testify because of spousal privilege. Crawford argued he had no opportunity to cross-examine her. The Supreme Court ruled that 'testimonial' out-of-court statements cannot be used against a defendant unless the witness is unavailable and the defendant had a prior opportunity to cross-examine.",
+    outcome: "Crawford's conviction was reversed. The Confrontation Clause bars testimonial hearsay without cross-examination.",
+    significance: "Strengthened the right to confront your accusers. Police statements, affidavits, and prior testimony cannot be used as evidence unless the defendant gets to cross-examine the witness. Changed how prosecutors can use witness statements at trial.",
+    url: "https://supreme.justia.com/cases/federal/us/541/36/"
+  },
+  "Epic Systems Corp. v. Lewis (2018)": {
+    name: "Epic Systems Corp. v. Lewis",
+    year: 2018,
+    citation: "584 U.S. 497",
+    amendment: "7th",
+    summary: "Employees at several companies challenged mandatory arbitration agreements that required them to resolve disputes individually, waiving their right to pursue class or collective actions. The Supreme Court ruled 5-4 that the Federal Arbitration Act requires enforcement of these agreements as written, even when they prohibit class actions.",
+    outcome: "Mandatory individual arbitration clauses in employment contracts were upheld.",
+    significance: "Means employers can require workers to give up their right to class action lawsuits and instead resolve disputes one-by-one in private arbitration. Critics argue this makes it economically impossible for individual workers to challenge widespread workplace violations.",
+    url: "https://supreme.justia.com/cases/federal/us/584/497/"
+  },
+  "AT&T Mobility v. Concepcion (2011)": {
+    name: "AT&T Mobility v. Concepcion",
+    year: 2011,
+    citation: "563 U.S. 333",
+    amendment: "7th",
+    summary: "Vincent and Liza Concepcion signed a cell phone contract with AT&T that included an arbitration clause banning class actions. They sued AT&T for charging sales tax on phones advertised as free. The Supreme Court ruled 5-4 that the Federal Arbitration Act preempts state laws that would invalidate class-action waivers in arbitration agreements.",
+    outcome: "AT&T's class-action waiver was upheld. Companies can force individual arbitration.",
+    significance: "Made it much harder for consumers to band together in class action lawsuits against corporations. When individual claims are small (a few dollars of overcharging), no one will pursue individual arbitration, effectively shielding companies from accountability for widespread small-dollar fraud.",
+    url: "https://supreme.justia.com/cases/federal/us/563/333/"
+  },
+  "Graham v. Florida (2010)": {
+    name: "Graham v. Florida",
+    year: 2010,
+    citation: "560 U.S. 48",
+    amendment: "8th",
+    summary: "Terrance Graham was 16 when he committed armed robbery. After violating probation at 17, he was sentenced to life without parole. The Supreme Court ruled that the 8th Amendment prohibits sentencing a juvenile to life without parole for a non-homicide offense.",
+    outcome: "Graham's life-without-parole sentence was struck down. Juveniles convicted of non-homicide offenses must have a meaningful opportunity for release.",
+    significance: "Recognized that juveniles are fundamentally different from adults in terms of culpability. Children have greater capacity for change, and sentencing them to die in prison for non-homicide crimes is cruel and unusual punishment.",
+    url: "https://supreme.justia.com/cases/federal/us/560/48/"
+  },
+  "Richmond Newspapers v. Virginia (1980)": {
+    name: "Richmond Newspapers v. Virginia",
+    year: 1980,
+    citation: "448 U.S. 555",
+    amendment: "1st",
+    summary: "A murder defendant's trial was closed to the public after three previous mistrials. Richmond Newspapers challenged the closure. The Supreme Court ruled 7-1 that the First Amendment guarantees a right of public access to criminal trials.",
+    outcome: "The trial closure was ruled unconstitutional. Criminal trials must be open to the public and press.",
+    significance: "Established a First Amendment right of public access to criminal trials. Open trials ensure fairness, maintain public confidence in the justice system, and serve as a check on judicial power. Secret trials are antithetical to a free society.",
+    url: "https://supreme.justia.com/cases/federal/us/448/555/"
+  },
+  "United States v. Lopez (1995)": {
+    name: "United States v. Lopez",
+    year: 1995,
+    citation: "514 U.S. 549",
+    amendment: "Art. I",
+    summary: "Alfonso Lopez, a 12th-grade student, carried a concealed handgun to school. He was charged under the federal Gun-Free School Zones Act. The Supreme Court ruled 5-4 that Congress exceeded its Commerce Clause power because possessing a gun in a school zone was not economic activity that substantially affected interstate commerce.",
+    outcome: "The Gun-Free School Zones Act was struck down as exceeding Congress's commerce power.",
+    significance: "The first case in 60 years to strike down a federal law as exceeding Commerce Clause authority. Signaled that there are outer limits to federal power under the Commerce Clause, even after Wickard v. Filburn's expansive reading.",
+    url: "https://supreme.justia.com/cases/federal/us/514/549/"
+  },
+  "National Federation of Independent Business v. Sebelius (2012)": {
+    name: "National Federation of Independent Business v. Sebelius",
+    year: 2012,
+    citation: "567 U.S. 519",
+    amendment: "Art. I",
+    summary: "26 states challenged the Affordable Care Act's individual mandate and Medicaid expansion. The Supreme Court upheld the individual mandate as a valid exercise of the taxing power (not the Commerce Clause) but struck down the Medicaid expansion's enforcement mechanism, ruling that threatening to revoke all existing Medicaid funding from non-complying states was unconstitutionally coercive.",
+    outcome: "The ACA was largely upheld, but the Medicaid expansion became optional for states.",
+    significance: "Set important limits on federal power: Congress cannot use the Commerce Clause to compel people to buy something, and cannot threaten states with losing all existing funding to force compliance with new programs. The spending power has limits.",
+    url: "https://supreme.justia.com/cases/federal/us/567/519/"
+  },
+  "Printz v. United States (1997)": {
+    name: "Printz v. United States",
+    year: 1997,
+    citation: "521 U.S. 898",
+    amendment: "10th",
+    summary: "The Brady Handgun Violence Prevention Act required local law enforcement to conduct background checks on handgun purchasers. Jay Printz, a Montana sheriff, challenged this requirement. The Supreme Court ruled 5-4 that the federal government cannot 'commandeer' state and local officials to enforce federal regulatory programs.",
+    outcome: "The provision requiring local officers to conduct federal background checks was struck down.",
+    significance: "Established the anti-commandeering doctrine: the federal government cannot compel state or local officials to administer federal law. States can choose to cooperate, but cannot be forced to. This principle has been invoked in immigration enforcement and marijuana legalization contexts.",
+    url: "https://supreme.justia.com/cases/federal/us/521/898/"
+  },
+  "Ex parte Young (1908)": {
+    name: "Ex parte Young",
+    year: 1908,
+    citation: "209 U.S. 123",
+    amendment: "11th",
+    summary: "Shareholders of railroad companies sought to enjoin Minnesota's Attorney General Edward Young from enforcing allegedly unconstitutional railroad rate regulations. Young claimed sovereign immunity under the 11th Amendment. The Supreme Court created a fiction: when a state official acts unconstitutionally, they are 'stripped of their official character' and can be sued as an individual, not as the state.",
+    outcome: "State officials can be sued in federal court to stop ongoing constitutional violations.",
+    significance: "Created the crucial workaround to sovereign immunity. You can't sue a state, but you can sue the state official responsible for an unconstitutional act. Without this doctrine, states could violate the Constitution with impunity. It remains one of the most important tools for enforcing constitutional rights.",
+    url: "https://supreme.justia.com/cases/federal/us/209/123/"
+  },
+  "Alden v. Maine (1999)": {
+    name: "Alden v. Maine",
+    year: 1999,
+    citation: "527 U.S. 706",
+    amendment: "11th",
+    summary: "Probation officers sued Maine in state court for violating the Fair Labor Standards Act's overtime provisions. The Supreme Court ruled 5-4 that states have sovereign immunity from private suits in their own state courts as well as federal courts, absent consent.",
+    outcome: "The suit was barred by sovereign immunity even in state court.",
+    significance: "Extended sovereign immunity beyond the text of the 11th Amendment (which only mentions federal court). States cannot be forced to defend themselves against private lawsuits in any court unless they consent. This makes it harder to hold state governments accountable.",
+    url: "https://supreme.justia.com/cases/federal/us/527/706/"
+  },
+  "Chiafalo v. Washington (2020)": {
+    name: "Chiafalo v. Washington",
+    year: 2020,
+    citation: "591 U.S. 578",
+    amendment: "12th",
+    summary: "Three Washington state presidential electors in 2016 voted for Colin Powell instead of Hillary Clinton, who won Washington's popular vote. They were fined $1,000 each under state law. The Supreme Court unanimously upheld the fines, ruling that states can enforce pledges that require electors to vote for their party's candidate.",
+    outcome: "States can penalize or replace 'faithless electors' who don't vote as pledged.",
+    significance: "Resolved a long-standing question about the Electoral College: electors are not free agents. States have broad power to ensure electors vote according to the popular vote in that state, preventing individual electors from overriding the will of the voters.",
+    url: "https://supreme.justia.com/cases/federal/us/591/578/"
+  },
+  "Jones v. Alfred H. Mayer Co. (1968)": {
+    name: "Jones v. Alfred H. Mayer Co.",
+    year: 1968,
+    citation: "392 U.S. 409",
+    amendment: "13th",
+    summary: "Joseph Lee Jones, a Black man, alleged that the Alfred H. Mayer Company refused to sell him a home because of his race. The Supreme Court ruled that the 13th Amendment gives Congress power to prohibit all racial discrimination, private and public, in the sale or rental of property.",
+    outcome: "Private racial discrimination in housing was ruled illegal under the 13th Amendment.",
+    significance: "Established that the 13th Amendment is not limited to literal slavery -- it empowers Congress to eliminate all 'badges and incidents of slavery,' including private racial discrimination. This was a landmark in the argument that constitutional rights can reach private conduct.",
+    url: "https://supreme.justia.com/cases/federal/us/392/409/"
+  },
+  "Brown v. Board of Education (1954)": {
+    name: "Brown v. Board of Education",
+    year: 1954,
+    citation: "347 U.S. 483",
+    amendment: "14th",
+    summary: "Linda Brown, a Black third-grader in Topeka, Kansas, had to walk a mile to her segregated school when a white school was only seven blocks away. Her father sued. The Supreme Court unanimously ruled that racial segregation in public schools violates the Equal Protection Clause, overturning the 'separate but equal' doctrine of Plessy v. Ferguson (1896).",
+    outcome: "Racial segregation in public schools was declared unconstitutional.",
+    significance: "Perhaps the most important civil rights case in American history. Chief Justice Warren wrote: 'Separate educational facilities are inherently unequal.' Launched the modern civil rights movement and the legal dismantling of Jim Crow laws across America.",
+    url: "https://supreme.justia.com/cases/federal/us/347/483/"
+  },
+  "Loving v. Virginia (1967)": {
+    name: "Loving v. Virginia",
+    year: 1967,
+    citation: "388 U.S. 1",
+    amendment: "14th",
+    summary: "Richard Loving, a white man, and Mildred Jeter, a Black woman, married in Washington D.C. and returned to their home in Virginia, where interracial marriage was a felony. They were convicted and sentenced to a year in jail, suspended on condition they leave Virginia for 25 years. The Supreme Court unanimously struck down Virginia's anti-miscegenation law.",
+    outcome: "Bans on interracial marriage were struck down nationwide.",
+    significance: "Established that the freedom to marry is a fundamental right protected by the Due Process and Equal Protection Clauses. The Court declared: 'The freedom to marry has long been recognized as one of the vital personal rights essential to the orderly pursuit of happiness by free men.'",
+    url: "https://supreme.justia.com/cases/federal/us/388/1/"
+  },
+  "Harlow v. Fitzgerald (1982)": {
+    name: "Harlow v. Fitzgerald",
+    year: 1982,
+    citation: "457 U.S. 800",
+    amendment: "14th",
+    summary: "A. Ernest Fitzgerald, a Pentagon whistleblower, was fired after testifying before Congress about $2 billion in cost overruns. He sued White House aide Bryce Harlow. The Supreme Court established the modern qualified immunity standard: government officials are shielded from liability unless their conduct violates 'clearly established' statutory or constitutional rights that a reasonable person would have known.",
+    outcome: "Created the 'clearly established law' test for qualified immunity.",
+    significance: "Established the qualified immunity doctrine that shields government officials from personal liability for constitutional violations unless the specific right violated was 'clearly established.' Critics argue this creates a nearly insurmountable barrier for victims of government abuse, since courts require highly specific prior precedent.",
+    url: "https://supreme.justia.com/cases/federal/us/457/800/"
+  },
+  "Shelby County v. Holder (2013)": {
+    name: "Shelby County v. Holder",
+    year: 2013,
+    citation: "570 U.S. 529",
+    amendment: "15th",
+    summary: "Shelby County, Alabama challenged the Voting Rights Act's preclearance requirement, which required jurisdictions with histories of voting discrimination to get federal approval before changing voting rules. The Supreme Court ruled 5-4 that the coverage formula used to determine which jurisdictions needed preclearance was outdated and unconstitutional.",
+    outcome: "The preclearance coverage formula was struck down, effectively ending federal pre-approval of voting changes.",
+    significance: "Gutted a core protection of the Voting Rights Act. Within hours of the decision, several states began enacting voting restrictions that would have previously required federal approval. Justice Ginsburg's dissent compared it to 'throwing away your umbrella in a rainstorm because you are not getting wet.'",
+    url: "https://supreme.justia.com/cases/federal/us/570/529/"
+  },
+  "Brnovich v. Democratic National Committee (2021)": {
+    name: "Brnovich v. Democratic National Committee",
+    year: 2021,
+    citation: "594 U.S. 647",
+    amendment: "15th",
+    summary: "Arizona enacted two voting provisions: one discarding ballots cast in the wrong precinct and another criminalizing ballot collection by third parties ('ballot harvesting'). The Democratic National Committee challenged both as violating Section 2 of the Voting Rights Act because they disproportionately affected minority voters.",
+    outcome: "Both Arizona voting restrictions were upheld 6-3.",
+    significance: "Made it significantly harder to challenge voting restrictions under the Voting Rights Act. The Court created new guideposts that favor upholding restrictions, including the 'usual burdens of voting' concept -- if a restriction imposes only typical inconveniences, disparate impact alone doesn't violate the VRA.",
+    url: "https://supreme.justia.com/cases/federal/us/594/647/"
+  },
+  "Pollock v. Farmers' Loan & Trust Co. (1895)": {
+    name: "Pollock v. Farmers' Loan & Trust Co.",
+    year: 1895,
+    citation: "157 U.S. 429",
+    amendment: "Art. I",
+    summary: "Charles Pollock challenged the federal income tax enacted in 1894. The Supreme Court ruled that taxes on income from property (rents, dividends, interest) were 'direct taxes' that had to be apportioned among states by population, effectively striking down the income tax as unconstitutional.",
+    outcome: "The federal income tax was struck down.",
+    significance: "This decision made a federal income tax practically impossible, since apportioning it by population would create absurd results. It directly led to the 16th Amendment (1913), which explicitly granted Congress the power to tax income without apportionment.",
+    url: "https://supreme.justia.com/cases/federal/us/157/429/"
+  },
+  "Minor v. Happersett (1875)": {
+    name: "Minor v. Happersett",
+    year: 1875,
+    citation: "88 U.S. 162",
+    amendment: "14th",
+    summary: "Virginia Minor attempted to register to vote in Missouri and was turned away because she was a woman. She argued the 14th Amendment's citizenship and privileges or immunities clauses guaranteed her right to vote. The Supreme Court unanimously ruled that while women were citizens, citizenship alone did not confer the right to vote.",
+    outcome: "Minor's claim was denied. Women could be citizens without the right to vote.",
+    significance: "The ruling that citizenship didn't include suffrage made clear that a constitutional amendment was needed to guarantee women's right to vote. It fueled the suffrage movement that ultimately led to the 19th Amendment in 1920.",
+    url: "https://supreme.justia.com/cases/federal/us/88/162/"
+  },
+  "Oregon v. Mitchell (1970)": {
+    name: "Oregon v. Mitchell",
+    year: 1970,
+    citation: "400 U.S. 112",
+    amendment: "14th",
+    summary: "Congress lowered the voting age to 18 for all elections through the Voting Rights Act Amendments of 1970. Oregon and other states challenged this. The Supreme Court ruled that Congress could set the voting age for federal elections but not state elections.",
+    outcome: "The federal voting age was upheld at 18, but states could set their own age for state elections.",
+    significance: "Created the absurd situation where 18-year-olds could vote for president but not for governor in the same election. This forced the rapid adoption of the 26th Amendment (ratified in just 107 days), which set 18 as the voting age for all elections.",
+    url: "https://supreme.justia.com/cases/federal/us/400/112/"
+  },
+  "Adams v. Clinton (2000)": {
+    name: "Adams v. Clinton",
+    year: 2000,
+    citation: "90 F. Supp. 2d 35 (D.D.C.)",
+    amendment: "23rd",
+    summary: "D.C. residents sued for voting representation in Congress, arguing that lack of representation violated their constitutional rights. The federal district court ruled that D.C. residents have no constitutional right to voting representation in Congress because the Constitution grants House representation only to 'the People of the several States,' and D.C. is not a state.",
+    outcome: "D.C. residents' claim for Congressional representation was denied.",
+    significance: "Highlighted the unique constitutional status of D.C. residents: they can vote for President (23rd Amendment) but have no voting representation in Congress. Over 700,000 American citizens remain without full congressional representation.",
+    url: "https://law.justia.com/cases/federal/district-courts/FSupp2/90/35/2382953/"
+  },
+  "Jones v. Governor of Florida (2020)": {
+    name: "Jones v. Governor of Florida",
+    year: 2020,
+    citation: "975 F.3d 1016 (11th Cir.)",
+    amendment: "24th",
+    summary: "Florida voters passed Amendment 4 in 2018, restoring voting rights to most felons who completed their sentences. The legislature then required payment of all outstanding fines, fees, and restitution before voting rights could be restored. Felons challenged this as a modern poll tax. The 11th Circuit upheld the payment requirement 6-4.",
+    outcome: "The fines-and-fees requirement was upheld. Felons must pay all financial obligations before voting.",
+    significance: "Raised sharp debate about whether requiring payment of financial obligations before restoring voting rights functions as a modern poll tax. The dissent argued that conditioning a fundamental right on ability to pay is unconstitutional wealth-based discrimination.",
+    url: "https://law.justia.com/cases/federal/appellate-courts/ca11/20-12003/20-12003-2020-09-11.html"
+  },
+  "Mitchell v. City of Henderson (2015)": {
+    name: "Mitchell v. City of Henderson",
+    year: 2015,
+    citation: "No. 2:13-cv-01154 (D. Nev.)",
+    amendment: "3rd",
+    summary: "Anthony Mitchell alleged that Henderson, Nevada police officers forcibly occupied his home to gain a tactical advantage against a neighbor suspected of domestic violence. When Mitchell refused to let officers use his home, they broke down his door, shot him with pepper balls, and arrested him. He sued under the Third Amendment.",
+    outcome: "The court dismissed the Third Amendment claim, ruling that police officers are not 'soldiers.' The case settled for other claims.",
+    significance: "A rare modern invocation of the Third Amendment. While the court rejected the claim, the case highlighted how police militarization raises questions about the amendment's underlying principle: the government cannot commandeer private homes for military or quasi-military purposes.",
+    url: "https://law.justia.com/cases/federal/district-courts/nevada/nvdce/2:2013cv01154/95906/27/"
   }
 };

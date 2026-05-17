@@ -652,6 +652,41 @@ function CaseReference({ caseKey, children, onOpenCase }) {
 }
 
 // ============================================================
+// INLINE CASE PARSER (finds case names in running text)
+// ============================================================
+
+function TextWithCases({ text, onOpenCase }) {
+  if (!onOpenCase) return <>{text}</>;
+
+  // Build regex from all case keys
+  const caseKeys = Object.keys(cases);
+  if (caseKeys.length === 0) return <>{text}</>;
+
+  // Escape special regex chars in case names, sort longest first to match greedily
+  const escaped = caseKeys
+    .sort((a, b) => b.length - a.length)
+    .map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const regex = new RegExp(`(${escaped.join('|')})`, 'g');
+
+  const parts = text.split(regex);
+  if (parts.length === 1) return <>{text}</>;
+
+  return (
+    <>
+      {parts.map((part, i) =>
+        cases[part] ? (
+          <CaseReference key={i} caseKey={part} onOpenCase={onOpenCase}>
+            {part}
+          </CaseReference>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
+}
+
+// ============================================================
 // HELPER: Find amendment data for bridging Rights to Library
 // ============================================================
 
@@ -788,7 +823,9 @@ function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
                   <div className="p-4 rounded-xl border" style={{ background: 'var(--gold-bg)', borderColor: 'var(--gold)', borderWidth: '1px' }}>
                     <div className="stars-decoration" />
                     <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>How This Protects You</p>
-                    <p style={{ fontSize: '14px', lineHeight: '1.7', color: 'var(--text-primary)' }}>{section.rights}</p>
+                    <p style={{ fontSize: '14px', lineHeight: '1.7', color: 'var(--text-primary)' }}>
+                      <TextWithCases text={section.rights} onOpenCase={onOpenCase} />
+                    </p>
                   </div>
                 )}
 
@@ -798,7 +835,9 @@ function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
                     {section.examples.map((ex, i) => (
                       <div key={i} className="flex gap-3 items-start mb-2 last:mb-0">
                         <span style={{ color: 'var(--crimson)', fontSize: '11px', fontWeight: '800', marginTop: '3px', flexShrink: 0 }}>{i + 1}</span>
-                        <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>{ex}</p>
+                        <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>
+                          <TextWithCases text={ex} onOpenCase={onOpenCase} />
+                        </p>
                       </div>
                     ))}
                   </div>

@@ -2,16 +2,15 @@
 cd "$(dirname "$0")"
 rm -f .git/index.lock
 git add -A
-git commit -m "Add clickable court cases, enriched Rights Guide, and 10 new scenarios
+git commit -m "Make all court case references clickable across entire Library
 
-- Built CaseModal with rich case details (summary, outcome, significance, citation, link to official records)
-- Created CaseReference component making all court case names clickable throughout the app
-- Updated ContinuousSection to render references as clickable case cards
-- Completely enriched RightsView: expandable right cards with case previews, amendment source text, and links back to the Library
-- Added 10 new Know Your Rights scenarios: Workplace, Students, Immigration, Firearms, Housing, Jury Duty, Healthcare, Social Media, Federal Agents
-- Added 25+ new court cases to cases.js database
-- New situation icons for all new scenarios
-- 'Read the Source Documents' CTA bridges Rights back to Library"
+- Added 43 new court cases to cases.js (now 70+ total)
+- Every case mentioned in Declaration, Constitution, Bill of Rights, and Amendments 11-27 now has full details
+- Created TextWithCases component that auto-detects case names in running text and makes them clickable
+- Examples/infringements text now has inline clickable case references
+- Rights explanations text also parses for inline case mentions
+- References section shows each case as a clickable card with citation
+- All cases link to official court records on Justia"
 git push origin main
 rm -- "$0"
 echo ""

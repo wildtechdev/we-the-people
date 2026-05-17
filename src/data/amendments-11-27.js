@@ -10,12 +10,12 @@ export const laterAmendments = {
       translation: "You can't sue a state in federal court if you're from a different state or a foreign country.",
       rights: "This limits your ability to hold state governments accountable in federal court. States have immunity from many lawsuits unless they consent to be sued.",
       examples: [
-        "If a state violates your rights, you often can't sue the state directly -- you have to sue the specific official responsible (a workaround established by later case law).",
+        "If a state violates your rights, you often can't sue the state directly. Instead, you have to sue the specific official responsible (a workaround established by later case law).",
         "State universities, agencies, and entities can sometimes avoid lawsuits by claiming sovereign immunity."
       ],
       references: [
-        { text: "Ex parte Young (1908) -- You can sue state officials (not the state) for ongoing constitutional violations.", source: "209 U.S. 123" },
-        { text: "Alden v. Maine (1999) -- States are immune from private suits in their own courts too, unless they consent.", source: "527 U.S. 706" }
+        { text: "Ex parte Young (1908): You can sue state officials (not the state) for ongoing constitutional violations.", source: "209 U.S. 123" },
+        { text: "Alden v. Maine (1999): States are immune from private suits in their own courts too, unless they consent.", source: "527 U.S. 706" }
       ]
     },
     {
@@ -26,12 +26,12 @@ export const laterAmendments = {
       translation: "The President and Vice President are voted on separately (previously, the runner-up became VP). Electors cast one vote for President and a separate vote for VP.",
       rights: "This fixed a design flaw from the original Constitution that caused chaos in the 1800 election. It established the ticket system we have today.",
       examples: [
-        "The Electoral College itself remains controversial -- a candidate can win the popular vote and lose the election, as happened in 2000 and 2016.",
+        "The Electoral College itself remains controversial because a candidate can win the popular vote and lose the election, as happened in 2000 and 2016.",
         "Some states are joining the National Popular Vote Interstate Compact to effectively bypass the Electoral College without amending the Constitution."
       ],
       references: [
         { text: "The 1800 election between Jefferson and Burr deadlocked because the old system didn't distinguish between presidential and VP votes.", source: "Historical" },
-        { text: "Chiafalo v. Washington (2020) -- States can punish or replace 'faithless electors' who don't vote as pledged.", source: "591 U.S. 578" }
+        { text: "Chiafalo v. Washington (2020): States can punish or replace 'faithless electors' who don't vote as pledged.", source: "591 U.S. 578" }
       ]
     },
     {
@@ -42,12 +42,12 @@ export const laterAmendments = {
       translation: "Slavery is illegal. Forced labor is illegal. The one exception: people convicted of crimes can be required to work as part of their punishment.",
       rights: "You cannot be owned, and you cannot be forced to work against your will. However, the exception for convicted criminals has significant modern implications.",
       examples: [
-        "Prison labor programs pay inmates pennies per hour (sometimes $0.12-0.40/hour) for work that benefits private companies and government operations -- the 'punishment' exception in practice.",
+        "Prison labor programs pay inmates pennies per hour (sometimes $0.12-0.40/hour) for work that benefits private companies and government operations. This is the 'punishment' exception in practice.",
         "Human trafficking remains a form of modern slavery. Despite this amendment, an estimated hundreds of thousands of people are trafficked in the US annually.",
         "Debt bondage and exploitative labor contracts that effectively trap workers (especially undocumented immigrants) echo involuntary servitude."
       ],
       references: [
-        { text: "Jones v. Alfred H. Mayer Co. (1968) -- Congress can prohibit private racial discrimination under the 13th Amendment's enforcement power.", source: "392 U.S. 409" },
+        { text: "Jones v. Alfred H. Mayer Co. (1968): Congress can prohibit private racial discrimination under the 13th Amendment's enforcement power.", source: "392 U.S. 409" },
         { text: "The 13th Amendment exception clause directly enabled convict leasing systems after the Civil War, which some historians consider 'slavery by another name.'", source: "Historical analysis, Douglas Blackmon (2008)" }
       ]
     },
@@ -60,14 +60,14 @@ export const laterAmendments = {
       rights: "This is arguably the most important amendment after the Bill of Rights. It (1) defines citizenship, (2) applies the Bill of Rights to STATE governments (not just federal), and (3) requires every person be treated equally under law. Most civil rights protections flow from this amendment.",
       examples: [
         "Before this amendment, states could violate your rights freely because the Bill of Rights only limited the federal government. The 14th changed that.",
-        "Qualified immunity allows government officials to violate your rights without personal liability unless the exact violation was 'clearly established' by prior case law -- critics argue this undermines equal protection.",
+        "Qualified immunity allows government officials to violate your rights without personal liability unless the exact violation was 'clearly established' by prior case law, which critics argue undermines equal protection.",
         "Racial profiling, discriminatory sentencing, and unequal school funding all raise equal protection challenges.",
         "The due process clause has been used to protect rights not explicitly mentioned in the Constitution (substantive due process)."
       ],
       references: [
-        { text: "Brown v. Board of Education (1954) -- Racial segregation in public schools violates equal protection.", source: "347 U.S. 483" },
-        { text: "Loving v. Virginia (1967) -- Bans on interracial marriage violate equal protection.", source: "388 U.S. 1" },
-        { text: "Harlow v. Fitzgerald (1982) -- Established modern qualified immunity doctrine.", source: "457 U.S. 800" }
+        { text: "Brown v. Board of Education (1954): Racial segregation in public schools violates equal protection.", source: "347 U.S. 483" },
+        { text: "Loving v. Virginia (1967): Bans on interracial marriage violate equal protection.", source: "388 U.S. 1" },
+        { text: "Harlow v. Fitzgerald (1982): Established modern qualified immunity doctrine.", source: "457 U.S. 800" }
       ]
     },
     {
@@ -83,8 +83,8 @@ export const laterAmendments = {
         "Felony disenfranchisement removes voting rights from millions, disproportionately affecting Black Americans due to disparities in the criminal justice system."
       ],
       references: [
-        { text: "Shelby County v. Holder (2013) -- Struck down the preclearance formula of the Voting Rights Act, removing federal oversight from states with histories of discrimination.", source: "570 U.S. 529" },
-        { text: "Brnovich v. Democratic National Committee (2021) -- Made it harder to challenge voting restrictions under the Voting Rights Act.", source: "594 U.S. 647" }
+        { text: "Shelby County v. Holder (2013): Struck down the preclearance formula of the Voting Rights Act, removing federal oversight from states with histories of discrimination.", source: "570 U.S. 529" },
+        { text: "Brnovich v. Democratic National Committee (2021): Made it harder to challenge voting restrictions under the Voting Rights Act.", source: "594 U.S. 647" }
       ]
     },
     {
@@ -96,10 +96,10 @@ export const laterAmendments = {
       rights: "This gave the federal government the power to tax individual income. Before this, the federal government relied mainly on tariffs and excise taxes.",
       examples: [
         "The income tax code has grown to over 6,000 pages. Its complexity benefits those who can afford accountants and lawyers to find loopholes.",
-        "Wage earners have taxes automatically withheld, while investment income (capital gains) is taxed at lower rates -- the 'income' that gets taxed most aggressively is money from working."
+        "Wage earners have taxes automatically withheld, while investment income (capital gains) is taxed at lower rates, so the 'income' that gets taxed most aggressively is money from working."
       ],
       references: [
-        { text: "Pollock v. Farmers' Loan & Trust Co. (1895) -- The case that struck down a previous income tax and made this amendment necessary.", source: "157 U.S. 429" }
+        { text: "Pollock v. Farmers' Loan & Trust Co. (1895): The case that struck down a previous income tax and made this amendment necessary.", source: "157 U.S. 429" }
       ]
     },
     {
@@ -123,7 +123,7 @@ export const laterAmendments = {
       year: 1919,
       original: "After one year from the ratification of this article the manufacture, sale, or transportation of intoxicating liquors within, the importation thereof into, or the exportation thereof from the United States and all territory subject to the jurisdiction thereof for beverage purposes is hereby prohibited.",
       translation: "Making, selling, or transporting alcohol is illegal.",
-      rights: "This TOOK AWAY a right -- the right to drink. It's the only amendment that restricted personal liberty rather than protecting it. It was repealed 14 years later by the 21st Amendment because it was a disaster.",
+      rights: "This TOOK AWAY a right, specifically the right to drink. It's the only amendment that restricted personal liberty rather than protecting it. It was repealed 14 years later by the 21st Amendment because it was a disaster.",
       examples: [
         "Prohibition created organized crime, filled prisons, and was selectively enforced (the wealthy still drank). It's a case study in what happens when government tries to regulate personal behavior.",
         "The parallels to the War on Drugs are direct: prohibition of a substance people want creates black markets, violence, mass incarceration, and selective enforcement."
@@ -140,11 +140,11 @@ export const laterAmendments = {
       translation: "Women can vote. The government cannot deny anyone's vote because of their sex.",
       rights: "Half the population gained full political participation. It took 144 years from the Declaration of Independence for women to get the vote.",
       examples: [
-        "Women's suffrage took 72 years of organized activism from Seneca Falls (1848) to ratification. Rights aren't given -- they're won through persistent demand.",
+        "Women's suffrage took 72 years of organized activism from Seneca Falls (1848) to ratification. Rights aren't given. They're won through persistent demand.",
         "Despite the vote, women remain underrepresented in elected office, making up roughly 29% of Congress as of recent years."
       ],
       references: [
-        { text: "Minor v. Happersett (1875) -- The shameful case that said citizenship alone didn't guarantee women the right to vote, making this amendment necessary.", source: "88 U.S. 162" }
+        { text: "Minor v. Happersett (1875): The shameful case that said citizenship alone didn't guarantee women the right to vote, making this amendment necessary.", source: "88 U.S. 162" }
       ]
     },
     {
@@ -155,10 +155,10 @@ export const laterAmendments = {
       translation: "The President's term starts and ends on January 20th. Congress starts January 3rd. This eliminated the long 'lame duck' period between election and taking office.",
       rights: "Reduces the time a defeated politician holds power. Gets newly elected officials into office faster so the people's choice takes effect sooner.",
       examples: [
-        "The transition period between election (November) and inauguration (January 20) is still over two months -- a period where the outgoing administration can make last-minute policy changes, appointments, and executive orders."
+        "The transition period between election (November) and inauguration (January 20) is still over two months, a period where the outgoing administration can make last-minute policy changes, appointments, and executive orders."
       ],
       references: [
-        { text: "Previously, inaugurations were in March -- four months after the election. The 'lame duck' Congress could pass unpopular laws with no electoral accountability.", source: "Historical" }
+        { text: "Previously, inaugurations were in March, four months after the election. The 'lame duck' Congress could pass unpopular laws with no electoral accountability.", source: "Historical" }
       ]
     },
     {
@@ -169,7 +169,7 @@ export const laterAmendments = {
       translation: "The 18th Amendment (Prohibition) is canceled. Alcohol is legal again. States can set their own alcohol laws.",
       rights: "This is the only amendment that repeals another amendment. It restored personal liberty and proved that bad amendments CAN be undone. It also delegated alcohol regulation to states.",
       examples: [
-        "The existence of this amendment proves the Constitution can correct its own mistakes. If Prohibition could be repealed, any amendment can be -- the Constitution is a living document.",
+        "The existence of this amendment proves the Constitution can correct its own mistakes. If Prohibition could be repealed, any amendment can be. The Constitution is a living document.",
         "Some argue this precedent should apply to modern drug prohibition, which creates similar problems (black markets, mass incarceration, selective enforcement)."
       ],
       references: [
@@ -199,11 +199,11 @@ export const laterAmendments = {
       translation: "Washington D.C. residents get electoral votes for President (3 votes). Before this, D.C. residents had no voice in presidential elections at all.",
       rights: "Over 700,000 American citizens living in D.C. can now vote for President. However, they still have no voting representation in Congress.",
       examples: [
-        "D.C. residents pay federal taxes, serve in the military, and follow federal laws -- but have no voting senators or representatives. Their license plates read 'Taxation Without Representation.'",
+        "D.C. residents pay federal taxes, serve in the military, and follow federal laws, yet have no voting senators or representatives. Their license plates read 'Taxation Without Representation.'",
         "D.C. statehood has been proposed repeatedly to give these citizens full representation, but remains politically contentious."
       ],
       references: [
-        { text: "Adams v. Clinton (2000) -- Court ruled D.C. residents have no constitutional right to voting representation in Congress.", source: "90 F. Supp. 2d 35" }
+        { text: "Adams v. Clinton (2000): Court ruled D.C. residents have no constitutional right to voting representation in Congress.", source: "90 F. Supp. 2d 35" }
       ]
     },
     {
@@ -218,8 +218,8 @@ export const laterAmendments = {
         "Court fees, fines, and restitution requirements that must be paid before voting rights are restored for former felons function as modern poll taxes."
       ],
       references: [
-        { text: "Harper v. Virginia Board of Elections (1966) -- Extended the poll tax ban to state and local elections under the Equal Protection Clause.", source: "383 U.S. 663" },
-        { text: "Jones v. Governor of Florida (2020) -- Court upheld requiring payment of all fines/fees before felons can vote, which critics called a modern poll tax.", source: "975 F.3d 1016" }
+        { text: "Harper v. Virginia Board of Elections (1966): Extended the poll tax ban to state and local elections under the Equal Protection Clause.", source: "383 U.S. 663" },
+        { text: "Jones v. Governor of Florida (2020): Court upheld requiring payment of all fines/fees before felons can vote, which critics called a modern poll tax.", source: "975 F.3d 1016" }
       ]
     },
     {
@@ -230,12 +230,12 @@ export const laterAmendments = {
       translation: "If the President dies, resigns, or is removed: the VP becomes President. If the VP slot is empty, the President picks a new one (confirmed by Congress). If the President is temporarily unable to serve, the VP takes over until they can.",
       rights: "This ensures there's always a clear line of succession and a process for handling an incapacitated president. It prevents power vacuums and ambiguity.",
       examples: [
-        "Section 4 (involuntary removal of an incapacitated president) has never been successfully invoked. The threshold -- VP plus a majority of the cabinet -- makes it nearly impossible in practice.",
+        "Section 4 (involuntary removal of an incapacitated president) has never been successfully invoked. The threshold (VP plus a majority of the cabinet) makes it nearly impossible in practice.",
         "Gerald Ford became VP (then President) without ever being elected to either office, using Section 2 of this amendment."
       ],
       references: [
         { text: "Used when Nixon resigned (1974): Ford became President, then nominated Rockefeller as VP.", source: "Historical" },
-        { text: "Section 3 has been invoked for presidential medical procedures (colonoscopies, surgeries) -- temporary transfers to VP.", source: "Historical" }
+        { text: "Section 3 has been invoked for presidential medical procedures (colonoscopies, surgeries), resulting in temporary transfers to the VP.", source: "Historical" }
       ]
     },
     {
@@ -250,7 +250,7 @@ export const laterAmendments = {
         "Youth voter turnout remains significantly lower than older demographics, meaning this right is underutilized by the people who fought to get it."
       ],
       references: [
-        { text: "Oregon v. Mitchell (1970) -- Court ruled Congress could set voting age for federal elections but not state elections, forcing this amendment.", source: "400 U.S. 112" }
+        { text: "Oregon v. Mitchell (1970): Court ruled Congress could set voting age for federal elections but not state elections, forcing this amendment.", source: "400 U.S. 112" }
       ]
     },
     {
@@ -261,7 +261,7 @@ export const laterAmendments = {
       translation: "Congress can't give itself a raise that takes effect immediately. Any pay change doesn't kick in until after the next election, so voters can weigh in first.",
       rights: "You get a say before your representatives get a pay raise. They can't vote themselves more money and pocket it before you can vote them out.",
       examples: [
-        "This was originally proposed in 1789 and not ratified until 1992 -- 203 years later. A college student (Gregory Watson) noticed it had no expiration date and campaigned for ratification.",
+        "This was originally proposed in 1789 and not ratified until 1992, a full 203 years later. A college student (Gregory Watson) noticed it had no expiration date and campaigned for ratification.",
         "Congress has found workarounds: automatic cost-of-living adjustments (COLAs) that increase pay without a formal 'vote' on a raise, though Congress has blocked these in many recent years."
       ],
       references: [

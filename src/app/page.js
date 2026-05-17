@@ -1064,7 +1064,7 @@ function AboutView() {
   const handleShare = async () => {
     const shareData = {
       title: 'We The People',
-      text: 'Carry and learn your constitutional rights -- free, ad-free, and always available. Check out We The People.',
+      text: 'Carry and learn your constitutional rights. Free, ad-free, and always available. Check out We The People.',
       url: 'https://we-the-people-bice.vercel.app',
     };
     try {
@@ -1101,15 +1101,15 @@ function AboutView() {
         <div style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.8' }}>
           <p>
             The Declaration of Independence, the Constitution, the Bill of Rights, and every
-            amendment that followed -- these documents are not the property of any app, company,
-            or political party. They belong to <strong style={{ color: 'var(--text-primary)' }}>We The People</strong> -- the
+            amendment that followed are not the property of any app, company,
+            or political party. They belong to <strong style={{ color: 'var(--text-primary)' }}>We The People</strong>, the
             citizens of the United States of America.
           </p>
           <p style={{ marginTop: '14px' }}>
             But ownership alone is not enough. Beyond the rights described within these founding
             documents, We The People also have an inherent duty and responsibility to
             actually <em>know</em> our rights. A right you don't know about is a right that can be
-            taken from you without your knowledge -- and that is something no free people should
+            taken from you without your knowledge, and that is something no free people should
             ever accept.
           </p>
         </div>
@@ -1133,7 +1133,7 @@ function AboutView() {
           apps that cared more about profit than civic education.
         </p>
         <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.8', marginTop: '14px' }}>
-          That felt wrong. So we built this -- free, forever, for everyone.
+          That felt wrong. So we built this: free, forever, for everyone.
         </p>
       </div>
 

@@ -70,7 +70,7 @@ export const cases = {
     type: "book",
     summary: "One of the most influential political philosophy texts in history, written by English philosopher John Locke. The treatise argues that all people possess natural rights to life, liberty, and property, that government exists only by the consent of the governed, and that when government fails to protect these rights, the people have the right to overthrow it. Thomas Jefferson drew heavily from Locke when drafting the Declaration of Independence.",
     outcome: "Established the philosophical foundations of liberal democracy: natural rights, government by consent, separation of powers, and the right of revolution. These ideas became the intellectual bedrock of both the American and French Revolutions.",
-    significance: "The Declaration of Independence's most famous passage -- 'Life, Liberty and the pursuit of Happiness' -- is a direct adaptation of Locke's 'life, liberty, and property.' The entire structure of American government, from consent of the governed to the right to alter or abolish government, traces back to this text. It remains the most important philosophical source for understanding American constitutional principles.",
+    significance: "The Declaration of Independence's most famous passage, 'Life, Liberty and the pursuit of Happiness,' is a direct adaptation of Locke's 'life, liberty, and property.' The entire structure of American government, from consent of the governed to the right to alter or abolish government, traces back to this text. It remains the most important philosophical source for understanding American constitutional principles.",
     url: "https://www.gutenberg.org/ebooks/7370"
   },
   "Military Commissions Act (2006)": {
@@ -90,7 +90,7 @@ export const cases = {
     citation: "17 F. Cas. 144",
     amendment: "Art. I",
     type: "case",
-    summary: "During the Civil War, President Lincoln suspended habeas corpus and authorized military detention of civilians suspected of aiding the Confederacy. John Merryman, a Maryland state legislator and Confederate sympathizer, was arrested by the military and held at Fort McHenry. Chief Justice Roger Taney, sitting as a circuit judge, ruled that only Congress -- not the President -- has the power to suspend habeas corpus.",
+    summary: "During the Civil War, President Lincoln suspended habeas corpus and authorized military detention of civilians suspected of aiding the Confederacy. John Merryman, a Maryland state legislator and Confederate sympathizer, was arrested by the military and held at Fort McHenry. Chief Justice Roger Taney, sitting as a circuit judge, ruled that only Congress, not the President, has the power to suspend habeas corpus.",
     outcome: "Taney ordered Merryman's release, but Lincoln and the military ignored the order. The President argued that the emergency of civil war justified his actions and that the Constitution's habeas suspension clause does not specify which branch can invoke it.",
     significance: "A dramatic test of constitutional limits during wartime. Lincoln's refusal to obey the court's order remains one of the most significant confrontations between executive power and judicial authority in American history. Congress eventually passed legislation retroactively authorizing Lincoln's suspensions in 1863.",
     url: "https://www.loc.gov/item/llst017/"
@@ -156,7 +156,7 @@ export const cases = {
     year: 1969,
     citation: "395 U.S. 752",
     amendment: "4th",
-    summary: "Police arrested Ted Chimel at his home for burglary and then conducted a warrantless search of his entire house, finding stolen coins. The Supreme Court ruled that a search 'incident to arrest' is limited to the person and the area within their immediate control -- not their entire home.",
+    summary: "Police arrested Ted Chimel at his home for burglary and then conducted a warrantless search of his entire house, finding stolen coins. The Supreme Court ruled that a search 'incident to arrest' is limited to the person and the area within their immediate control, not their entire home.",
     outcome: "The evidence from the broader home search was suppressed.",
     significance: "Defined the scope of searches during arrest: police can search the person and the area within 'arm's reach' for weapons or evidence that might be destroyed, but anything beyond that requires a warrant.",
     url: "https://supreme.justia.com/cases/federal/us/395/752/"
@@ -198,7 +198,7 @@ export const cases = {
     amendment: "1st",
     summary: "Mayor Frank Hague of Jersey City banned labor union meetings and expelled union organizers from the city. The Supreme Court struck down the ban, establishing that public streets, sidewalks, and parks are traditional public forums where citizens have a right to assemble and speak.",
     outcome: "The city's restrictions on assembly were struck down as unconstitutional.",
-    significance: "Created the 'public forum doctrine' -- the principle that government-owned public spaces like streets, parks, and sidewalks are places where people have a constitutional right to gather and express themselves.",
+    significance: "Created the 'public forum doctrine,' the principle that government-owned public spaces like streets, parks, and sidewalks are places where people have a constitutional right to gather and express themselves.",
     url: "https://supreme.justia.com/cases/federal/us/307/496/"
   },
   "Police Dept. of Chicago v. Mosley (1972)": {
@@ -388,7 +388,7 @@ export const cases = {
     amendment: "1st",
     summary: "Newton Cantwell and his sons, Jehovah's Witnesses, went door-to-door in a Catholic neighborhood in New Haven, playing anti-Catholic recordings and soliciting donations. They were arrested for breach of peace and soliciting without a permit. The Supreme Court reversed all convictions, ruling that both the Free Exercise Clause and the Establishment Clause apply to state governments.",
     outcome: "All convictions were reversed.",
-    significance: "The first case to 'incorporate' the Free Exercise Clause to the states through the 14th Amendment, meaning that state and local governments -- not just the federal government -- must respect religious freedom.",
+    significance: "The first case to 'incorporate' the Free Exercise Clause to the states through the 14th Amendment, meaning that state and local governments, not just the federal government, must respect religious freedom.",
     url: "https://supreme.justia.com/cases/federal/us/310/296/"
   },
   "Bailey v. Alabama (1911)": {
@@ -546,7 +546,7 @@ export const cases = {
     year: 2022,
     citation: "597 U.S. 1",
     amendment: "2nd",
-    summary: "New York's concealed carry permit law required applicants to demonstrate 'proper cause' -- essentially a special need beyond ordinary self-defense -- to carry a handgun in public. The Supreme Court ruled 6-3 that the right to bear arms includes the right to carry in public for self-defense and that New York's 'proper cause' requirement was unconstitutional.",
+    summary: "New York's concealed carry permit law required applicants to demonstrate 'proper cause' (essentially a special need beyond ordinary self-defense) to carry a handgun in public. The Supreme Court ruled 6-3 that the right to bear arms includes the right to carry in public for self-defense and that New York's 'proper cause' requirement was unconstitutional.",
     outcome: "New York's may-issue concealed carry regime was struck down.",
     significance: "Established that gun regulations must be consistent with the historical tradition of firearm regulation. States cannot require people to demonstrate a special need beyond self-defense to exercise their right to carry firearms in public.",
     url: "https://supreme.justia.com/cases/federal/us/597/1/"
@@ -588,7 +588,7 @@ export const cases = {
     amendment: "14th",
     summary: "Nancy Cruzan was left in a persistent vegetative state after a car accident. Her parents sought to remove her feeding tube, but Missouri required 'clear and convincing evidence' of her wishes. The Supreme Court recognized a constitutional liberty interest in refusing unwanted medical treatment but upheld Missouri's evidentiary standard.",
     outcome: "The state's requirement of clear evidence of the patient's wishes was upheld, but the right to refuse treatment was recognized.",
-    significance: "The first Supreme Court case to recognize a constitutional right to die -- or more precisely, a liberty interest in refusing unwanted medical treatment. Spurred the nationwide adoption of living wills and healthcare directives.",
+    significance: "The first Supreme Court case to recognize a constitutional right to die, or more precisely, a liberty interest in refusing unwanted medical treatment. Spurred the nationwide adoption of living wills and healthcare directives.",
     url: "https://supreme.justia.com/cases/federal/us/497/261/"
   },
   "Missouri v. McNeely (2013)": {
@@ -606,7 +606,7 @@ export const cases = {
     year: 2013,
     citation: "570 U.S. 178",
     amendment: "5th",
-    summary: "Genovevo Salinas voluntarily answered police questions but went silent when asked whether his shotgun would match shells found at a murder scene. At trial, prosecutors used his silence as evidence of guilt. The Supreme Court ruled that simply remaining silent is not enough to invoke the Fifth Amendment -- you must explicitly assert the privilege.",
+    summary: "Genovevo Salinas voluntarily answered police questions but went silent when asked whether his shotgun would match shells found at a murder scene. At trial, prosecutors used his silence as evidence of guilt. The Supreme Court ruled that simply remaining silent is not enough to invoke the Fifth Amendment. You must explicitly assert the privilege.",
     outcome: "Salinas's conviction was upheld. His silence was admissible because he didn't explicitly invoke the Fifth Amendment.",
     significance: "Critically important: you must clearly say you are invoking your Fifth Amendment right to remain silent. Simply staying quiet, without being in custody and without explicitly invoking the right, may not protect you.",
     url: "https://supreme.justia.com/cases/federal/us/570/178/"
@@ -628,7 +628,7 @@ export const cases = {
     amendment: "5th",
     summary: "Terence Gamble was convicted of second-degree robbery in Alabama. Years later, he was pulled over and found with a firearm. He was prosecuted in both state and federal court for being a felon in possession of a firearm. He argued this was double jeopardy. The Supreme Court upheld the 'dual sovereignty' doctrine: state and federal governments are separate sovereigns, so each can prosecute for the same conduct.",
     outcome: "Both prosecutions were allowed to stand. The dual sovereignty doctrine was upheld 7-2.",
-    significance: "Confirmed that double jeopardy does not prevent successive state and federal prosecutions for the same act. This is often used in civil rights cases where state courts fail to convict -- the federal government can bring separate charges.",
+    significance: "Confirmed that double jeopardy does not prevent successive state and federal prosecutions for the same act. This is often used in civil rights cases where state courts fail to convict, because the federal government can bring separate charges.",
     url: "https://supreme.justia.com/cases/federal/us/587/678/"
   },
   "Texas v. White (1869)": {
@@ -636,7 +636,7 @@ export const cases = {
     year: 1869,
     citation: "74 U.S. 700",
     amendment: "Art. IV",
-    summary: "After the Civil War, the Reconstruction government of Texas sued to recover U.S. bonds that the Confederate state legislature had sold to finance the rebellion. The Supreme Court had to decide whether Texas was even a state at that point. Chief Justice Chase ruled that the Constitution created 'an indestructible Union, composed of indestructible States' -- secession was never legally valid.",
+    summary: "After the Civil War, the Reconstruction government of Texas sued to recover U.S. bonds that the Confederate state legislature had sold to finance the rebellion. The Supreme Court had to decide whether Texas was even a state at that point. Chief Justice Chase ruled that the Constitution created 'an indestructible Union, composed of indestructible States,' meaning secession was never legally valid.",
     outcome: "Texas was deemed to have never left the Union. The bond sales by the Confederate legislature were void.",
     significance: "Established that states cannot unilaterally secede from the Union. The Constitution creates a permanent union. However, the Court acknowledged that revolution or consent of the states could alter this relationship.",
     url: "https://supreme.justia.com/cases/federal/us/74/700/"
@@ -648,7 +648,7 @@ export const cases = {
     amendment: "9th",
     summary: "Connecticut law made it a crime to use contraceptives or to counsel others in their use. Estelle Griswold, director of a Planned Parenthood clinic, was convicted for providing contraceptive advice to married couples. The Supreme Court struck down the law, holding that the Bill of Rights contains implicit guarantees that create 'zones of privacy.'",
     outcome: "The Connecticut contraceptive ban was struck down as unconstitutional.",
-    significance: "First recognized a constitutional right to privacy. Justice Douglas wrote that specific Bill of Rights guarantees have 'penumbras' -- implied protections that extend beyond their literal text. This became the foundation for privacy rights in American law.",
+    significance: "First recognized a constitutional right to privacy. Justice Douglas wrote that specific Bill of Rights guarantees have 'penumbras,' or implied protections that extend beyond their literal text. This became the foundation for privacy rights in American law.",
     url: "https://supreme.justia.com/cases/federal/us/381/479/"
   },
   "Obergefell v. Hodges (2015)": {
@@ -706,7 +706,7 @@ export const cases = {
     year: 2024,
     citation: "144 S. Ct. 2244",
     amendment: "Art. III",
-    summary: "Fishing companies challenged a federal rule requiring them to pay for on-board monitors. The case became the vehicle for overturning Chevron deference -- the 40-year-old doctrine that courts should defer to agency interpretations of ambiguous statutes. The Supreme Court ruled 6-3 that courts must exercise independent judgment in interpreting statutes, not defer to agencies.",
+    summary: "Fishing companies challenged a federal rule requiring them to pay for on-board monitors. The case became the vehicle for overturning Chevron deference, the 40-year-old doctrine that courts should defer to agency interpretations of ambiguous statutes. The Supreme Court ruled 6-3 that courts must exercise independent judgment in interpreting statutes, not defer to agencies.",
     outcome: "Chevron deference was overruled. Courts no longer automatically defer to agency interpretations.",
     significance: "One of the most consequential administrative law decisions in decades. Shifted power from executive agencies back to courts and Congress. Agencies can no longer fill in gaps in legislation with their own preferred interpretations and expect judicial deference.",
     url: "https://supreme.justia.com/cases/federal/us/603/369/"
@@ -728,7 +728,7 @@ export const cases = {
     amendment: "Art. I",
     summary: "During the Great Depression, Minnesota passed a mortgage moratorium law allowing courts to extend the period homeowners had to redeem foreclosed properties. The Home Building & Loan Association challenged it as impairing the obligation of contracts. The Supreme Court upheld the law 5-4, ruling that states can exercise emergency powers to modify contract obligations temporarily during genuine crises.",
     outcome: "The Minnesota mortgage moratorium was upheld as a valid exercise of state emergency power.",
-    significance: "Established that the Contract Clause is not absolute -- states can temporarily modify private contracts during genuine emergencies to protect the public welfare. However, the modification must be temporary, reasonable, and proportional to the emergency.",
+    significance: "Established that the Contract Clause is not absolute. States can temporarily modify private contracts during genuine emergencies to protect the public welfare. However, the modification must be temporary, reasonable, and proportional to the emergency.",
     url: "https://supreme.justia.com/cases/federal/us/290/398/"
   },
   "Trump v. United States (2024)": {
@@ -746,7 +746,7 @@ export const cases = {
     year: 2014,
     citation: "573 U.S. 513",
     amendment: "Art. II",
-    summary: "President Obama made recess appointments to the National Labor Relations Board while the Senate was holding pro forma sessions every three days. The Supreme Court unanimously ruled these appointments invalid because the Senate was not truly in recess -- it was holding brief sessions specifically to block recess appointments.",
+    summary: "President Obama made recess appointments to the National Labor Relations Board while the Senate was holding pro forma sessions every three days. The Supreme Court unanimously ruled these appointments invalid because the Senate was not truly in recess, since it was holding brief sessions specifically to block recess appointments.",
     outcome: "The recess appointments were invalidated. Actions taken by the improperly constituted NLRB were void.",
     significance: "Limited presidential recess appointment power. The Senate determines whether it is in session, and pro forma sessions count as sessions. Presidents cannot circumvent Senate confirmation by declaring the Senate to be in recess when it says it isn't.",
     url: "https://supreme.justia.com/cases/federal/us/573/513/"
@@ -758,7 +758,7 @@ export const cases = {
     amendment: "Art. I",
     summary: "Federal Judge Walter Nixon was impeached by the House and convicted by the Senate using a committee procedure rather than a trial before the full Senate. Nixon (no relation to President Nixon) argued the Senate had to conduct a full trial. The Supreme Court ruled that the question of how the Senate conducts impeachment trials is a 'political question' not reviewable by courts.",
     outcome: "Nixon's challenge was dismissed. The Senate's impeachment procedures are unreviewable by courts.",
-    significance: "Established that impeachment is entirely a political process. Courts cannot second-guess how Congress conducts impeachment proceedings. The Constitution gives the House 'sole' power to impeach and the Senate 'sole' power to try -- 'sole' means courts stay out.",
+    significance: "Established that impeachment is entirely a political process. Courts cannot second-guess how Congress conducts impeachment proceedings. The Constitution gives the House 'sole' power to impeach and the Senate 'sole' power to try, and 'sole' means courts stay out.",
     url: "https://supreme.justia.com/cases/federal/us/506/224/"
   },
   "Marbury v. Madison (1803)": {
@@ -766,9 +766,9 @@ export const cases = {
     year: 1803,
     citation: "5 U.S. 137",
     amendment: "Art. III",
-    summary: "William Marbury was appointed as a justice of the peace by outgoing President Adams, but incoming Secretary of State James Madison refused to deliver his commission. Marbury sued. Chief Justice Marshall ruled that while Marbury had a right to his commission, the Court lacked jurisdiction to order its delivery -- and more importantly, that the Judiciary Act provision Marbury relied on was unconstitutional.",
+    summary: "William Marbury was appointed as a justice of the peace by outgoing President Adams, but incoming Secretary of State James Madison refused to deliver his commission. Marbury sued. Chief Justice Marshall ruled that while Marbury had a right to his commission, the Court lacked jurisdiction to order its delivery. More importantly, the Judiciary Act provision Marbury relied on was unconstitutional.",
     outcome: "Marbury lost his commission, but the Court gained something far greater: the power of judicial review.",
-    significance: "The most important case in American constitutional law. Established judicial review -- the power of courts to declare laws unconstitutional. This power is not explicitly in the Constitution; the Supreme Court claimed it for itself and it has been the foundation of constitutional law ever since.",
+    significance: "The most important case in American constitutional law. Established judicial review, the power of courts to declare laws unconstitutional. This power is not explicitly in the Constitution; the Supreme Court claimed it for itself and it has been the foundation of constitutional law ever since.",
     url: "https://supreme.justia.com/cases/federal/us/5/137/"
   },
   "Saenz v. Roe (1999)": {
@@ -788,7 +788,7 @@ export const cases = {
     amendment: "Art. VI",
     summary: "After Brown v. Board of Education ordered school desegregation, the Little Rock, Arkansas school board sought to delay integration, citing public hostility and violence. Governor Faubus had called in the National Guard to block Black students. The Supreme Court unanimously and emphatically rejected the delay, with all nine justices individually signing the opinion.",
     outcome: "The delay was denied. Desegregation could not be postponed because of public opposition.",
-    significance: "Established that state officials are bound by Supreme Court decisions and cannot nullify them. The Constitution is the supreme law as interpreted by the Supreme Court, and no state official can defy it -- not a governor, not a legislature, not a school board.",
+    significance: "Established that state officials are bound by Supreme Court decisions and cannot nullify them. The Constitution is the supreme law as interpreted by the Supreme Court, and no state official can defy it, whether a governor, a legislature, or a school board.",
     url: "https://supreme.justia.com/cases/federal/us/358/1/"
   },
   "Cramer v. United States (1945)": {
@@ -806,7 +806,7 @@ export const cases = {
     year: 1964,
     citation: "376 U.S. 254",
     amendment: "1st",
-    summary: "L.B. Sullivan, a Montgomery, Alabama city commissioner, sued the New York Times over an advertisement that contained minor factual errors about civil rights protests. An Alabama jury awarded $500,000 in damages. The Supreme Court reversed, holding that public officials cannot recover for defamation unless they prove 'actual malice' -- knowledge that the statement was false or reckless disregard for its truth.",
+    summary: "L.B. Sullivan, a Montgomery, Alabama city commissioner, sued the New York Times over an advertisement that contained minor factual errors about civil rights protests. An Alabama jury awarded $500,000 in damages. The Supreme Court reversed, holding that public officials cannot recover for defamation unless they prove 'actual malice,' meaning knowledge that the statement was false or reckless disregard for its truth.",
     outcome: "The verdict was reversed. The 'actual malice' standard was established for public official defamation cases.",
     significance: "The most important press freedom case in American history. Without this protection, a single defamation lawsuit could bankrupt a newspaper, creating a powerful tool for officials to silence criticism. The ruling ensures robust public debate about government officials can continue even when reporting contains honest mistakes.",
     url: "https://supreme.justia.com/cases/federal/us/376/254/"
@@ -938,7 +938,7 @@ export const cases = {
     amendment: "13th",
     summary: "Joseph Lee Jones, a Black man, alleged that the Alfred H. Mayer Company refused to sell him a home because of his race. The Supreme Court ruled that the 13th Amendment gives Congress power to prohibit all racial discrimination, private and public, in the sale or rental of property.",
     outcome: "Private racial discrimination in housing was ruled illegal under the 13th Amendment.",
-    significance: "Established that the 13th Amendment is not limited to literal slavery -- it empowers Congress to eliminate all 'badges and incidents of slavery,' including private racial discrimination. This was a landmark in the argument that constitutional rights can reach private conduct.",
+    significance: "Established that the 13th Amendment is not limited to literal slavery. It empowers Congress to eliminate all 'badges and incidents of slavery,' including private racial discrimination. This was a landmark in the argument that constitutional rights can reach private conduct.",
     url: "https://supreme.justia.com/cases/federal/us/392/409/"
   },
   "Brown v. Board of Education (1954)": {
@@ -988,7 +988,7 @@ export const cases = {
     amendment: "15th",
     summary: "Arizona enacted two voting provisions: one discarding ballots cast in the wrong precinct and another criminalizing ballot collection by third parties ('ballot harvesting'). The Democratic National Committee challenged both as violating Section 2 of the Voting Rights Act because they disproportionately affected minority voters.",
     outcome: "Both Arizona voting restrictions were upheld 6-3.",
-    significance: "Made it significantly harder to challenge voting restrictions under the Voting Rights Act. The Court created new guideposts that favor upholding restrictions, including the 'usual burdens of voting' concept -- if a restriction imposes only typical inconveniences, disparate impact alone doesn't violate the VRA.",
+    significance: "Made it significantly harder to challenge voting restrictions under the Voting Rights Act. The Court created new guideposts that favor upholding restrictions, including the 'usual burdens of voting' concept. If a restriction imposes only typical inconveniences, disparate impact alone doesn't violate the VRA.",
     url: "https://supreme.justia.com/cases/federal/us/594/647/"
   },
   "Pollock v. Farmers' Loan & Trust Co. (1895)": {

@@ -9,7 +9,7 @@ export const constitution = {
     translation: "We, the American people, are creating this government to: hold the country together, establish justice, keep the peace, defend the nation, promote the well-being of citizens, and protect freedom for ourselves and future generations.",
     rights: "The government exists to serve these six purposes. Any action that undermines justice, peace, defense, welfare, or liberty is contrary to the government's stated mission.",
     references: [
-      { text: "'We the People' -- not 'We the States' or 'We the Government.' The authority comes from citizens.", source: "Constitutional Convention debates, 1787" }
+      { text: "The phrase is 'We the People,' not 'We the States' or 'We the Government.' The authority comes from citizens.", source: "Constitutional Convention debates, 1787" }
     ]
   },
   articles: [
@@ -23,9 +23,9 @@ export const constitution = {
           title: "Section 1: Legislative Power",
           original: "All legislative Powers herein granted shall be vested in a Congress of the United States, which shall consist of a Senate and House of Representatives.",
           translation: "Only Congress can make federal laws. Congress has two chambers: the Senate and the House of Representatives.",
-          rights: "Laws must come from your elected representatives -- not the President, not agencies, not courts. When regulations are created by unelected bureaucrats or executive orders bypass Congress, this principle is strained.",
+          rights: "Laws must come from your elected representatives, not the President, not agencies, not courts. When regulations are created by unelected bureaucrats or executive orders bypass Congress, this principle is strained.",
           references: [
-            { text: "West Virginia v. EPA (2022) -- Major policy decisions must come from Congress, not agencies (the 'major questions doctrine').", source: "597 U.S. 697" }
+            { text: "West Virginia v. EPA (2022) held that major policy decisions must come from Congress, not agencies (the 'major questions doctrine').", source: "597 U.S. 697" }
           ]
         },
         {
@@ -33,10 +33,10 @@ export const constitution = {
           title: "Section 2: The House of Representatives",
           original: "The House of Representatives shall be composed of Members chosen every second Year by the People of the several States... No Person shall be a Representative who shall not have attained to the Age of twenty five Years, and been seven Years a Citizen of the United States... Representatives and direct Taxes shall be apportioned among the several States which may be included within this Union, according to their respective Numbers...",
           translation: "House members serve 2-year terms, elected directly by the people. You must be 25+, a citizen for 7+ years, and live in the state you represent. Seats are divided among states by population. The House has the sole power to impeach (charge) officials.",
-          rights: "The House is the 'people's chamber' -- closest to voters with the shortest terms. They control the power of the purse (spending bills start here) and the power to impeach.",
+          rights: "The House is the 'people's chamber,' closest to voters with the shortest terms. They control the power of the purse (spending bills start here) and the power to impeach.",
           references: [
-            { text: "The original text counted enslaved people as 3/5 of a person for apportionment -- superseded by the 14th Amendment.", source: "Historical, Art. I, Sec. 2, Cl. 3" },
-            { text: "U.S. Term Limits v. Thornton (1995) -- States cannot impose term limits on Congress beyond what the Constitution requires.", source: "514 U.S. 779" }
+            { text: "The original text counted enslaved people as 3/5 of a person for apportionment. This was superseded by the 14th Amendment.", source: "Historical, Art. I, Sec. 2, Cl. 3" },
+            { text: "U.S. Term Limits v. Thornton (1995) established that states cannot impose term limits on Congress beyond what the Constitution requires.", source: "514 U.S. 779" }
           ]
         },
         {
@@ -54,16 +54,16 @@ export const constitution = {
           title: "Section 8: Powers of Congress (Key Clauses)",
           original: "The Congress shall have Power To lay and collect Taxes, Duties, Imposts and Excises, to pay the Debts and provide for the common Defence and general Welfare of the United States... To borrow Money on the credit of the United States... To regulate Commerce with foreign Nations, and among the several States... To coin Money... To establish Post Offices... To declare War... To raise and support Armies... To provide and maintain a Navy... To make all Laws which shall be necessary and proper for carrying into Execution the foregoing Powers...",
           translation: "Congress can: tax, borrow money, regulate interstate and international trade, coin money, run the post office, declare war, fund the military, and make any law 'necessary and proper' to carry out these powers.",
-          rights: "Only CONGRESS can declare war (Presidents have gone around this). The 'Commerce Clause' and 'Necessary and Proper Clause' have been stretched to justify almost unlimited federal power -- far beyond what was originally intended.",
+          rights: "Only CONGRESS can declare war, though Presidents have often gone around this. The 'Commerce Clause' and 'Necessary and Proper Clause' have been stretched to justify almost unlimited federal power, far beyond what was originally intended.",
           examples: [
             "The US hasn't formally declared war since 1942, yet has been in continuous military conflicts. Presidents use 'authorizations' instead of declarations, bypassing this requirement.",
             "The Commerce Clause was used to justify everything from civil rights laws (good) to criminalizing growing wheat on your own farm for your own use (Wickard v. Filburn).",
-            "Congress delegated enormous lawmaking power to executive agencies -- the regulations those agencies write have the force of law but weren't voted on by anyone you elected."
+            "Congress delegated enormous lawmaking power to executive agencies, and the regulations those agencies write have the force of law but weren't voted on by anyone you elected."
           ],
           references: [
-            { text: "Wickard v. Filburn (1942) -- Growing wheat for personal use affects interstate commerce, therefore Congress can regulate it. Maximum Commerce Clause expansion.", source: "317 U.S. 111" },
-            { text: "War Powers Resolution (1973) -- Congress's attempt to reclaim war-declaration power. Presidents routinely ignore or work around it.", source: "50 U.S.C. ch. 33" },
-            { text: "Loper Bright Enterprises v. Raimondo (2024) -- Overturned Chevron deference, reducing agencies' power to interpret ambiguous statutes.", source: "144 S. Ct. 2244" }
+            { text: "Wickard v. Filburn (1942) held that growing wheat for personal use affects interstate commerce, and therefore Congress can regulate it. This represents the maximum Commerce Clause expansion.", source: "317 U.S. 111" },
+            { text: "The War Powers Resolution (1973) was Congress's attempt to reclaim war-declaration power. Presidents routinely ignore or work around it.", source: "50 U.S.C. ch. 33" },
+            { text: "Loper Bright Enterprises v. Raimondo (2024) overturned Chevron deference, reducing agencies' power to interpret ambiguous statutes.", source: "144 S. Ct. 2244" }
           ]
         },
         {
@@ -71,14 +71,14 @@ export const constitution = {
           title: "Section 9: Limits on Congress",
           original: "The Privilege of the Writ of Habeas Corpus shall not be suspended, unless when in Cases of Rebellion or Invasion the public Safety may require it. No Bill of Attainder or ex post facto Law shall be passed. No Tax or Duty shall be laid on Articles exported from any State. No Money shall be drawn from the Treasury, but in Consequence of Appropriations made by Law...",
           translation: "Congress CANNOT: suspend habeas corpus (your right to challenge imprisonment) except during rebellion or invasion. Cannot pass laws that punish specific people without trial. Cannot make something illegal and then punish you for doing it before it was illegal. Cannot spend money without authorizing it by law.",
-          rights: "Habeas corpus is your most fundamental protection against tyranny -- the right to go before a judge and say 'prove you have a legal reason to hold me.' Suspending it means the government can lock you up and throw away the key.",
+          rights: "Habeas corpus is your most fundamental protection against tyranny, specifically the right to go before a judge and say 'prove you have a legal reason to hold me.' Suspending it means the government can lock you up and throw away the key.",
           examples: [
             "The Military Commissions Act (2006) attempted to strip habeas corpus from 'enemy combatants' held at Guantanamo Bay. The Supreme Court struck this down.",
             "Ex post facto: If a new law bans something today, you cannot be punished for doing that thing yesterday. Some sex offender registration laws have been challenged on these grounds."
           ],
           references: [
-            { text: "Boumediene v. Bush (2008) -- Guantanamo detainees have habeas corpus rights. Congress cannot strip courts of this jurisdiction.", source: "553 U.S. 723" },
-            { text: "Ex parte Merryman (1861) -- Lincoln suspended habeas corpus during the Civil War. Chief Justice Taney ruled only Congress could do so, but Lincoln ignored the court.", source: "17 F. Cas. 144" }
+            { text: "Boumediene v. Bush (2008) ruled that Guantanamo detainees have habeas corpus rights. Congress cannot strip courts of this jurisdiction.", source: "553 U.S. 723" },
+            { text: "In Ex parte Merryman (1861), Lincoln suspended habeas corpus during the Civil War. Chief Justice Taney ruled only Congress could do so, but Lincoln ignored the court.", source: "17 F. Cas. 144" }
           ]
         },
         {
@@ -88,7 +88,7 @@ export const constitution = {
           translation: "States CANNOT: make treaties with foreign nations, print their own money, or pass laws that punish people without trial, make things retroactively illegal, or break existing contracts.",
           rights: "This keeps states from acting like independent countries or from arbitrarily destroying people's contractual rights.",
           references: [
-            { text: "Home Building & Loan Assn. v. Blaisdell (1934) -- States can temporarily modify contract obligations during emergencies (Great Depression mortgage moratorium).", source: "290 U.S. 398" }
+            { text: "Home Building & Loan Assn. v. Blaisdell (1934) held that states can temporarily modify contract obligations during emergencies (Great Depression mortgage moratorium).", source: "290 U.S. 398" }
           ]
         }
       ]
@@ -103,13 +103,13 @@ export const constitution = {
           title: "Section 1: Executive Power and Election",
           original: "The executive Power shall be vested in a President of the United States of America. He shall hold his Office during the Term of four Years... Each State shall appoint, in such Manner as the Legislature thereof may direct, a Number of Electors...",
           translation: "The President holds executive power. Serves a 4-year term. Is chosen by the Electoral College (electors from each state), not by direct popular vote.",
-          rights: "The President executes laws -- does not make them. Executive power is meant to be limited to carrying out what Congress decides.",
+          rights: "The President executes laws and does not make them. Executive power is meant to be limited to carrying out what Congress decides.",
           examples: [
             "Executive orders have expanded far beyond administrative directives into what critics call 'legislating by pen.' Major policy changes enacted without Congress.",
             "The Electoral College means your vote's weight depends on where you live. A vote in Wyoming counts roughly 3.6 times more than a vote in California for presidential elections."
           ],
           references: [
-            { text: "Youngstown Sheet & Tube Co. v. Sawyer (1952) -- President cannot seize private property by executive order even during wartime without Congressional authorization.", source: "343 U.S. 579" }
+            { text: "Youngstown Sheet & Tube Co. v. Sawyer (1952) ruled that the President cannot seize private property by executive order even during wartime without Congressional authorization.", source: "343 U.S. 579" }
           ]
         },
         {
@@ -120,11 +120,11 @@ export const constitution = {
           rights: "Key checks: treaties need 2/3 Senate approval, appointments need Senate confirmation. The pardon power is nearly unlimited for federal crimes but cannot undo impeachment. The President commands the military but cannot declare war.",
           examples: [
             "The pardon power has no check except impeachment. Presidents can pardon allies, family, or themselves (debated but untested).",
-            "Recess appointments let presidents bypass Senate confirmation when Congress isn't in session -- both parties have used and been frustrated by this."
+            "Recess appointments let presidents bypass Senate confirmation when Congress isn't in session, and both parties have used and been frustrated by this."
           ],
           references: [
-            { text: "Trump v. United States (2024) -- Court ruled presidents have broad immunity for official acts, sparking debate about accountability.", source: "144 S. Ct. 2312" },
-            { text: "NLRB v. Noel Canning (2014) -- Limited presidential power to make recess appointments when the Senate claims to be in session.", source: "573 U.S. 513" }
+            { text: "In Trump v. United States (2024), the Court ruled presidents have broad immunity for official acts, sparking debate about accountability.", source: "144 S. Ct. 2312" },
+            { text: "NLRB v. Noel Canning (2014) limited presidential power to make recess appointments when the Senate claims to be in session.", source: "573 U.S. 513" }
           ]
         },
         {
@@ -132,13 +132,13 @@ export const constitution = {
           title: "Section 4: Impeachment",
           original: "The President, Vice President and all civil Officers of the United States, shall be removed from Office on Impeachment for, and Conviction of, Treason, Bribery, or other high Crimes and Misdemeanors.",
           translation: "The President, VP, and all federal officials can be removed from office if impeached (charged by the House) and convicted (by the Senate) of treason, bribery, or other serious offenses.",
-          rights: "No one is above the law. Even the President can be fired by the people's representatives for serious misconduct. 'High crimes and misdemeanors' is intentionally broad -- it means whatever Congress decides constitutes an abuse of power.",
+          rights: "No one is above the law. Even the President can be fired by the people's representatives for serious misconduct. 'High crimes and misdemeanors' is intentionally broad, meaning whatever Congress decides constitutes an abuse of power.",
           examples: [
             "Three presidents have been impeached by the House (Andrew Johnson, Bill Clinton, Donald Trump twice). None were convicted by the Senate. The 2/3 Senate threshold makes conviction extremely difficult in a partisan environment.",
-            "The political nature of impeachment means it functions only when both parties agree misconduct occurred -- which in polarized times may mean it never functions."
+            "The political nature of impeachment means it functions only when both parties agree misconduct occurred, which in polarized times may mean it never functions."
           ],
           references: [
-            { text: "Nixon v. United States (1993) -- Courts cannot review Senate impeachment trial procedures. Impeachment is purely a political process.", source: "506 U.S. 224" }
+            { text: "Nixon v. United States (1993) held that courts cannot review Senate impeachment trial procedures. Impeachment is purely a political process.", source: "506 U.S. 224" }
           ]
         }
       ]
@@ -157,10 +157,10 @@ export const constitution = {
           examples: [
             "Life tenure means a single president can shape the court for decades. No other democracy gives judges unlimited terms.",
             "Congress controls how many Supreme Court justices there are (currently 9, but not fixed by the Constitution). 'Court packing' proposals would add justices to change the balance.",
-            "The Constitution doesn't mention judicial review (courts striking down laws as unconstitutional) -- the Supreme Court claimed that power for itself in 1803."
+            "The Constitution doesn't mention judicial review (courts striking down laws as unconstitutional). The Supreme Court claimed that power for itself in 1803."
           ],
           references: [
-            { text: "Marbury v. Madison (1803) -- The Court asserted the power of judicial review: courts decide what the Constitution means and can strike down laws that violate it.", source: "5 U.S. 137" }
+            { text: "In Marbury v. Madison (1803), the Court asserted the power of judicial review: courts decide what the Constitution means and can strike down laws that violate it.", source: "5 U.S. 137" }
           ]
         },
         {
@@ -180,11 +180,11 @@ export const constitution = {
           translation: "Treason means ONLY: waging war against the US or helping its enemies. Conviction requires two witnesses to the same act, or a confession in open court. Treason charges cannot be used against someone's family.",
           rights: "The Founders defined treason extremely narrowly ON PURPOSE. In England, 'treason' was used to execute political opponents. Here, the government cannot label dissent or criticism as treason. Protesting, criticizing, even hating the government is NOT treason.",
           examples: [
-            "Politicians sometimes casually accuse opponents of 'treason' -- the Constitution says that word means something very specific and very narrow.",
+            "Politicians sometimes casually accuse opponents of 'treason,' but the Constitution says that word means something very specific and very narrow.",
             "Only about 30 people have been charged with treason in US history. The narrow definition is a feature, not a bug."
           ],
           references: [
-            { text: "Cramer v. United States (1945) -- The 'two witness' requirement is strict. Both witnesses must testify to the same overt act of treason.", source: "325 U.S. 1" }
+            { text: "Cramer v. United States (1945) confirmed that the 'two witness' requirement is strict. Both witnesses must testify to the same overt act of treason.", source: "325 U.S. 1" }
           ]
         }
       ]
@@ -205,7 +205,7 @@ export const constitution = {
             "This clause has been central to debates about whether states must recognize same-sex marriages performed in other states (resolved by Obergefell in 2015)."
           ],
           references: [
-            { text: "Obergefell v. Hodges (2015) -- All states must recognize same-sex marriages performed in any state.", source: "576 U.S. 644" }
+            { text: "Obergefell v. Hodges (2015) ruled that all states must recognize same-sex marriages performed in any state.", source: "576 U.S. 644" }
           ]
         },
         {
@@ -215,7 +215,7 @@ export const constitution = {
           translation: "States cannot discriminate against citizens from other states. If you visit or move to another state, you get the same basic rights as people who live there.",
           rights: "A state cannot treat you as a second-class citizen because you're from somewhere else. There are exceptions (like residency requirements for in-state tuition), but the core rights are portable.",
           references: [
-            { text: "Saenz v. Roe (1999) -- New residents of a state get the same welfare benefits as long-term residents.", source: "526 U.S. 489" }
+            { text: "Saenz v. Roe (1999) held that new residents of a state get the same welfare benefits as long-term residents.", source: "526 U.S. 489" }
           ]
         }
       ]
@@ -223,16 +223,16 @@ export const constitution = {
     {
       number: 5,
       title: "Amending the Constitution",
-      summary: "How to change the Constitution. It's intentionally difficult -- requiring supermajorities at every step.",
+      summary: "How to change the Constitution. It's intentionally difficult, requiring supermajorities at every step.",
       sections: [
         {
           id: "a5",
           title: "The Amendment Process",
           original: "The Congress, whenever two thirds of both Houses shall deem it necessary, shall propose Amendments to this Constitution, or, on the Application of the Legislatures of two thirds of the several States, shall call a Convention for proposing Amendments, which, in either Case, shall be valid to all Intents and Purposes, as Part of this Constitution, when ratified by the Legislatures of three fourths of the several States, or by Conventions in three fourths thereof...",
-          translation: "To change the Constitution: Either 2/3 of Congress proposes an amendment, OR 2/3 of state legislatures call a convention. Then 3/4 of states must ratify it. That's it -- two paths to propose, one threshold to approve.",
+          translation: "To change the Constitution: Either 2/3 of Congress proposes an amendment, OR 2/3 of state legislatures call a convention. Then 3/4 of states must ratify it. That's it: two paths to propose, one threshold to approve.",
           rights: "The Constitution is meant to be hard to change. This protects your rights from being eliminated by a temporary majority. It takes broad, sustained consensus to alter the nation's fundamental law.",
           examples: [
-            "Over 11,000 amendments have been proposed in Congress. Only 27 have been ratified. The system works as designed -- fleeting political movements can't easily rewrite fundamental rights.",
+            "Over 11,000 amendments have been proposed in Congress. Only 27 have been ratified. The system works as designed, because fleeting political movements can't easily rewrite fundamental rights.",
             "No constitutional convention has been called since 1787. Several state-driven efforts have come close (balanced budget amendment, term limits) but none have reached the 2/3 threshold."
           ],
           references: [
@@ -253,13 +253,13 @@ export const constitution = {
           translation: "The Constitution is the supreme law. Federal law overrides state law when they conflict. Every official must swear to uphold the Constitution. You cannot be required to follow any religion (or be non-religious) to hold office.",
           rights: "No state can pass a law that contradicts the Constitution or valid federal law. And your religious beliefs (or lack thereof) cannot be used to bar you from public office.",
           examples: [
-            "When state laws conflict with federal law, federal wins -- but the federal law must itself be constitutional. Unconstitutional federal laws can be struck down.",
+            "When state laws conflict with federal law, federal wins, but the federal law must itself be constitutional. Unconstitutional federal laws can be struck down.",
             "Several state constitutions still technically have religious tests for office (barring atheists, for example), but these are unenforceable under the Supremacy Clause.",
-            "The oath requirement means officials who undermine the Constitution are violating their sworn duty -- regardless of party."
+            "The oath requirement means officials who undermine the Constitution are violating their sworn duty, regardless of party."
           ],
           references: [
-            { text: "Cooper v. Aaron (1958) -- States cannot nullify Supreme Court decisions or ignore the Constitution.", source: "358 U.S. 1" },
-            { text: "Torcaso v. Watkins (1961) -- Religious requirements for public office are unconstitutional.", source: "367 U.S. 488" }
+            { text: "Cooper v. Aaron (1958) established that states cannot nullify Supreme Court decisions or ignore the Constitution.", source: "358 U.S. 1" },
+            { text: "Torcaso v. Watkins (1961) ruled that religious requirements for public office are unconstitutional.", source: "367 U.S. 488" }
           ]
         }
       ]
@@ -267,14 +267,14 @@ export const constitution = {
     {
       number: 7,
       title: "Ratification",
-      summary: "How the Constitution itself was approved -- requiring 9 of the original 13 states.",
+      summary: "How the Constitution itself was approved, requiring 9 of the original 13 states.",
       sections: [
         {
           id: "a7",
           title: "Ratification Process",
           original: "The Ratification of the Conventions of nine States, shall be sufficient for the Establishment of this Constitution between the States so ratifying the Same.",
           translation: "Nine of the thirteen states had to approve this Constitution for it to take effect.",
-          rights: "The Constitution was ratified by the people through state conventions -- not by state legislatures or the existing government. It drew its authority directly from citizens.",
+          rights: "The Constitution was ratified by the people through state conventions, not by state legislatures or the existing government. It drew its authority directly from citizens.",
           references: [
             { text: "Delaware was first to ratify (Dec 7, 1787). New Hampshire was the 9th, making it official (June 21, 1788). Rhode Island was last (May 29, 1790).", source: "Historical" }
           ]

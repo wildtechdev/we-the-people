@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>We The People - Know Your Rights</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --bg: #ffffff; --bg2: #f8f9fa; --text: #111827; --text2: #6b7280; --text3: #9ca3af; --border: #e5e7eb; --accent: #2563eb; }
+.dark { --bg: #111827; --bg2: #1f2937; --text: #f9fafb; --text2: #9ca3af; --text3: #6b7280; --border: #374151; --accent: #60a5fa; }
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+.header { position: sticky; top: 0; z-index: 50; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(8px); }
+.header-inner { max-width: 768px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
+.header h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
+.header p { font-size: 12px; color: var(--text2); }
+.donate-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: var(--text); color: var(--bg); border-radius: 8px; font-size: 13px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; }
+.dark .donate-btn { background: #f9fafb; color: #111827; }
+.nav { position: sticky; top: 57px; z-index: 40; background: var(--bg); border-bottom: 1px solid var(--border); }
+.nav-inner { max-width: 768px; margin: 0 auto; padding: 8px 16px; display: flex; gap: 4px; overflow-x: auto; }
+.nav-btn { padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 500; border: none; cursor: pointer; white-space: nowrap; background: transparent; color: var(--text2); }
+.nav-btn.active { background: var(--text); color: var(--bg); }
+.dark .nav-btn.active { background: #f9fafb; color: #111827; }
+.main { max-width: 768px; margin: 0 auto; padding: 24px 16px; }
+.view-toggle { display: flex; gap: 4px; padding: 4px; background: var(--bg2); border-radius: 8px; margin-bottom: 24px; }
+.view-btn { flex: 1; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: 500; border: none; cursor: pointer; background: transparent; color: var(--text2); }
+.view-btn.active { background: var(--bg); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.doc-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.doc-date { font-size: 13px; color: var(--text2); }
+.doc-summary { font-size: 14px; color: var(--text2); margin-top: 8px; margin-bottom: 24px; }
+.card { border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.card h3 { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+.card-text { font-size: 14px; line-height: 1.7; color: var(--text); white-space: pre-line; }
+.details-btn { margin-top: 12px; font-size: 13px; color: var(--accent); font-weight: 500; background: none; border: none; cursor: pointer; }
+.details { margin-top: 12px; display: none; }
+.details.open { display: block; }
+.rights-box { padding: 12px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; margin-bottom: 12px; }
+.dark .rights-box { background: rgba(217,119,6,0.1); border-color: rgba(217,119,6,0.3); }
+.rights-box .label { font-size: 11px; font-weight: 600; color: #b45309; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.dark .rights-box .label { color: #fbbf24; }
+.rights-box p { font-size: 13px; color: var(--text); }
+.examples-box { padding: 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; margin-bottom: 12px; }
+.dark .examples-box { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); }
+.examples-box .label { font-size: 11px; font-weight: 600; color: #b91c1c; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.dark .examples-box .label { color: #f87171; }
+.examples-box li { font-size: 13px; color: var(--text); padding: 6px 0 6px 12px; border-left: 2px solid #fca5a5; margin-bottom: 4px; list-style: none; }
+.dark .examples-box li { border-left-color: rgba(239,68,68,0.5); }
+.refs-box { padding: 12px; background: var(--bg2); border-radius: 8px; }
+.refs-box .label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.refs-box li { font-size: 12px; color: var(--text2); margin-bottom: 4px; list-style: none; }
+.refs-box .source { color: var(--text3); }
+.translated-box { padding: 12px; background: #eff6ff; border-radius: 8px; }
+.dark .translated-box { background: rgba(37,99,235,0.1); }
+.translated-box .label { font-size: 11px; font-weight: 600; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.dark .translated-box .label { color: #60a5fa; }
+.original-box { padding: 12px; background: var(--bg2); border-radius: 8px; margin-bottom: 12px; }
+.original-box .label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+footer { border-top: 1px solid var(--border); padding: 32px 16px; margin-top: 48px; text-align: center; }
+footer p { font-size: 13px; color: var(--text2); margin-bottom: 8px; }
+footer .small { font-size: 12px; color: var(--text3); }
+.dark-toggle { background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; color: var(--text); }
+.header-right { display: flex; align-items: center; gap: 8px; }
+</style>
+</head>
+<body>
+<div id="app">
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <h1>We The People</h1>
+      <p>Know your rights. No parties. Just law.</p>
+    </div>
+    <div class="header-right">
+      <a class="donate-btn" href="#">♥ Support This Project</a>
+      <button class="dark-toggle" onclick="document.body.classList.toggle('dark')" aria-label="Toggle dark mode">◐</button>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="switchDoc('declaration', this)">Declaration</button>
+    <button class="nav-btn" onclick="switchDoc('constitution', this)">Constitution</button>
+    <button class="nav-btn" onclick="switchDoc('bill-of-rights', this)">Bill of Rights</button>
+    <button class="nav-btn" onclick="switchDoc('amendments', this)">Amendments 11-27</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="view-toggle">
+    <button class="view-btn active" onclick="switchView('original', this)">Original Text</button>
+    <button class="view-btn" onclick="switchView('translated', this)">Plain English</button>
+    <button class="view-btn" onclick="switchView('both', this)">Side by Side</button>
+  </div>
+  <div id="content"></div>
+</div>
+
+<footer>
+  <p>We The People is nonpartisan. No political agenda. Just the law, explained clearly.</p>
+  <p class="small">The Constitution belongs to every American, regardless of party.</p>
+  <div style="margin-top:16px"><a class="donate-btn" href="#">♥ Support This Project</a></div>
+</footer>
+</div>
+
+<script>
+let currentView = 'original';
+let currentDoc = 'declaration';
+
+const data = {
+  declaration: {
+    title: "The Declaration of Independence",
+    date: "July 4, 1776",
+    summary: "America's breakup letter to England. It explains why people have the right to leave a bad government, lists what the King did wrong, and declares the colonies free.",
+    sections: [
+      { title: "Preamble", original: "When in the Course of human events, it becomes necessary for one people to dissolve the political bands which have connected them with another, and to assume among the powers of the earth, the separate and equal station to which the Laws of Nature and of Nature's God entitle them, a decent respect to the opinions of mankind requires that they should declare the causes which impel them to the separation.", translation: "When people need to break away from their government and become their own nation -- which is their natural right -- they should explain why.", rights: "You don't need permission to be free. Self-governance is a natural right.", examples: ["The right to vote out leaders who don't represent you comes from this principle.", "Communities pushing for local control over federal overreach exercise this same idea."], references: [{text:"Texas v. White (1869)", source:"74 U.S. 700"}, {text:"John Locke, Second Treatise of Government (1689)", source:"Chapter 19"}] },
+      { title: "Self-Evident Truths", original: "We hold these truths to be self-evident, that all men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty and the pursuit of Happiness.--That to secure these rights, Governments are instituted among Men, deriving their just powers from the consent of the governed,--That whenever any Form of Government becomes destructive of these ends, it is the Right of the People to alter or to abolish it, and to institute new Government, laying its foundation on such principles and organizing its powers in such form, as to them shall seem most likely to effect their Safety and Happiness.", translation: "These things are obviously true: All people are born equal. Everyone has rights that can never be taken away -- life, freedom, and the pursuit of happiness. Governments exist only to protect these rights. Governments get their power from the people agreeing to be governed. When government destroys the rights it was made to protect, the people can tear it down and build a better one.", rights: "Your rights come from being human, not from the government. Government works for you. If it fails, you can replace it.", examples: ["When officials say 'if you have nothing to hide, you have nothing to fear' to justify surveillance, they've flipped this principle. Government must justify its intrusions -- you don't have to justify your privacy.", "When any law restricts your freedom, the government must prove why. You were born free; restrictions need justification, not the other way around."], references: [{text:"Griswold v. Connecticut (1965)", source:"381 U.S. 479"}, {text:"Obergefell v. Hodges (2015)", source:"576 U.S. 644"}] },
+      { title: "When to Act", original: "Prudence, indeed, will dictate that Governments long established should not be changed for light and transient causes; and accordingly all experience hath shewn, that mankind are more disposed to suffer, while evils are sufferable, than to right themselves by abolishing the forms to which they are accustomed. But when a long train of abuses and usurpations, pursuing invariably the same Object evinces a design to reduce them under absolute Despotism, it is their right, it is their duty, to throw off such Government, and to provide new Guards for their future security.", translation: "You shouldn't overthrow a government over small problems. People will tolerate a lot before they act. But when there's a clear pattern of the government grabbing more power and crushing rights -- when they're obviously building toward total control -- it's not just your right to stop them. It's your duty.", rights: "One bad law might be a mistake. A pattern of laws all pushing toward more control and less freedom is a design. Citizens have a duty to recognize the pattern.", examples: ["The Patriot Act was 'temporary' in 2001. Its surveillance provisions lasted decades. Emergency powers that become permanent are exactly this pattern.", "Rights chipped away one small 'reasonable' step at a time. This passage says look at the trajectory, not just each individual step."], references: [{text:"Youngstown Sheet & Tube Co. v. Sawyer (1952)", source:"343 U.S. 579"}] },
+      { title: "The Grievances Against the King", original: "He has refused his Assent to Laws, the most wholesome and necessary for the public good.\nHe has forbidden his Governors to pass Laws of immediate and pressing importance.\nHe has dissolved Representative Houses repeatedly, for opposing with manly firmness his invasions on the rights of the people.\nHe has obstructed the Administration of Justice.\nHe has made Judges dependent on his Will alone, for the tenure of their offices, and the amount and payment of their salaries.\nHe has erected a multitude of New Offices, and sent hither swarms of Officers to harrass our people, and eat out their substance.\nHe has kept among us, in times of peace, Standing Armies without the Consent of our legislatures.\nHe has affected to render the Military independent of and superior to the Civil power.\nFor imposing Taxes on us without our Consent.\nFor depriving us in many cases, of the benefits of Trial by Jury.\nFor transporting us beyond Seas to be tried for pretended offences.", translation: "Here's what the King did: Blocked laws people needed. Shut down legislatures when they pushed back. Corrupted courts by controlling judges' jobs and pay. Created a massive bureaucracy to harass people and drain their money. Kept soldiers among civilians without permission. Put military above civilian authority. Taxed people with no representation. Took away jury trials. Shipped people overseas for rigged trials.", rights: "Every grievance here became a specific protection in the Constitution. The Founders experienced these abuses firsthand, then wrote rules to prevent them from ever happening again.", examples: ["Civil asset forfeiture lets police seize your property without charging you with a crime -- no jury trial needed.", "Militarized police (armored vehicles, military weapons, military tactics against civilians) echoes 'rendering the Military superior to Civil power.'", "Regulatory agencies that can fine and penalize you without full court protections echo 'erected a multitude of new offices to harass our people.'"], references: [{text:"Timbs v. Indiana (2019)", source:"586 U.S. 146"}, {text:"Posse Comitatus Act (1878)", source:"18 U.S.C. § 1385"}] },
+      { title: "The Declaration", original: "We, therefore, the Representatives of the united States of America, in General Congress, Assembled, appealing to the Supreme Judge of the world for the rectitude of our intentions, do, in the Name, and by Authority of the good People of these Colonies, solemnly publish and declare, That these United Colonies are, and of Right ought to be Free and Independent States; that they are Absolved from all Allegiance to the British Crown, and that all political connection between them and the State of Great Britain, is and ought to be totally dissolved; and that as Free and Independent States, they have full Power to levy War, conclude Peace, contract Alliances, establish Commerce, and to do all other Acts and Things which Independent States may of right do. And for the support of this Declaration, with a firm reliance on the protection of divine Providence, we mutually pledge to each other our Lives, our Fortunes and our sacred Honor.", translation: "We officially declare: these colonies are free and independent. We owe England nothing. We have every right any free nation has -- to defend ourselves, make peace, form alliances, and trade freely. To back this up, we pledge our lives, our money, and our honor to each other.", rights: "The signers committed treason against the world's most powerful empire by signing this. They risked execution because they believed these principles were worth dying for.", examples: ["'We mutually pledge to each other' -- rights come with responsibility. You defend them for everyone, not just yourself."], references: [{text:"Of the 56 signers, 5 were captured and tortured, 12 had homes destroyed, 2 lost sons in the war.", source:"National Archives"}] }
+    ]
+  },
+  "bill-of-rights": {
+    title: "The Bill of Rights",
+    date: "Ratified December 15, 1791",
+    summary: "The first 10 amendments. These are your core personal rights -- the things the government is specifically forbidden from doing to you.",
+    sections: [
+      { title: "Amendment 1: Freedom of Religion, Speech, Press, Assembly, Petition", original: "Congress shall make no law respecting an establishment of religion, or prohibiting the free exercise thereof; or abridging the freedom of speech, or of the press; or the right of the people peaceably to assemble, and to petition the Government for a redress of grievances.", translation: "The government cannot: create an official religion, stop you from practicing yours, silence your speech, censor the press, prevent you from gathering peacefully, or punish you for demanding they fix problems.", rights: "This is five rights in one amendment. You can believe what you want, say what you want, publish what you want, gather with whoever you want, and complain to the government -- and they cannot stop you.", examples: ["Free speech zones that push protesters miles from events effectively neutralize the right to assemble where it matters.", "When government pressures social media companies to remove content, that can be state action restricting speech.", "Requiring permits and fees to protest is legal in limited cases, but when selectively enforced, it becomes a barrier to the right itself."], references: [{text:"Tinker v. Des Moines (1969)", source:"393 U.S. 503"}, {text:"New York Times v. Sullivan (1964)", source:"376 U.S. 254"}] },
+      { title: "Amendment 2: Right to Bear Arms", original: "A well regulated Militia, being necessary to the security of a free State, the right of the people to keep and bear Arms, shall not be infringed.", translation: "Because a trained armed citizenry is necessary for a free country to stay free, the people's right to own and carry weapons cannot be violated.", rights: "Individual citizens have the right to own firearms. This exists so the people always retain the physical ability to defend themselves -- against criminals, invaders, or a tyrannical government.", examples: ["May-issue permit systems where officials have discretion to deny carry permits can result in unequal application.", "Some jurisdictions require barriers that disproportionately affect low-income individuals in high-crime areas who need protection most."], references: [{text:"District of Columbia v. Heller (2008)", source:"554 U.S. 570"}, {text:"NYSRPA v. Bruen (2022)", source:"597 U.S. 1"}] },
+      { title: "Amendment 4: Search and Seizure", original: "The right of the people to be secure in their persons, houses, papers, and effects, against unreasonable searches and seizures, shall not be violated, and no Warrants shall issue, but upon probable cause, supported by Oath or affirmation, and particularly describing the place to be searched, and the persons or things to be seized.", translation: "You have the right to be left alone. The government cannot search you, your home, your belongings, or your documents without a good reason. To get a warrant, they must swear under oath that they have probable cause AND specifically describe what they're looking for and where.", rights: "Police need a warrant (with rare exceptions). That warrant must be specific -- no fishing expeditions. The standard is probable cause -- actual evidence, not just a hunch.", examples: ["Mass surveillance programs that collect everyone's phone records and internet activity without individual warrants violate the spirit of this amendment.", "Police using cell-site location data to track your movements without a warrant was ruled unconstitutional.", "Civil asset forfeiture seizes property without a criminal conviction."], references: [{text:"Carpenter v. United States (2018)", source:"585 U.S. 296"}, {text:"Riley v. California (2014)", source:"573 U.S. 373"}] },
+      { title: "Amendment 5: Rights of the Accused", original: "No person shall be held to answer for a capital, or otherwise infamous crime, unless on a presentment or indictment of a Grand Jury; nor shall any person be subject for the same offence to be twice put in jeopardy of life or limb; nor shall be compelled in any criminal case to be a witness against himself, nor be deprived of life, liberty, or property, without due process of law; nor shall private property be taken for public use, without just compensation.", translation: "For serious crimes, a grand jury must indict you first. You can't be tried twice for the same crime. You can't be forced to testify against yourself. You can't lose your life, freedom, or property without fair legal proceedings. If the government takes your property, they must pay you fairly.", rights: "Five protections: Grand jury, no double jeopardy, right to remain silent, due process, fair payment for taken property.", examples: ["Civil asset forfeiture bypasses due process -- your property is 'charged' (not you), so criminal protections don't apply.", "Plea bargaining pressures innocent people to plead guilty. When facing decades at trial vs. months with a plea, even innocent people take the deal."], references: [{text:"Miranda v. Arizona (1966)", source:"384 U.S. 436"}, {text:"Kelo v. City of New London (2005)", source:"545 U.S. 469"}] }
+    ]
+  },
+  constitution: {
+    title: "The Constitution of the United States",
+    date: "Signed September 17, 1787. Ratified June 21, 1788.",
+    summary: "The operating manual for the American government. It creates the three branches (Congress, President, Courts), defines what each can and cannot do, and sets the rules for how states relate to each other.",
+    sections: [
+      { title: "Preamble", original: "We the People of the United States, in Order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defence, promote the general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity, do ordain and establish this Constitution for the United States of America.", translation: "We, the American people, are creating this government to: hold the country together, establish justice, keep the peace, defend the nation, promote the well-being of citizens, and protect freedom for ourselves and future generations.", rights: "The government exists to serve these six purposes. Any action that undermines justice, peace, defense, welfare, or liberty is contrary to the government's stated mission.", examples: [], references: [{text:"'We the People' -- not 'We the States' or 'We the Government.'", source:"Constitutional Convention, 1787"}] },
+      { title: "Article I: The Legislature (Congress)", original: "All legislative Powers herein granted shall be vested in a Congress of the United States, which shall consist of a Senate and House of Representatives.", translation: "Only Congress can make federal laws. Congress has two chambers: the Senate and the House of Representatives.", rights: "Laws must come from your elected representatives -- not the President, not agencies, not courts. When regulations are created by unelected bureaucrats or executive orders bypass Congress, this principle is strained.", examples: ["Congress delegated enormous lawmaking power to executive agencies -- the regulations those agencies write have the force of law but weren't voted on by anyone you elected."], references: [{text:"West Virginia v. EPA (2022)", source:"597 U.S. 697"}] },
+      { title: "Article II: The Executive (President)", original: "The executive Power shall be vested in a President of the United States of America. He shall hold his Office during the Term of four Years...", translation: "The President holds executive power. Serves a 4-year term. Executes laws -- does not make them.", rights: "The President executes laws -- does not make them. Executive power is meant to be limited to carrying out what Congress decides.", examples: ["Executive orders have expanded far beyond administrative directives into what critics call 'legislating by pen.'", "The US hasn't formally declared war since 1942, yet has been in continuous military conflicts."], references: [{text:"Youngstown Sheet & Tube Co. v. Sawyer (1952)", source:"343 U.S. 579"}] },
+      { title: "Article III: The Judiciary (Courts)", original: "The judicial Power of the United States, shall be vested in one supreme Court, and in such inferior Courts as the Congress may from time to time ordain and establish.", translation: "There is one Supreme Court. Congress can create lower courts. All federal judges serve for life and their pay cannot be cut.", rights: "Life tenure and pay protection exist so judges can make unpopular decisions without fear of retaliation. They answer to the law, not to politicians.", examples: ["The Constitution doesn't mention judicial review -- the Supreme Court claimed that power itself in 1803 (Marbury v. Madison).", "Life tenure means a single president can shape the court for decades."], references: [{text:"Marbury v. Madison (1803)", source:"5 U.S. 137"}] }
+    ]
+  },
+  amendments: {
+    title: "Amendments 11-27",
+    date: "Ratified 1795-1992",
+    summary: "The remaining amendments expanded rights, fixed problems, and adapted the Constitution to a changing nation.",
+    sections: [
+      { title: "Amendment 13: Abolition of Slavery (1865)", original: "Neither slavery nor involuntary servitude, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States.", translation: "Slavery is illegal. Forced labor is illegal. The one exception: people convicted of crimes can be required to work as part of their punishment.", rights: "You cannot be owned, and you cannot be forced to work against your will.", examples: ["Prison labor programs pay inmates pennies per hour for work that benefits private companies -- the 'punishment' exception in practice.", "Human trafficking remains a form of modern slavery despite this amendment."], references: [{text:"Jones v. Alfred H. Mayer Co. (1968)", source:"392 U.S. 409"}] },
+      { title: "Amendment 14: Equal Protection (1868)", original: "All persons born or naturalized in the United States, and subject to the jurisdiction thereof, are citizens of the United States and of the State wherein they reside. No State shall make or enforce any law which shall abridge the privileges or immunities of citizens; nor shall any State deprive any person of life, liberty, or property, without due process of law; nor deny to any person within its jurisdiction the equal protection of the laws.", translation: "If you're born here or naturalized, you're a citizen. Period. No state can take away your rights, your life, freedom, or property without fair process, or deny anyone equal protection under law.", rights: "This applies the Bill of Rights to STATE governments and requires every person be treated equally under law. Most civil rights protections flow from this amendment.", examples: ["Qualified immunity allows officials to violate your rights without personal liability unless the exact violation was 'clearly established' by prior case law.", "Before this amendment, states could violate your rights freely because the Bill of Rights only limited the federal government."], references: [{text:"Brown v. Board of Education (1954)", source:"347 U.S. 483"}, {text:"Loving v. Virginia (1967)", source:"388 U.S. 1"}] },
+      { title: "Amendment 15: Right to Vote Regardless of Race (1870)", original: "The right of citizens of the United States to vote shall not be denied or abridged by the United States or by any State on account of race, color, or previous condition of servitude.", translation: "The government cannot deny your right to vote because of your race or because you or your ancestors were enslaved.", rights: "It took a century of further struggle after this amendment before it was actually enforced by the Voting Rights Act of 1965.", examples: ["After this passed, states used poll taxes, literacy tests, and violence to prevent Black citizens from voting for another 95 years.", "Felony disenfranchisement removes voting rights from millions, disproportionately affecting minority communities."], references: [{text:"Shelby County v. Holder (2013)", source:"570 U.S. 529"}] },
+      { title: "Amendment 19: Women's Right to Vote (1920)", original: "The right of citizens of the United States to vote shall not be denied or abridged by the United States or by any State on account of sex.", translation: "Women can vote. The government cannot deny anyone's vote because of their sex.", rights: "Half the population gained full political participation. It took 144 years from the Declaration of Independence.", examples: ["Women's suffrage took 72 years of organized activism from Seneca Falls (1848) to ratification."], references: [{text:"Minor v. Happersett (1875) made this amendment necessary.", source:"88 U.S. 162"}] },
+      { title: "Amendment 22: Presidential Term Limits (1951)", original: "No person shall be elected to the office of the President more than twice.", translation: "No one can be President for more than two terms (8 years).", rights: "This prevents any one person from holding presidential power indefinitely. It's a structural protection against authoritarianism.", examples: ["There is no equivalent term limit for Congress, where some members serve 30-40+ years."], references: [{text:"George Washington voluntarily set the two-term precedent.", source:"Historical"}] }
+    ]
+  }
+};
+
+function switchDoc(doc, btn) {
+  currentDoc = doc;
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function switchView(view, btn) {
+  currentView = view;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function toggleDetails(el) {
+  const details = el.nextElementSibling;
+  details.classList.toggle('open');
+  el.textContent = details.classList.contains('open') ? 'Hide rights impact, examples & references' : 'Show rights impact, examples & references';
+}
+
+function render() {
+  const doc = data[currentDoc];
+  let html = `<h2 class="doc-title">${doc.title}</h2><p class="doc-date">${doc.date}</p><p class="doc-summary">${doc.summary}</p>`;
+
+  doc.sections.forEach(s => {
+    html += `<div class="card"><h3>${s.title}</h3>`;
+
+    if (currentView === 'original') {
+      html += `<p class="card-text">${s.original}</p>`;
+    } else if (currentView === 'translated') {
+      html += `<p class="card-text">${s.translation}</p>`;
+    } else {
+      html += `<div class="original-box"><p class="label">Original</p><p class="card-text">${s.original}</p></div>`;
+      html += `<div class="translated-box"><p class="label">Plain English</p><p class="card-text">${s.translation}</p></div>`;
+    }
+
+    html += `<button class="details-btn" onclick="toggleDetails(this)">Show rights impact, examples & references</button>`;
+    html += `<div class="details">`;
+
+    if (s.rights) {
+      html += `<div class="rights-box"><p class="label">Your Rights</p><p>${s.rights}</p></div>`;
+    }
+    if (s.examples && s.examples.length) {
+      html += `<div class="examples-box"><p class="label">Real-World Examples</p><ul>${s.examples.map(e => `<li>${e}</li>`).join('')}</ul></div>`;
+    }
+    if (s.references && s.references.length) {
+      html += `<div class="refs-box"><p class="label">References</p><ul>${s.references.map(r => `<li>${r.text} <span class="source">— ${r.source}</span></li>`).join('')}</ul></div>`;
+    }
+
+    html += `</div></div>`;
+  });
+
+  document.getElementById('content').innerHTML = html;
+}
+
+render();
+</script>
+</body>
+</html>

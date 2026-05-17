@@ -5,6 +5,7 @@ import { billOfRights } from '../data/bill-of-rights';
 import { laterAmendments } from '../data/amendments-11-27';
 import { constitution } from '../data/constitution';
 import { glossary, situations } from '../data/glossary';
+import { cases } from '../data/cases';
 
 // ============================================================
 // ICONS (inline SVG for zero dependencies)
@@ -99,6 +100,15 @@ function SituationIcon({ icon }) {
     home: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
     vote: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>,
     faith: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>,
+    briefcase: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M12 12v2"/></svg>,
+    graduation: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 0 2.5 3 6 3s6-3 6-3v-5"/><path d="M22 10v6"/></svg>,
+    passport: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 18h8"/></svg>,
+    firearm: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>,
+    apartment: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9h1M9 13h1M9 17h1"/></svg>,
+    gavel: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="m14.5 12.5-5 5"/><path d="m9 11 5 5"/><path d="m17.5 8.5-9 9"/><path d="M20 5 5 20"/><path d="m5 20 3 1 1-3"/><path d="M11.5 6.5 17 12"/></svg>,
+    medical: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M8 2h8l4 4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6l4-4z"/><path d="M10 10h4M12 8v4"/></svg>,
+    phone: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>,
+    badge: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M12 2 L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26z"/></svg>,
   };
   return map[icon] || map.shield;
 }
@@ -418,7 +428,7 @@ function getDocMeta(docId) {
   return meta[docId] || {};
 }
 
-function LibraryView({ activeDoc, setActiveDoc, setActiveView }) {
+function LibraryView({ activeDoc, setActiveDoc, setActiveView, onOpenCase }) {
   const [view, setView] = useState('original');
   const [tocOpen, setTocOpen] = useState(false);
 
@@ -530,17 +540,138 @@ function LibraryView({ activeDoc, setActiveDoc, setActiveView }) {
 
       {/* Continuous document content */}
       {sections.map((section, idx) => (
-        <ContinuousSection key={idx} section={section} idx={idx} view={view} isFirst={idx === 0} />
+        <ContinuousSection key={idx} section={section} idx={idx} view={view} isFirst={idx === 0} onOpenCase={onOpenCase} />
       ))}
     </div>
   );
 }
 
 // ============================================================
+// CASE MODAL (rich court case popup)
+// ============================================================
+
+function CaseModal({ caseKey, onClose }) {
+  const caseData = cases[caseKey];
+  if (!caseData) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center" onClick={onClose}>
+      <div className="absolute inset-0" style={{ background: 'rgba(27,42,74,0.5)', backdropFilter: 'blur(4px)' }} />
+      <div
+        className="relative w-full max-w-md rounded-t-2xl sm:rounded-2xl overflow-hidden"
+        style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-xl)', maxHeight: '85vh' }}
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="p-5 pb-3" style={{ borderBottom: '1px solid var(--border)' }}>
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="amendment-badge" style={{ width: '24px', height: '24px', fontSize: '9px' }}>{caseData.amendment}</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{caseData.year}</span>
+              </div>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif", lineHeight: '1.3' }}>
+                {caseData.name}
+              </h3>
+              <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '2px', fontFamily: "'JetBrains Mono', monospace" }}>{caseData.citation}</p>
+            </div>
+            <button onClick={onClose} className="p-1 rounded-lg" style={{ color: 'var(--text-tertiary)' }}>
+              <Icon.X />
+            </button>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="p-5 overflow-y-auto" style={{ maxHeight: 'calc(85vh - 100px)' }}>
+          {/* Summary */}
+          <p style={{ fontSize: '14px', lineHeight: '1.8', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            {caseData.summary}
+          </p>
+
+          {/* Outcome */}
+          <div className="p-4 rounded-xl mb-3" style={{ background: 'var(--navy-bg)', border: '1px solid var(--navy-lighter)' }}>
+            <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--navy)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Outcome</p>
+            <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>{caseData.outcome}</p>
+          </div>
+
+          {/* Significance */}
+          <div className="p-4 rounded-xl mb-4" style={{ background: 'var(--gold-bg)', border: '1px solid var(--gold)' }}>
+            <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Why This Matters</p>
+            <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>{caseData.significance}</p>
+          </div>
+
+          {/* Link to official records */}
+          <a
+            href={caseData.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm"
+            style={{ background: 'var(--navy)', color: 'white' }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            Read Full Court Opinion
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// CASE REFERENCE (clickable case name wrapper)
+// ============================================================
+
+function CaseReference({ caseKey, children, onOpenCase }) {
+  const hasCase = cases[caseKey];
+  if (!hasCase) return <span>{children || caseKey}</span>;
+
+  return (
+    <button
+      onClick={(e) => { e.stopPropagation(); onOpenCase(caseKey); }}
+      className="inline text-left"
+      style={{
+        color: 'var(--navy)',
+        textDecoration: 'underline',
+        textDecorationStyle: 'dotted',
+        textUnderlineOffset: '3px',
+        textDecorationColor: 'var(--navy-lighter)',
+        cursor: 'pointer',
+        background: 'none',
+        border: 'none',
+        padding: 0,
+        font: 'inherit',
+        fontSize: 'inherit',
+        lineHeight: 'inherit',
+      }}
+    >
+      {children || caseKey}
+    </button>
+  );
+}
+
+// ============================================================
+// HELPER: Find amendment data for bridging Rights to Library
+// ============================================================
+
+function findAmendmentData(amendmentNum) {
+  const num = parseInt(amendmentNum);
+  if (isNaN(num)) return null;
+  if (num >= 1 && num <= 10) {
+    return billOfRights.amendments.find(a => a.number === num);
+  }
+  if (num >= 11) {
+    return laterAmendments.amendments.find(a => a.number === num);
+  }
+  return null;
+}
+
+// ============================================================
 // CONTINUOUS SECTION (renders inline in the document flow)
 // ============================================================
 
-function ContinuousSection({ section, idx, view, isFirst }) {
+function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
@@ -676,12 +807,29 @@ function ContinuousSection({ section, idx, view, isFirst }) {
                 {section.references?.length > 0 && (
                   <div className="p-4 rounded-xl" style={{ background: 'var(--bg-secondary)' }}>
                     <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Legal References</p>
-                    {section.references.map((ref, i) => (
-                      <div key={i} className="mb-2 last:mb-0" style={{ fontSize: '12px' }}>
-                        <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{ref.text}</span>
-                        {ref.source && <span style={{ color: 'var(--text-tertiary)' }}> -- {ref.source}</span>}
-                      </div>
-                    ))}
+                    {section.references.map((ref, i) => {
+                      // Try to match the case name from the text
+                      const caseMatch = ref.text.match(/^(.+?\(\d{4}\))/);
+                      const caseKey = caseMatch ? caseMatch[1].trim() : null;
+                      const hasCase = caseKey && cases[caseKey];
+                      const restOfText = caseKey ? ref.text.slice(caseMatch[0].length) : null;
+
+                      return (
+                        <div key={i} className="mb-3 last:mb-0 p-3 rounded-lg" style={{ fontSize: '12px', background: hasCase ? 'var(--bg-card)' : 'transparent', border: hasCase ? '1px solid var(--border-light)' : 'none' }}>
+                          {hasCase ? (
+                            <>
+                              <CaseReference caseKey={caseKey} onOpenCase={onOpenCase}>
+                                <span style={{ fontWeight: '600' }}>{caseKey}</span>
+                              </CaseReference>
+                              {restOfText && <span style={{ color: 'var(--text-secondary)' }}>{restOfText}</span>}
+                            </>
+                          ) : (
+                            <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{ref.text}</span>
+                          )}
+                          {ref.source && <span style={{ color: 'var(--text-tertiary)', display: 'block', marginTop: '2px', fontFamily: "'JetBrains Mono', monospace", fontSize: '10px' }}>{ref.source}</span>}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -694,44 +842,135 @@ function ContinuousSection({ section, idx, view, isFirst }) {
 }
 
 // ============================================================
-// RIGHTS GUIDE
+// RIGHTS GUIDE (enriched with amendment content + case links)
 // ============================================================
 
-function RightsView() {
+function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
   const [active, setActive] = useState(null);
+  const [expandedRight, setExpandedRight] = useState(null);
 
   if (active) {
+    // Collect unique amendments referenced in this scenario
+    const referencedAmendments = [...new Set(active.rights.map(r => r.amendment))];
+
     return (
       <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
-        <button onClick={() => setActive(null)} className="flex items-center gap-1 mb-6" style={{ color: 'var(--text-tertiary)', fontSize: '14px' }}>
+        <button onClick={() => { setActive(null); setExpandedRight(null); }} className="flex items-center gap-1 mb-6" style={{ color: 'var(--text-tertiary)', fontSize: '14px' }}>
           <Icon.ChevronLeft /> Back
         </button>
 
-        <div className="flex items-center gap-4 mb-6">
+        <div className="flex items-center gap-4 mb-2">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: 'var(--navy-lighter)', color: 'var(--navy)' }}>
             <SituationIcon icon={active.icon} />
           </div>
           <div>
             <h2 style={{ fontSize: '22px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif" }}>{active.title}</h2>
-            <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>{active.description}</p>
+            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>{active.description}</p>
           </div>
+        </div>
+
+        {/* Amendment badges with quick-jump */}
+        <div className="flex flex-wrap gap-2 mt-4 mb-6">
+          {referencedAmendments.map(a => (
+            <span key={a} className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: 'var(--navy-lighter)', color: 'var(--navy)' }}>
+              {isNaN(parseInt(a)) ? a : `${a} Amendment`}
+            </span>
+          ))}
         </div>
 
         <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Your Constitutional Rights</p>
         <div className="space-y-3 mb-8">
-          {active.rights.map((r, i) => (
-            <div key={i} className="p-4 rounded-xl border" style={{ background: 'var(--bg-card)', borderColor: 'var(--border)' }}>
-              <div className="flex items-start gap-3">
-                <div className="amendment-badge" style={{ width: '28px', height: '28px', fontSize: '10px', marginTop: '1px' }}>{r.amendment}</div>
-                <div>
-                  <p style={{ fontSize: '13px', lineHeight: '1.7', color: 'var(--text-primary)' }}>{r.right}</p>
-                  <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '4px', fontStyle: 'italic' }}>{r.ref}</p>
+          {active.rights.map((r, i) => {
+            const isExpanded = expandedRight === i;
+            const amendmentData = findAmendmentData(r.amendment);
+            const caseData = cases[r.ref];
+
+            return (
+              <div key={i} className="rounded-xl border overflow-hidden" style={{ background: 'var(--bg-card)', borderColor: isExpanded ? 'var(--navy)' : 'var(--border)', transition: 'border-color 0.2s' }}>
+                {/* Main right card */}
+                <button
+                  onClick={() => setExpandedRight(isExpanded ? null : i)}
+                  className="w-full text-left p-4"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="amendment-badge" style={{ width: '28px', height: '28px', fontSize: '10px', marginTop: '1px' }}>{r.amendment}</div>
+                    <div className="flex-1">
+                      <p style={{ fontSize: '13px', lineHeight: '1.7', color: 'var(--text-primary)' }}>{r.right}</p>
+                      {caseData ? (
+                        <div className="flex items-center gap-2 mt-2">
+                          <CaseReference caseKey={r.ref} onOpenCase={onOpenCase}>
+                            <span style={{ fontSize: '11px', fontWeight: '600' }}>{caseData.name} ({caseData.year})</span>
+                          </CaseReference>
+                        </div>
+                      ) : (
+                        <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '4px', fontStyle: 'italic' }}>{r.ref}</p>
+                      )}
+                    </div>
+                    <div style={{ color: 'var(--text-tertiary)', flexShrink: 0, marginTop: '2px' }}>
+                      <Icon.ChevronDown open={isExpanded} />
+                    </div>
+                  </div>
+                </button>
+
+                {/* Expanded details */}
+                <div className="card-expand" style={{ maxHeight: isExpanded ? '1200px' : '0', opacity: isExpanded ? 1 : 0 }}>
+                  {isExpanded && (
+                    <div className="px-4 pb-4 space-y-3">
+                      {/* Case quick summary */}
+                      {caseData && (
+                        <div className="p-3 rounded-lg" style={{ background: 'var(--bg-secondary)' }}>
+                          <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Key Case</p>
+                          <p style={{ fontSize: '12px', lineHeight: '1.6', color: 'var(--text-secondary)' }}>
+                            {caseData.summary.length > 200 ? caseData.summary.slice(0, 200) + '...' : caseData.summary}
+                          </p>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); onOpenCase(r.ref); }}
+                            className="mt-2 text-xs font-semibold flex items-center gap-1"
+                            style={{ color: 'var(--navy)' }}
+                          >
+                            Read full case details
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Amendment source text */}
+                      {amendmentData && (
+                        <div className="p-3 rounded-lg" style={{ background: 'var(--gold-bg)', border: '1px solid var(--gold)' }}>
+                          <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>
+                            From the {r.amendment} Amendment
+                          </p>
+                          <p style={{ fontSize: '12px', lineHeight: '1.6', color: 'var(--text-secondary)', fontFamily: "'Libre Baskerville', Georgia, serif", fontStyle: 'italic' }}>
+                            "{amendmentData.original.length > 200 ? amendmentData.original.slice(0, 200) + '...' : amendmentData.original}"
+                          </p>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const num = parseInt(r.amendment);
+                              if (num >= 1 && num <= 10) {
+                                setActiveDoc('bill-of-rights');
+                              } else if (num >= 11) {
+                                setActiveDoc('amendments');
+                              }
+                              setActiveView('library');
+                            }}
+                            className="mt-2 text-xs font-semibold flex items-center gap-1"
+                            style={{ color: 'var(--gold)' }}
+                          >
+                            Read full amendment
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
+        {/* Practical Tips */}
         <div className="p-5 rounded-xl border" style={{ background: 'var(--gold-bg)', borderColor: 'var(--gold)', borderWidth: '1px' }}>
           <div className="stars-decoration" />
           <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Practical Tips</p>
@@ -741,6 +980,28 @@ function RightsView() {
               <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>{t}</p>
             </div>
           ))}
+        </div>
+
+        {/* Related documents CTA */}
+        <div className="mt-6 p-4 rounded-xl text-center" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
+          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '8px' }}>Want the full picture?</p>
+          <button
+            onClick={() => {
+              const firstNum = parseInt(active.rights[0]?.amendment);
+              if (firstNum >= 1 && firstNum <= 10) {
+                setActiveDoc('bill-of-rights');
+              } else if (firstNum >= 11) {
+                setActiveDoc('amendments');
+              } else {
+                setActiveDoc('constitution');
+              }
+              setActiveView('library');
+            }}
+            className="px-4 py-2 rounded-xl text-sm font-semibold"
+            style={{ background: 'var(--navy)', color: 'white' }}
+          >
+            Read the Source Documents
+          </button>
         </div>
       </div>
     );
@@ -752,14 +1013,18 @@ function RightsView() {
         Know Your Rights
       </h1>
       <p className="fade-in-up visible" style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px', lineHeight: '1.6' }}>
-        Real situations. Real rights. Tap a scenario to learn exactly which protections apply.
+        Real situations. Real rights. Tap a scenario to learn exactly which constitutional protections apply to you.
       </p>
 
-      <div className="mt-6 space-y-3 stagger-in">
+      <p className="fade-in-up visible" style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '16px', marginBottom: '8px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+        {situations.length} scenarios covered
+      </p>
+
+      <div className="space-y-3 stagger-in">
         {situations.map(s => (
           <button
             key={s.id}
-            onClick={() => setActive(s)}
+            onClick={() => { setActive(s); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             className="w-full text-left p-4 rounded-2xl border flex items-center gap-4"
             style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-sm)' }}
           >
@@ -961,6 +1226,7 @@ export default function Home() {
   const [activeView, setActiveView] = useState('home');
   const [activeDoc, setActiveDoc] = useState('declaration');
   const [searchOpen, setSearchOpen] = useState(false);
+  const [openCase, setOpenCase] = useState(null);
 
   const searchIndex = useMemo(() => buildSearchIndex(), []);
   const observe = useInView();
@@ -975,20 +1241,25 @@ export default function Home() {
     return () => window.removeEventListener('keydown', h);
   }, []);
 
+  const handleOpenCase = useCallback((caseKey) => setOpenCase(caseKey), []);
+
   return (
     <div className={darkMode ? 'dark' : ''}>
       <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-primary)', transition: 'background 0.3s, color 0.3s' }}>
         <ReadingProgress />
         <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} searchIndex={searchIndex} />
+        {openCase && <CaseModal caseKey={openCase} onClose={() => setOpenCase(null)} />}
         <TopBar darkMode={darkMode} setDarkMode={setDarkMode} onSearchOpen={() => setSearchOpen(true)} />
 
         {activeView === 'home' && (
           <HomeView setActiveView={setActiveView} setActiveDoc={setActiveDoc} />
         )}
         {activeView === 'library' && (
-          <LibraryView activeDoc={activeDoc} setActiveDoc={setActiveDoc} setActiveView={setActiveView} />
+          <LibraryView activeDoc={activeDoc} setActiveDoc={setActiveDoc} setActiveView={setActiveView} onOpenCase={handleOpenCase} />
         )}
-        {activeView === 'rights' && <RightsView />}
+        {activeView === 'rights' && (
+          <RightsView onOpenCase={handleOpenCase} setActiveView={setActiveView} setActiveDoc={setActiveDoc} />
+        )}
         {activeView === 'glossary' && <GlossaryView />}
 
         <BottomNav activeView={activeView} setActiveView={setActiveView} />

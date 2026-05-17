@@ -163,5 +163,127 @@ export const situations = [
       { amendment: "14th", right: "These protections apply equally at the state and local level, not just federal.", ref: "Cantwell v. Connecticut (1940)" }
     ],
     tips: ["Public schools cannot sponsor prayer but students can pray privately and form religious clubs.", "Employers must reasonably accommodate religious practices unless it causes undue hardship.", "The government can regulate conduct that happens to be religious if the law is neutral and generally applicable.", "Religious organizations have broad exemptions from many employment discrimination laws.", "You have the right to be free FROM religion -- non-belief is equally protected."]
+  },
+  {
+    id: "workplace",
+    title: "Workplace Rights",
+    icon: "briefcase",
+    description: "Constitutional protections that follow you to work.",
+    rights: [
+      { amendment: "13th", right: "Forced labor is unconstitutional. No employer, public or private, can compel you to work against your will or under threat of violence.", ref: "Bailey v. Alabama (1911)" },
+      { amendment: "14th", right: "Government employers cannot fire you without due process. If you have a property interest in your job (tenure, contract), you're entitled to notice and a hearing.", ref: "Cleveland Board of Education v. Loudermill (1985)" },
+      { amendment: "1st", right: "Government employees retain free speech rights on matters of public concern. You can speak out about corruption, waste, or public safety without retaliation.", ref: "Pickering v. Board of Education (1968)" },
+      { amendment: "4th", right: "Government employers need reasonable grounds before searching your workspace. Suspicionless drug testing is limited to safety-sensitive positions.", ref: "O'Connor v. Ortega (1987)" },
+      { amendment: "5th", right: "You cannot be compelled to testify against yourself in a workplace investigation that could lead to criminal charges.", ref: "Garrity v. New Jersey (1967)" }
+    ],
+    tips: ["Private employers have more latitude to restrict speech at work than government employers.", "Whistleblower protections vary by state and federal law, but retaliation for reporting illegal activity is widely prohibited.", "Your employer cannot force you to participate in political activities or make political contributions.", "Document everything if you believe your rights are being violated -- dates, witnesses, communications.", "Know that 'at-will' employment means you can be fired for most reasons, but never for constitutionally protected reasons."]
+  },
+  {
+    id: "school-rights",
+    title: "Students' Rights at School",
+    icon: "graduation",
+    description: "Your rights don't stop at the schoolhouse gate.",
+    rights: [
+      { amendment: "1st", right: "Students retain free speech rights in school. The government cannot punish you for peaceful expression that doesn't substantially disrupt learning.", ref: "Tinker v. Des Moines (1969)" },
+      { amendment: "4th", right: "School officials can search you if they have reasonable suspicion (a lower bar than probable cause), but strip searches require stronger justification.", ref: "New Jersey v. T.L.O. (1985)" },
+      { amendment: "14th", right: "You cannot be suspended for more than a trivial period without notice of the charges and an opportunity to respond.", ref: "Goss v. Lopez (1975)" },
+      { amendment: "1st", right: "You have the right to refuse to participate in the Pledge of Allegiance or any patriotic exercise.", ref: "West Virginia v. Barnette (1943)" },
+      { amendment: "1st", right: "Public universities cannot restrict student speech to tiny 'free speech zones' that limit where you can express yourself on campus.", ref: "Healy v. James (1972)" }
+    ],
+    tips: ["Student newspapers at public schools have some First Amendment protection, though school-sponsored publications have less.", "You can form political or religious student clubs if the school allows other non-curricular clubs.", "Private schools are not bound by the First Amendment, but many state laws still provide student protections.", "If you're facing disciplinary action, know your school's written policies and your right to appeal.", "Parents have the right to opt children out of certain programs that conflict with religious beliefs."]
+  },
+  {
+    id: "immigration-encounter",
+    title: "Immigration Encounters",
+    icon: "passport",
+    description: "Constitutional protections apply to everyone on U.S. soil, not just citizens.",
+    rights: [
+      { amendment: "4th", right: "Immigration agents generally need a warrant to enter your home. An ICE administrative warrant (Form I-200) does not authorize entering a home without consent.", ref: "Payton v. New York (1980)" },
+      { amendment: "5th", right: "Everyone in the United States, regardless of immigration status, has the right to remain silent and cannot be forced to answer questions about their status.", ref: "Miranda v. Arizona (1966)" },
+      { amendment: "14th", right: "The Equal Protection Clause applies to all 'persons' in U.S. jurisdiction, not just citizens. Racial profiling by immigration agents is unconstitutional.", ref: "Yick Wo v. Hopkins (1886)" },
+      { amendment: "6th", right: "If you face criminal charges (including illegal entry), you have the right to an attorney. In deportation proceedings, you have the right to hire one but the government is not required to provide one.", ref: "Gideon v. Wainwright (1963)" },
+      { amendment: "5th", right: "Due process requires that deportation proceedings be fair, including proper notice and an opportunity to present your case.", ref: "Zadvydas v. Davis (2001)" }
+    ],
+    tips: ["You do not have to open your door for immigration agents without a judicial warrant signed by a judge.", "You have the right to remain silent -- say 'I am exercising my right to remain silent.'", "Do not sign any documents without reading them fully and consulting an attorney.", "Keep important documents (identification, court papers) in a safe, accessible place.", "Within 100 miles of a U.S. border, Border Patrol has expanded checkpoint authority, but you still have the right to remain silent."]
+  },
+  {
+    id: "gun-ownership",
+    title: "Firearm Ownership",
+    icon: "firearm",
+    description: "Your Second Amendment rights and their limits.",
+    rights: [
+      { amendment: "2nd", right: "You have an individual right to keep and bear arms in your home for self-defense, independent of militia service.", ref: "District of Columbia v. Heller (2008)" },
+      { amendment: "2nd", right: "This right applies to state and local governments, not just the federal government. Cities and states cannot impose total bans on handgun ownership.", ref: "McDonald v. City of Chicago (2010)" },
+      { amendment: "2nd", right: "You have the right to carry a firearm outside the home for self-defense. States cannot require you to show 'special need' beyond self-defense to obtain a carry permit.", ref: "New York State Rifle & Pistol Assn. v. Bruen (2022)" },
+      { amendment: "14th", right: "Gun regulations must be applied equally. Laws that effectively allow only wealthy or connected individuals to exercise gun rights can violate equal protection.", ref: "14th Amendment" }
+    ],
+    tips: ["Federal law prohibits certain people from owning firearms, including convicted felons and those involuntarily committed.", "Background checks are required for purchases from licensed dealers. Private sale rules vary by state.", "Concealed carry laws differ dramatically by state -- know the rules wherever you travel.", "Even with a permit, there are places you cannot legally carry (courthouses, schools, federal buildings).", "Safe storage laws are increasingly common and may require locking up firearms when children are present."]
+  },
+  {
+    id: "housing",
+    title: "Tenant and Housing Rights",
+    icon: "apartment",
+    description: "Constitutional protections for where you live.",
+    rights: [
+      { amendment: "4th", right: "Your home has the strongest Fourth Amendment protection. Police almost always need a warrant to enter, and landlords cannot let them in without one.", ref: "Payton v. New York (1980)" },
+      { amendment: "3rd", right: "The government cannot commandeer your home to quarter soldiers or use it as a law enforcement staging area without your consent.", ref: "Engblom v. Carey (1982)" },
+      { amendment: "14th", right: "Government housing agencies cannot discriminate based on race, religion, or national origin. Equal protection applies to all public housing decisions.", ref: "Yick Wo v. Hopkins (1886)" },
+      { amendment: "5th", right: "If the government takes your property through eminent domain, they must pay fair market value. This applies even to long-term leases.", ref: "Kelo v. City of New London (2005)" },
+      { amendment: "4th", right: "Building inspectors generally need your consent or a warrant to enter your home for code inspections.", ref: "Camara v. Municipal Court (1967)" }
+    ],
+    tips: ["A landlord is not the government -- the Constitution mainly protects you from government action, not private landlords.", "However, federal, state, and local fair housing laws protect against discrimination by private landlords.", "If police knock, you do not have to open the door unless they have a warrant. Ask them to slide it under the door.", "Public housing tenants have additional due process protections before eviction.", "Document the condition of your rental when you move in and out -- photos with timestamps."]
+  },
+  {
+    id: "jury-duty",
+    title: "Jury Duty and the Court System",
+    icon: "gavel",
+    description: "Your role in the justice system and your rights as a juror.",
+    rights: [
+      { amendment: "6th", right: "Criminal defendants have the right to an impartial jury of their peers. This means juries must be drawn from a fair cross-section of the community.", ref: "Taylor v. Louisiana (1975)" },
+      { amendment: "7th", right: "In federal civil cases involving more than $20, you have the right to a jury trial. Most states have similar guarantees.", ref: "7th Amendment" },
+      { amendment: "14th", right: "Jurors cannot be excluded based on race. Prosecutors and defense attorneys cannot use peremptory challenges to remove jurors because of their race.", ref: "Batson v. Kentucky (1986)" },
+      { amendment: "5th", right: "Grand jurors (who decide whether to indict) serve as a check on prosecutorial power. They can refuse to indict if they believe evidence is insufficient.", ref: "5th Amendment" }
+    ],
+    tips: ["Jury duty is both a right and a civic obligation. Failure to appear can result in fines or contempt of court.", "You cannot be fired or penalized by your employer for serving on a jury.", "As a juror, you must follow the judge's instructions on the law, but you are the sole judge of the facts.", "If you're selected for a jury, do not research the case or discuss it outside the courtroom.", "Jury nullification (acquitting despite evidence of guilt) is controversial but historically has been used as a check on unjust laws."]
+  },
+  {
+    id: "healthcare",
+    title: "Medical Rights and Privacy",
+    icon: "medical",
+    description: "Constitutional protections for your body and medical decisions.",
+    rights: [
+      { amendment: "14th", right: "You have a liberty interest in refusing unwanted medical treatment. Competent adults can refuse even life-saving treatment.", ref: "Cruzan v. Director, Missouri Dept. of Health (1990)" },
+      { amendment: "4th", right: "Police cannot draw your blood without a warrant or your consent, even if they suspect you of drunk driving.", ref: "Missouri v. McNeely (2013)" },
+      { amendment: "14th", right: "Parents have a fundamental right to make medical decisions for their children, though the state can intervene in cases of medical neglect.", ref: "Parham v. J.R. (1979)" },
+      { amendment: "5th", right: "You cannot be forced to undergo medical examinations in criminal cases that are testimonial in nature, though physical evidence (blood, DNA) may be compelled with a warrant.", ref: "Schmerber v. California (1966)" }
+    ],
+    tips: ["HIPAA is a federal law, not a constitutional right, but it provides strong privacy protections for your medical records.", "You have the right to informed consent before any medical procedure.", "Emergency rooms must treat you regardless of your ability to pay under EMTALA (a federal statute, not the Constitution).", "Involuntary psychiatric commitment requires due process -- the government must prove you're a danger to yourself or others.", "Medical records can generally only be shared with law enforcement through a warrant or court order."]
+  },
+  {
+    id: "social-media",
+    title: "Social Media and Big Tech",
+    icon: "phone",
+    description: "Where your rights stand in the age of platforms and algorithms.",
+    rights: [
+      { amendment: "1st", right: "Social media platforms are the modern public square. The government cannot ban you from these platforms as punishment.", ref: "Packingham v. North Carolina (2017)" },
+      { amendment: "1st", right: "You have the right to post anonymously. The government generally cannot force platforms to reveal your identity without proper legal process.", ref: "McIntyre v. Ohio Elections Commission (1995)" },
+      { amendment: "4th", right: "The government needs a warrant to access your private messages, cloud-stored photos, and social media accounts.", ref: "Carpenter v. United States (2018)" },
+      { amendment: "1st", right: "The government cannot pressure or coerce private platforms into censoring your speech. When officials threaten regulatory consequences to silence viewpoints, that can become unconstitutional state action.", ref: "Murthy v. Missouri (2024)" }
+    ],
+    tips: ["Private platforms can set their own content policies -- the First Amendment restricts the government, not companies.", "However, when government officials pressure platforms to remove content, the line between private moderation and state censorship gets blurry.", "Your 'public' posts can be viewed by law enforcement without a warrant, but your DMs and private content generally require one.", "Terms of service are contracts, not laws. Violating them may get you banned, but it's not a crime.", "Before posting, remember: screenshots are forever. Even 'disappearing' content can be captured."]
+  },
+  {
+    id: "peaceful-carry",
+    title: "Interactions with Federal Agents",
+    icon: "badge",
+    description: "Your rights when dealing with FBI, DEA, ATF, or other federal agencies.",
+    rights: [
+      { amendment: "4th", right: "Federal agents need a warrant to search your home, car, or belongings, with the same exceptions that apply to local police.", ref: "Chimel v. California (1969)" },
+      { amendment: "5th", right: "You have the right to remain silent during federal investigations. Saying 'I'm invoking my Fifth Amendment right' is crucial -- silence alone may not be enough.", ref: "Salinas v. Texas (2013)" },
+      { amendment: "6th", right: "If you're charged with a federal crime, you have the right to an attorney at all critical stages of the proceeding.", ref: "Gideon v. Wainwright (1963)" },
+      { amendment: "4th", right: "Federal agents at airports can conduct routine screening, but invasive searches (pat-downs, device searches) require additional justification.", ref: "United States v. Cotterman (2013)" },
+      { amendment: "5th", right: "You cannot be tried twice for the same federal offense. However, the 'dual sovereignty' doctrine means state and federal governments can each prosecute you for the same conduct.", ref: "Gamble v. United States (2019)" }
+    ],
+    tips: ["Federal agents must identify themselves if asked. Ask to see credentials.", "You do not have to let agents into your home without a warrant. Step outside to speak with them.", "Lying to federal agents is a crime (18 U.S.C. 1001) even if you're not under oath. Silence is safer than a lie.", "If you receive a federal subpoena, consult an attorney immediately -- don't ignore it.", "Recording federal agents is legal in public spaces, but be aware of state wiretapping laws in private settings."]
   }
 ];

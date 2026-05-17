@@ -2,18 +2,18 @@
 cd "$(dirname "$0")"
 rm -f .git/index.lock
 git add -A
-git commit -m "Continuous document flow: read documents as single scrollable text
+git commit -m "Add clickable court cases, enriched Rights Guide, and 10 new scenarios
 
-- Documents now render as continuous flowing text, not isolated sections
-- Collapsible Table of Contents to jump to any section
-- Star dividers between sections for visual breaks
-- Each section has inline expandable rights/examples/references
-- Drop cap on first section, centered section titles throughout
-- Article labels and amendment numbers shown inline
-- Scroll-to-section with smooth scrolling from TOC
-- No more back-button required to continue reading"
+- Built CaseModal with rich case details (summary, outcome, significance, citation, link to official records)
+- Created CaseReference component making all court case names clickable throughout the app
+- Updated ContinuousSection to render references as clickable case cards
+- Completely enriched RightsView: expandable right cards with case previews, amendment source text, and links back to the Library
+- Added 10 new Know Your Rights scenarios: Workplace, Students, Immigration, Firearms, Housing, Jury Duty, Healthcare, Social Media, Federal Agents
+- Added 25+ new court cases to cases.js database
+- New situation icons for all new scenarios
+- 'Read the Source Documents' CTA bridges Rights back to Library"
 git push origin main
-rm -f push.command
+rm -- "$0"
 echo ""
-echo "Pushed successfully! You can close this window."
+echo "Push complete! Changes deployed to Vercel."
 read -n 1 -s -r -p "Press any key to close..."

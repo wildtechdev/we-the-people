@@ -128,19 +128,6 @@ const DOC_COVERS = {
 // HOOKS
 // ============================================================
 
-function useScrollProgress() {
-  const [progress, setProgress] = useState(0);
-  useEffect(() => {
-    const h = () => {
-      const t = document.documentElement.scrollHeight - window.innerHeight;
-      if (t > 0) setProgress((window.scrollY / t) * 100);
-    };
-    window.addEventListener('scroll', h, { passive: true });
-    return () => window.removeEventListener('scroll', h);
-  }, []);
-  return progress;
-}
-
 function useInView() {
   const observe = useCallback(() => {
     const obs = new IntersectionObserver((entries) => {
@@ -215,15 +202,6 @@ function highlightText(text, query) {
 }
 
 // ============================================================
-// READING PROGRESS
-// ============================================================
-
-function ReadingProgress() {
-  const p = useScrollProgress();
-  return <div className="reading-progress no-print" style={{ width: `${p}%` }} />;
-}
-
-// ============================================================
 // BOTTOM NAV (mobile reading-app style)
 // ============================================================
 
@@ -282,7 +260,7 @@ function TopBar({ darkMode, setDarkMode, onSearchOpen }) {
 // HOME VIEW (like the reference's home screen)
 // ============================================================
 
-function HomeView({ setActiveView, setActiveDoc, setReadingSection, lastRead }) {
+function HomeView({ setActiveView, setActiveDoc, setReadingSection }) {
   return (
     <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
       {/* Title */}
@@ -293,35 +271,7 @@ function HomeView({ setActiveView, setActiveDoc, setReadingSection, lastRead }) 
         No parties. Just law.
       </p>
 
-      {/* Currently Reading Card */}
-      <div className="fade-in-up visible mt-6">
-        <button
-          onClick={() => { setActiveView('library'); setActiveDoc('constitution'); }}
-          className="w-full p-4 rounded-2xl border flex items-center gap-4 text-left"
-          style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-sm)' }}
-        >
-          <div className="flex-1">
-            <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: '2px' }}>Continue reading</p>
-            <p style={{ fontSize: '15px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
-              {lastRead || 'The Constitution'}
-            </p>
-          </div>
-          {/* Progress circle */}
-          <div style={{ width: '44px', height: '44px', position: 'relative' }}>
-            <svg width="44" height="44" viewBox="0 0 44 44">
-              <circle cx="22" cy="22" r="18" fill="none" stroke="var(--border)" strokeWidth="3" />
-              <circle cx="22" cy="22" r="18" fill="none" stroke="var(--crimson)" strokeWidth="3"
-                strokeDasharray={`${2 * Math.PI * 18}`}
-                strokeDashoffset={`${2 * Math.PI * 18 * (1 - 0.35)}`}
-                strokeLinecap="round"
-                transform="rotate(-90 22 22)" />
-            </svg>
-            <span style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: 'var(--text-primary)' }}>35%</span>
-          </div>
-        </button>
-      </div>
-
-      {/* Documents ("Rekomendasi kami" equivalent) */}
+      {/* Documents */}
       <h2 className="fade-in-up" style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginTop: '32px', marginBottom: '16px', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
         Founding Documents
       </h2>
@@ -1299,7 +1249,6 @@ export default function Home() {
   return (
     <div className={darkMode ? 'dark' : ''}>
       <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-primary)', transition: 'background 0.3s, color 0.3s' }}>
-        <ReadingProgress />
         <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} searchIndex={searchIndex} />
         {openCase && <CaseModal caseKey={openCase} onClose={() => setOpenCase(null)} />}
         <TopBar darkMode={darkMode} setDarkMode={setDarkMode} onSearchOpen={() => setSearchOpen(true)} />

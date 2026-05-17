@@ -100,15 +100,7 @@ body {
 }
 
 /* Reading progress bar */
-.reading-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--crimson), var(--gold));
-  z-index: 100;
-  transition: width 0.1s linear;
-}
+
 
 /* Scroll animations */
 .fade-in-up {

@@ -88,6 +88,21 @@ const Icon = {
       <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
     </svg>
   ),
+  Info: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+    </svg>
+  ),
+  Share: () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+    </svg>
+  ),
+  Flag: () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>
+    </svg>
+  ),
 };
 
 function SituationIcon({ icon }) {
@@ -238,7 +253,7 @@ function BottomNav({ activeView, setActiveView }) {
 // TOP BAR (minimal like the reference)
 // ============================================================
 
-function TopBar({ darkMode, setDarkMode, onSearchOpen }) {
+function TopBar({ darkMode, setDarkMode, onSearchOpen, onAboutOpen }) {
   return (
     <div className="no-print" style={{ background: 'var(--bg-primary)' }}>
       <div className="max-w-lg mx-auto px-5 pt-4 pb-2 flex items-center justify-between">
@@ -249,6 +264,9 @@ function TopBar({ darkMode, setDarkMode, onSearchOpen }) {
           </button>
           <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-xl" style={{ color: 'var(--text-tertiary)' }}>
             {darkMode ? <Icon.Sun /> : <Icon.Moon />}
+          </button>
+          <button onClick={onAboutOpen} className="p-2 rounded-xl" style={{ color: 'var(--text-tertiary)' }}>
+            <Icon.Info />
           </button>
         </div>
       </div>
@@ -328,16 +346,6 @@ function HomeView({ setActiveView, setActiveDoc, setReadingSection }) {
         ))}
       </div>
 
-      {/* Donate card */}
-      <div className="fade-in-up mt-8 p-5 rounded-2xl text-center" style={{ background: 'var(--navy)', color: 'white' }}>
-        <p style={{ fontSize: '15px', fontWeight: '700', fontFamily: "'Libre Baskerville', Georgia, serif", marginBottom: '4px' }}>Support This Project</p>
-        <p style={{ fontSize: '12px', opacity: 0.8, marginBottom: '14px' }}>Keep civic education free and nonpartisan.</p>
-        <a href="https://donate.stripe.com/PLACEHOLDER" target="_blank" rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold"
-          style={{ background: 'var(--crimson)', color: 'white' }}>
-          <Icon.Heart /> Donate
-        </a>
-      </div>
     </div>
   );
 }
@@ -1049,6 +1057,136 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
 }
 
 // ============================================================
+// ABOUT VIEW
+// ============================================================
+
+function AboutView() {
+  const handleShare = async () => {
+    const shareData = {
+      title: 'We The People',
+      text: 'Carry and learn your constitutional rights -- free, ad-free, and always available. Check out We The People.',
+      url: 'https://we-the-people-bice.vercel.app',
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareData.url);
+        alert('Link copied to clipboard!');
+      }
+    } catch (err) {
+      // user cancelled share
+    }
+  };
+
+  return (
+    <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
+      <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
+        About
+      </h1>
+      <p className="fade-in-up visible" style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+        By the people, for the people.
+      </p>
+
+      {/* Mission statement */}
+      <div className="fade-in-up mt-8 p-6 rounded-2xl border" style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-md)' }}>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'var(--navy)', color: 'white' }}>
+            <Icon.Flag />
+          </div>
+          <h2 style={{ fontSize: '17px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
+            These Words Belong to You
+          </h2>
+        </div>
+        <div style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.8' }}>
+          <p>
+            The Declaration of Independence, the Constitution, the Bill of Rights, and every
+            amendment that followed -- these documents are not the property of any app, company,
+            or political party. They belong to <strong style={{ color: 'var(--text-primary)' }}>We The People</strong> -- the
+            citizens of the United States of America.
+          </p>
+          <p style={{ marginTop: '14px' }}>
+            But ownership alone is not enough. Beyond the rights described within these founding
+            documents, We The People also have an inherent duty and responsibility to
+            actually <em>know</em> our rights. A right you don't know about is a right that can be
+            taken from you without your knowledge -- and that is something no free people should
+            ever accept.
+          </p>
+        </div>
+      </div>
+
+      {/* Why this app exists */}
+      <div className="fade-in-up mt-5 p-6 rounded-2xl border" style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-md)' }}>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'var(--crimson)', color: 'white' }}>
+            <Icon.Heart />
+          </div>
+          <h2 style={{ fontSize: '17px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
+            Why This App Exists
+          </h2>
+        </div>
+        <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.8' }}>
+          This app was created after noticing something surprising: there wasn't a single
+          ad-free, subscription-free resource on the App Store for We The People to carry and
+          learn our constitutional rights anywhere and everywhere we go. The documents that
+          define our freedoms were locked behind paywalls, cluttered with ads, or buried in
+          apps that cared more about profit than civic education.
+        </p>
+        <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.8', marginTop: '14px' }}>
+          That felt wrong. So we built this -- free, forever, for everyone.
+        </p>
+      </div>
+
+      {/* Share */}
+      <div className="fade-in-up mt-5 p-6 rounded-2xl border" style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-md)' }}>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'var(--gold)', color: 'white' }}>
+            <Icon.Share />
+          </div>
+          <h2 style={{ fontSize: '17px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
+            Spread the Word
+          </h2>
+        </div>
+        <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.8', marginBottom: '16px' }}>
+          The more people who understand their rights, the stronger those rights become for
+          all of us. Share this app with your family, friends, and loved ones so they too can
+          better understand their rights as citizens.
+        </p>
+        <button
+          onClick={handleShare}
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold w-full justify-center"
+          style={{ background: 'var(--navy)', color: 'white' }}
+        >
+          <Icon.Share /> Share We The People
+        </button>
+      </div>
+
+      {/* Support */}
+      <div className="fade-in-up mt-5 p-6 rounded-2xl text-center" style={{ background: 'var(--navy)', color: 'white', boxShadow: 'var(--shadow-lg)' }}>
+        <p style={{ fontSize: '17px', fontWeight: '700', fontFamily: "'Libre Baskerville', Georgia, serif", marginBottom: '6px' }}>Support This Project</p>
+        <p style={{ fontSize: '13px', opacity: 0.8, marginBottom: '16px', lineHeight: '1.6' }}>
+          Help keep civic education free and nonpartisan for every American.
+        </p>
+        <a href="https://donate.stripe.com/PLACEHOLDER" target="_blank" rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold"
+          style={{ background: 'var(--crimson)', color: 'white' }}>
+          <Icon.Heart /> Donate
+        </a>
+      </div>
+
+      {/* Footer */}
+      <div className="fade-in-up mt-8 text-center" style={{ fontSize: '12px', color: 'var(--text-tertiary)', lineHeight: '1.7' }}>
+        <p style={{ fontFamily: "'Libre Baskerville', Georgia, serif", fontStyle: 'italic', fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '8px' }}>
+          "We the People of the United States, in Order to form a more perfect Union..."
+        </p>
+        <p>Made with love for this country and its people.</p>
+        <p style={{ marginTop: '4px' }}>No ads. No subscriptions. No politics. Just your rights.</p>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
 // GLOSSARY VIEW
 // ============================================================
 
@@ -1251,7 +1389,7 @@ export default function Home() {
       <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-primary)', transition: 'background 0.3s, color 0.3s' }}>
         <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} searchIndex={searchIndex} />
         {openCase && <CaseModal caseKey={openCase} onClose={() => setOpenCase(null)} />}
-        <TopBar darkMode={darkMode} setDarkMode={setDarkMode} onSearchOpen={() => setSearchOpen(true)} />
+        <TopBar darkMode={darkMode} setDarkMode={setDarkMode} onSearchOpen={() => setSearchOpen(true)} onAboutOpen={() => setActiveView('about')} />
 
         {activeView === 'home' && (
           <HomeView setActiveView={setActiveView} setActiveDoc={setActiveDoc} />
@@ -1263,6 +1401,7 @@ export default function Home() {
           <RightsView onOpenCase={handleOpenCase} setActiveView={setActiveView} setActiveDoc={setActiveDoc} />
         )}
         {activeView === 'glossary' && <GlossaryView />}
+        {activeView === 'about' && <AboutView />}
 
         <BottomNav activeView={activeView} setActiveView={setActiveView} />
         <ScrollToTop />

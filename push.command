@@ -2,20 +2,16 @@
 cd "$(dirname "$0")"
 rm -f .git/index.lock
 git add -A
-git commit -m "Redesign: reading-app aesthetic with patriotic palette
+git commit -m "Continuous document flow: read documents as single scrollable text
 
-- Book/reading-app layout matching reference design
-- Home screen with continue reading card, document covers, quick-access rights
-- Library view with document browser and immersive reading mode
-- Drop caps, pull quotes, dot indicators, and serif typography
-- Bottom navigation bar (Home, Library, Rights, Glossary)
-- Patriotic color palette: navy, crimson, cream, gold
-- Document cover art cards with gradient backgrounds
-- Stars decoration on detail panels
-- Warm cream backgrounds with refined card system
-- Full dark mode with matching palette
-- All search, glossary, and rights guide features preserved
-- Mobile-first responsive design"
+- Documents now render as continuous flowing text, not isolated sections
+- Collapsible Table of Contents to jump to any section
+- Star dividers between sections for visual breaks
+- Each section has inline expandable rights/examples/references
+- Drop cap on first section, centered section titles throughout
+- Article labels and amendment numbers shown inline
+- Scroll-to-section with smooth scrolling from TOC
+- No more back-button required to continue reading"
 git push origin main
 rm -f push.command
 echo ""

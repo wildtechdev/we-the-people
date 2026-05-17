@@ -383,33 +383,60 @@ function HomeView({ setActiveView, setActiveDoc, setReadingSection, lastRead }) 
 }
 
 // ============================================================
-// LIBRARY VIEW (document reader)
+// LIBRARY VIEW (continuous document reader)
 // ============================================================
+
+function getDocSections(docId) {
+  switch (docId) {
+    case 'declaration':
+      return declaration.sections.map(s => ({ ...s, _docLabel: null }));
+    case 'constitution': {
+      const all = [{ ...constitution.preamble, _docLabel: null }];
+      constitution.articles.forEach(art => {
+        art.sections.forEach(s => {
+          all.push({ ...s, _docLabel: `Article ${art.number}`, _articleTitle: art.title });
+        });
+      });
+      return all;
+    }
+    case 'bill-of-rights':
+      return billOfRights.amendments.map(a => ({ ...a, _isAmendment: true }));
+    case 'amendments':
+      return laterAmendments.amendments.map(a => ({ ...a, _isAmendment: true, title: `${a.title} (${a.year})` }));
+    default:
+      return [];
+  }
+}
+
+function getDocMeta(docId) {
+  const meta = {
+    declaration: { title: declaration.title, date: declaration.date, summary: declaration.summary },
+    constitution: { title: constitution.title, date: constitution.date, summary: constitution.summary },
+    'bill-of-rights': { title: billOfRights.title, date: billOfRights.date, summary: billOfRights.summary },
+    amendments: { title: laterAmendments.title, summary: laterAmendments.summary },
+  };
+  return meta[docId] || {};
+}
 
 function LibraryView({ activeDoc, setActiveDoc, setActiveView }) {
   const [view, setView] = useState('original');
-  const [readingSection, setReadingSection] = useState(null);
+  const [tocOpen, setTocOpen] = useState(false);
 
-  // If a section is selected, show the reading view
-  if (readingSection) {
-    return (
-      <ReadingView
-        section={readingSection}
-        view={view}
-        setView={setView}
-        onBack={() => setReadingSection(null)}
-      />
-    );
-  }
+  const sections = useMemo(() => getDocSections(activeDoc), [activeDoc]);
+  const meta = useMemo(() => getDocMeta(activeDoc), [activeDoc]);
+
+  const scrollToSection = (idx) => {
+    const el = document.getElementById(`section-${idx}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTocOpen(false);
+    }
+  };
 
   return (
     <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
-      <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
-        Library
-      </h1>
-
       {/* Document selector tabs */}
-      <div className="flex gap-2 overflow-x-auto hide-scrollbar mt-5 pb-1">
+      <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
         {[
           { id: 'declaration', label: 'Declaration' },
           { id: 'constitution', label: 'Constitution' },
@@ -418,7 +445,7 @@ function LibraryView({ activeDoc, setActiveDoc, setActiveView }) {
         ].map(d => (
           <button
             key={d.id}
-            onClick={() => setActiveDoc(d.id)}
+            onClick={() => { setActiveDoc(d.id); setTocOpen(false); window.scrollTo({ top: 0 }); }}
             className="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium"
             style={{
               background: activeDoc === d.id ? 'var(--navy)' : 'var(--bg-secondary)',
@@ -430,8 +457,23 @@ function LibraryView({ activeDoc, setActiveDoc, setActiveView }) {
         ))}
       </div>
 
+      {/* Document title */}
+      <div className="text-center mt-8 mb-2">
+        <h1 style={{ fontSize: '26px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif", lineHeight: '1.3' }}>
+          {meta.title}
+        </h1>
+        {meta.date && <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '4px' }}>{meta.date}</p>}
+      </div>
+
+      {/* Dot divider */}
+      <div className="dot-indicator my-3">
+        <span className={view === 'original' ? 'active' : ''} />
+        <span className={view === 'translated' ? 'active' : ''} />
+        <span className={view === 'both' ? 'active' : ''} />
+      </div>
+
       {/* View toggle */}
-      <div className="flex gap-1 p-1 rounded-xl mt-5" style={{ background: 'var(--bg-secondary)' }}>
+      <div className="flex gap-1 p-1 rounded-xl mb-4" style={{ background: 'var(--bg-secondary)' }}>
         {[
           { id: 'original', label: 'Original' },
           { id: 'translated', label: 'Plain English' },
@@ -452,137 +494,106 @@ function LibraryView({ activeDoc, setActiveDoc, setActiveView }) {
         ))}
       </div>
 
-      {/* Sections list */}
-      <div className="mt-5 space-y-3 stagger-in">
-        {activeDoc === 'declaration' && declaration.sections.map((s, i) => (
-          <SectionListItem key={s.id} section={s} index={i} view={view} onRead={() => setReadingSection(s)} />
-        ))}
-        {activeDoc === 'constitution' && (
-          <>
-            <SectionListItem section={constitution.preamble} index={0} view={view} onRead={() => setReadingSection(constitution.preamble)} />
-            {constitution.articles.map((art, ai) => (
-              <div key={art.number}>
-                <div className="flex items-center gap-3 mt-6 mb-3">
-                  <div className="amendment-badge" style={{ background: 'var(--navy)' }}>{art.number}</div>
-                  <div>
-                    <p style={{ fontSize: '14px', fontWeight: '700', color: 'var(--text-primary)' }}>Article {art.number}: {art.title}</p>
-                    <p style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{art.sections.length} section{art.sections.length > 1 ? 's' : ''}</p>
-                  </div>
-                </div>
-                {art.sections.map((s, si) => (
-                  <SectionListItem key={s.id} section={s} index={si} view={view} onRead={() => setReadingSection(s)} />
-                ))}
-              </div>
-            ))}
-          </>
-        )}
-        {activeDoc === 'bill-of-rights' && billOfRights.amendments.map((a, i) => (
-          <SectionListItem key={a.number} section={{ ...a, title: a.title }} index={i} view={view} isAmendment onRead={() => setReadingSection(a)} />
-        ))}
-        {activeDoc === 'amendments' && laterAmendments.amendments.map((a, i) => (
-          <SectionListItem key={a.number} section={{ ...a, title: `${a.title} (${a.year})` }} index={i} view={view} isAmendment onRead={() => setReadingSection(a)} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function SectionListItem({ section, index, view, isAmendment, onRead }) {
-  const [expanded, setExpanded] = useState(false);
-  const text = view === 'translated' ? section.translation : section.original;
-  const preview = text ? text.slice(0, 100) + (text.length > 100 ? '...' : '') : '';
-
-  return (
-    <div className="rounded-2xl border overflow-hidden"
-      style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-sm)' }}>
-      <button onClick={onRead} className="w-full p-4 text-left">
-        <div className="flex items-start gap-3">
-          {isAmendment && section.number && (
-            <div className="amendment-badge" style={{ marginTop: '2px' }}>{section.number}</div>
+      {/* Table of Contents (collapsible) */}
+      <div className="mb-6 rounded-xl border overflow-hidden" style={{ background: 'var(--bg-card)', borderColor: 'var(--border)' }}>
+        <button
+          onClick={() => setTocOpen(!tocOpen)}
+          className="w-full flex items-center justify-between p-4 text-sm font-semibold"
+          style={{ color: 'var(--navy)' }}
+        >
+          <span>Table of Contents ({sections.length} sections)</span>
+          <Icon.ChevronDown open={tocOpen} />
+        </button>
+        <div className="card-expand" style={{ maxHeight: tocOpen ? '600px' : '0', opacity: tocOpen ? 1 : 0 }}>
+          {tocOpen && (
+            <div className="px-4 pb-4 space-y-1 overflow-y-auto" style={{ maxHeight: '400px' }}>
+              {sections.map((s, i) => (
+                <button
+                  key={i}
+                  onClick={() => scrollToSection(i)}
+                  className="w-full text-left py-2 px-3 rounded-lg text-sm flex items-center gap-2 hover:opacity-80"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
+                  {s._isAmendment && s.number && (
+                    <span className="amendment-badge" style={{ width: '22px', height: '22px', fontSize: '9px' }}>{s.number}</span>
+                  )}
+                  {s._docLabel && (
+                    <span style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', flexShrink: 0 }}>{s._docLabel}</span>
+                  )}
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.title}</span>
+                </button>
+              ))}
+            </div>
           )}
-          <div className="flex-1 min-w-0">
-            <p style={{ fontSize: '14px', fontWeight: '700', color: 'var(--text-primary)', lineHeight: '1.4' }}>{section.title}</p>
-            <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '6px', lineHeight: '1.5' }}>{preview}</p>
-          </div>
-          <span style={{ color: 'var(--text-tertiary)', flexShrink: 0, marginTop: '4px' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
-          </span>
         </div>
-      </button>
+      </div>
+
+      {/* Continuous document content */}
+      {sections.map((section, idx) => (
+        <ContinuousSection key={idx} section={section} idx={idx} view={view} isFirst={idx === 0} />
+      ))}
     </div>
   );
 }
 
 // ============================================================
-// READING VIEW (full immersive reading like the reference)
+// CONTINUOUS SECTION (renders inline in the document flow)
 // ============================================================
 
-function ReadingView({ section, view, setView, onBack }) {
+function ContinuousSection({ section, idx, view, isFirst }) {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
-      {/* Back button */}
-      <button onClick={onBack} className="flex items-center gap-1 mb-6" style={{ color: 'var(--text-tertiary)', fontSize: '14px' }}>
-        <Icon.ChevronLeft /> Back
-      </button>
+    <div id={`section-${idx}`} style={{ scrollMarginTop: '120px' }}>
+      {/* Section divider (not on first section) */}
+      {!isFirst && (
+        <div className="flex items-center justify-center gap-4 my-10">
+          <div style={{ flex: 1, height: '1px', background: 'var(--border)' }} />
+          <span style={{ color: 'var(--gold)', fontSize: '10px', letterSpacing: '4px' }}>&#9733; &#9733; &#9733;</span>
+          <div style={{ flex: 1, height: '1px', background: 'var(--border)' }} />
+        </div>
+      )}
 
-      {/* Section label */}
-      {section.number && (
-        <p className="text-center" style={{ fontSize: '13px', fontWeight: '600', color: 'var(--crimson)', letterSpacing: '0.03em', marginBottom: '6px' }}>
+      {/* Article label if applicable */}
+      {section._docLabel && (
+        <p style={{ fontSize: '12px', fontWeight: '700', color: 'var(--crimson)', letterSpacing: '0.04em', marginBottom: '4px', textAlign: 'center' }}>
+          {section._docLabel}
+        </p>
+      )}
+
+      {/* Amendment number */}
+      {section._isAmendment && section.number && (
+        <p className="text-center" style={{ fontSize: '12px', fontWeight: '600', color: 'var(--crimson)', letterSpacing: '0.03em', marginBottom: '4px' }}>
           Amendment {section.number}
         </p>
       )}
 
-      {/* Title */}
+      {/* Section title */}
       <h2 className="text-center" style={{
-        fontSize: '26px',
+        fontSize: '22px',
         fontWeight: '700',
         color: 'var(--text-primary)',
         fontFamily: "'Libre Baskerville', Georgia, serif",
-        lineHeight: '1.3',
-        marginBottom: '6px',
+        lineHeight: '1.35',
+        marginBottom: '4px',
       }}>
         {section.title}
       </h2>
 
-      {/* Year if available */}
       {section.year && (
-        <p className="text-center" style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>Ratified {section.year}</p>
+        <p className="text-center" style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>Ratified {section.year}</p>
       )}
 
-      {/* Dot divider */}
+      {/* Small dot divider under title */}
       <div className="dot-indicator my-4">
-        <span className={view === 'original' ? 'active' : ''} />
-        <span className={view === 'translated' ? 'active' : ''} />
-        <span className={view === 'both' ? 'active' : ''} />
-      </div>
-
-      {/* View tabs */}
-      <div className="flex gap-1 p-1 rounded-xl mb-6" style={{ background: 'var(--bg-secondary)' }}>
-        {[
-          { id: 'original', label: 'Original' },
-          { id: 'translated', label: 'Plain English' },
-          { id: 'both', label: 'Both' },
-        ].map(v => (
-          <button
-            key={v.id}
-            onClick={() => setView(v.id)}
-            className="flex-1 py-2 rounded-lg text-xs font-medium"
-            style={{
-              background: view === v.id ? 'var(--bg-card)' : 'transparent',
-              color: view === v.id ? 'var(--text-primary)' : 'var(--text-tertiary)',
-              boxShadow: view === v.id ? 'var(--shadow-sm)' : 'none',
-            }}
-          >
-            {v.label}
-          </button>
-        ))}
+        <span style={{ background: 'var(--border)' }} />
+        <span style={{ background: 'var(--crimson)', width: '6px' }} />
+        <span style={{ background: 'var(--border)' }} />
       </div>
 
       {/* Content */}
       {view === 'original' && (
-        <div className="drop-cap" style={{
+        <div className={isFirst ? 'drop-cap' : ''} style={{
           fontFamily: "'Libre Baskerville', Georgia, serif",
           fontSize: '15px',
           lineHeight: '1.9',
@@ -594,7 +605,7 @@ function ReadingView({ section, view, setView, onBack }) {
       )}
 
       {view === 'translated' && (
-        <div className="drop-cap" style={{
+        <div className={isFirst ? 'drop-cap' : ''} style={{
           fontSize: '15px',
           lineHeight: '1.9',
           color: 'var(--text-secondary)',
@@ -604,12 +615,12 @@ function ReadingView({ section, view, setView, onBack }) {
       )}
 
       {view === 'both' && (
-        <div className="space-y-5">
+        <div className="space-y-4">
           <div className="p-4 rounded-xl" style={{ background: 'var(--bg-secondary)' }}>
             <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>Original Text</p>
             <p style={{ fontFamily: "'Libre Baskerville', Georgia, serif", fontSize: '14px', lineHeight: '1.8', color: 'var(--text-secondary)', whiteSpace: 'pre-line' }}>{section.original}</p>
           </div>
-          <div className="p-4 rounded-xl" style={{ background: 'var(--crimson-lighter)', border: '1px solid var(--crimson)', borderColor: 'rgba(178,34,52,0.15)' }}>
+          <div className="p-4 rounded-xl" style={{ background: 'var(--crimson-lighter)', border: '1px solid rgba(178,34,52,0.15)' }}>
             <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>Plain English</p>
             <p style={{ fontSize: '14px', lineHeight: '1.8', color: 'var(--text-secondary)' }}>{section.translation}</p>
           </div>
@@ -618,66 +629,66 @@ function ReadingView({ section, view, setView, onBack }) {
 
       {/* Pull quote from rights */}
       {section.rights && (
-        <div className="pull-quote mt-8">
+        <div className="pull-quote mt-6">
           "{section.rights.length > 160 ? section.rights.slice(0, 160) + '...' : section.rights}"
         </div>
       )}
 
-      {/* Your Rights, Examples, References button */}
-      <button
-        onClick={() => setShowDetails(!showDetails)}
-        className="flex items-center gap-2 w-full mt-8 px-4 py-3 rounded-xl font-medium text-sm border"
-        style={{
-          background: showDetails ? 'var(--navy)' : 'var(--bg-card)',
-          color: showDetails ? 'white' : 'var(--navy)',
-          borderColor: showDetails ? 'var(--navy)' : 'var(--border)',
-        }}
-      >
-        <Icon.ChevronDown open={showDetails} />
-        {showDetails ? 'Hide Details' : 'Your Rights, Examples & Legal References'}
-      </button>
-
       {/* Expandable details */}
-      <div className="card-expand" style={{ maxHeight: showDetails ? '3000px' : '0', opacity: showDetails ? 1 : 0 }}>
-        {showDetails && (
-          <div className="mt-4 space-y-4 stagger-in">
-            {/* Rights */}
-            {section.rights && (
-              <div className="p-4 rounded-xl border" style={{ background: 'var(--gold-bg)', borderColor: 'var(--gold)', borderWidth: '1px' }}>
-                <div className="stars-decoration" />
-                <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>How This Protects You</p>
-                <p style={{ fontSize: '14px', lineHeight: '1.7', color: 'var(--text-primary)' }}>{section.rights}</p>
-              </div>
-            )}
+      {(section.rights || section.examples?.length > 0 || section.references?.length > 0) && (
+        <>
+          <button
+            onClick={() => setShowDetails(!showDetails)}
+            className="flex items-center gap-2 mx-auto mt-5 px-4 py-2.5 rounded-xl font-medium text-xs border"
+            style={{
+              background: showDetails ? 'var(--navy)' : 'var(--bg-card)',
+              color: showDetails ? 'white' : 'var(--navy)',
+              borderColor: showDetails ? 'var(--navy)' : 'var(--border)',
+            }}
+          >
+            <Icon.ChevronDown open={showDetails} />
+            {showDetails ? 'Hide Details' : 'Rights, Examples & References'}
+          </button>
 
-            {/* Examples */}
-            {section.examples?.length > 0 && (
-              <div className="p-4 rounded-xl border" style={{ background: 'var(--crimson-bg)', borderColor: 'var(--crimson)', borderWidth: '1px', borderColor: 'rgba(178,34,52,0.2)' }}>
-                <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Real-World Infringements</p>
-                {section.examples.map((ex, i) => (
-                  <div key={i} className="flex gap-3 items-start mb-2 last:mb-0">
-                    <span style={{ color: 'var(--crimson)', fontSize: '11px', fontWeight: '800', marginTop: '3px', flexShrink: 0 }}>{i + 1}</span>
-                    <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>{ex}</p>
+          <div className="card-expand" style={{ maxHeight: showDetails ? '3000px' : '0', opacity: showDetails ? 1 : 0 }}>
+            {showDetails && (
+              <div className="mt-4 space-y-4 stagger-in">
+                {section.rights && (
+                  <div className="p-4 rounded-xl border" style={{ background: 'var(--gold-bg)', borderColor: 'var(--gold)', borderWidth: '1px' }}>
+                    <div className="stars-decoration" />
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>How This Protects You</p>
+                    <p style={{ fontSize: '14px', lineHeight: '1.7', color: 'var(--text-primary)' }}>{section.rights}</p>
                   </div>
-                ))}
-              </div>
-            )}
+                )}
 
-            {/* References */}
-            {section.references?.length > 0 && (
-              <div className="p-4 rounded-xl" style={{ background: 'var(--bg-secondary)' }}>
-                <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Legal References</p>
-                {section.references.map((ref, i) => (
-                  <div key={i} className="mb-2 last:mb-0" style={{ fontSize: '12px' }}>
-                    <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{ref.text}</span>
-                    {ref.source && <span style={{ color: 'var(--text-tertiary)' }}> -- {ref.source}</span>}
+                {section.examples?.length > 0 && (
+                  <div className="p-4 rounded-xl border" style={{ background: 'var(--crimson-bg)', borderColor: 'rgba(178,34,52,0.2)', borderWidth: '1px' }}>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Real-World Infringements</p>
+                    {section.examples.map((ex, i) => (
+                      <div key={i} className="flex gap-3 items-start mb-2 last:mb-0">
+                        <span style={{ color: 'var(--crimson)', fontSize: '11px', fontWeight: '800', marginTop: '3px', flexShrink: 0 }}>{i + 1}</span>
+                        <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>{ex}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
+
+                {section.references?.length > 0 && (
+                  <div className="p-4 rounded-xl" style={{ background: 'var(--bg-secondary)' }}>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Legal References</p>
+                    {section.references.map((ref, i) => (
+                      <div key={i} className="mb-2 last:mb-0" style={{ fontSize: '12px' }}>
+                        <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{ref.text}</span>
+                        {ref.source && <span style={{ color: 'var(--text-tertiary)' }}> -- {ref.source}</span>}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 }

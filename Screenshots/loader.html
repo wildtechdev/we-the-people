@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div id="status">Loading screenshots...</div>
+<script>
+async function loadFiles() {
+    const status = document.getElementById('status');
+    const files = ['01_Home.png', '02_Document_Original.png', '03_Document_PlainEnglish.png', '04_Rights.png', '05_Glossary.png'];
+
+    for (const name of files) {
+        try {
+            status.textContent = 'Loading ' + name + '...';
+            const resp = await fetch('http://localhost:8888/' + name);
+            const buffer = await resp.arrayBuffer();
+            const arr = Array.from(new Uint8Array(buffer));
+            window.parent.postMessage({ type: 'screenshot-file', name: name, data: arr }, '*');
+            status.textContent = 'Sent ' + name;
+        } catch(e) {
+            status.textContent = 'Error: ' + name + ' - ' + e.message;
+            window.parent.postMessage({ type: 'screenshot-error', name: name, error: e.message }, '*');
+        }
+    }
+    window.parent.postMessage({ type: 'screenshots-complete' }, '*');
+    status.textContent = 'All files sent!';
+}
+loadFiles();
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
   "appId": "WildTech.WeThePeople",
-  "appName": "We The People",
+  "appName": "We The People: Your Rights",
   "webDir": "out",
   "ios": {
     "contentInset": "always",

@@ -255,17 +255,17 @@ function BottomNav({ activeView, setActiveView }) {
 
 function TopBar({ darkMode, setDarkMode, onSearchOpen, onAboutOpen }) {
   return (
-    <div className="no-print" style={{ background: 'var(--bg-primary)' }}>
-      <div className="max-w-lg mx-auto px-5 pt-4 pb-2 flex items-center justify-between">
+    <div className="no-print" style={{ background: 'var(--bg-primary)', paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+      <div className="max-w-lg mx-auto px-5 pt-3 pb-2 flex items-center justify-between">
         <div />
         <div className="flex items-center gap-1">
-          <button onClick={onSearchOpen} className="p-2 rounded-xl" style={{ color: 'var(--text-tertiary)' }}>
+          <button onClick={onSearchOpen} className="p-2 rounded-xl" style={{ color: 'var(--text-secondary)' }}>
             <Icon.Search size={19} />
           </button>
-          <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-xl" style={{ color: 'var(--text-tertiary)' }}>
+          <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-xl" style={{ color: 'var(--text-secondary)' }}>
             {darkMode ? <Icon.Sun /> : <Icon.Moon />}
           </button>
-          <button onClick={onAboutOpen} className="p-2 rounded-xl" style={{ color: 'var(--text-tertiary)' }}>
+          <button onClick={onAboutOpen} className="p-2 rounded-xl" style={{ color: 'var(--text-secondary)' }}>
             <Icon.Info />
           </button>
         </div>

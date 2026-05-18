@@ -4,3 +4,5 @@ out/
 .DS_Store
 *.tgz
 npm-debug.log*
+*.command
+Screenshots/.next_name

@@ -1,0 +1,15 @@
+{
+  "appId": "WildTech.WeThePeople",
+  "appName": "We The People",
+  "webDir": "out",
+  "ios": {
+    "contentInset": "always",
+    "backgroundColor": "#faf8f5",
+    "preferredContentMode": "mobile",
+    "allowsLinkPreview": false,
+    "scrollEnabled": true
+  },
+  "server": {
+    "iosScheme": "capacitor"
+  }
+}

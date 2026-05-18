@@ -1161,19 +1161,6 @@ function AboutView() {
         </button>
       </div>
 
-      {/* Support */}
-      <div className="fade-in-up mt-5 p-6 rounded-2xl text-center" style={{ background: 'var(--navy)', color: 'white', boxShadow: 'var(--shadow-lg)' }}>
-        <p style={{ fontSize: '17px', fontWeight: '700', fontFamily: "'Libre Baskerville', Georgia, serif", marginBottom: '6px' }}>Support This Project</p>
-        <p style={{ fontSize: '13px', opacity: 0.8, marginBottom: '16px', lineHeight: '1.6' }}>
-          Help keep civic education free and nonpartisan for every American.
-        </p>
-        <a href="https://donate.stripe.com/PLACEHOLDER" target="_blank" rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold"
-          style={{ background: 'var(--crimson)', color: 'white' }}>
-          <Icon.Heart /> Donate
-        </a>
-      </div>
-
       {/* Footer */}
       <div className="fade-in-up mt-8 text-center" style={{ fontSize: '12px', color: 'var(--text-tertiary)', lineHeight: '1.7' }}>
         <p style={{ fontFamily: "'Libre Baskerville', Georgia, serif", fontStyle: 'italic', fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '8px' }}>

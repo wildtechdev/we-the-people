@@ -1,11 +1,14 @@
 'use client';
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { declaration } from '../data/declaration';
-import { billOfRights } from '../data/bill-of-rights';
-import { laterAmendments } from '../data/amendments-11-27';
-import { constitution } from '../data/constitution';
-import { glossary, situations } from '../data/glossary';
-import { cases } from '../data/cases';
+import { useState, useEffect, useRef, useCallback, useMemo, createContext, useContext } from 'react';
+import { getData } from '../data';
+import { STRINGS, fmtBadge } from '../i18n';
+
+// ============================================================
+// APP CONTEXT (language, strings, language-specific data)
+// ============================================================
+
+const AppCtx = createContext(null);
+const useApp = () => useContext(AppCtx);
 
 // ============================================================
 // ICONS (inline SVG for zero dependencies)
@@ -158,38 +161,39 @@ function useInView() {
 // SEARCH
 // ============================================================
 
-function buildSearchIndex() {
+function buildSearchIndex(data, labels) {
   const entries = [];
-  const add = (doc, section, text, type, data) => entries.push({ doc, section, text, type, data });
+  const add = (doc, section, text, type, item) => entries.push({ doc, section, text, type, data: item });
+  const { declaration, constitution, billOfRights, laterAmendments, glossary, situations } = data;
 
   declaration.sections.forEach(s => {
-    add('Declaration', s.title, s.original, 'original', s);
-    add('Declaration', s.title, s.translation, 'translation', s);
-    if (s.rights) add('Declaration', s.title, s.rights, 'rights', s);
+    add(labels.declaration, s.title, s.original, 'original', s);
+    add(labels.declaration, s.title, s.translation, 'translation', s);
+    if (s.rights) add(labels.declaration, s.title, s.rights, 'rights', s);
   });
 
-  add('Constitution', 'Preamble', constitution.preamble.original, 'original', constitution.preamble);
-  add('Constitution', 'Preamble', constitution.preamble.translation, 'translation', constitution.preamble);
+  add(labels.constitution, constitution.preamble.title, constitution.preamble.original, 'original', constitution.preamble);
+  add(labels.constitution, constitution.preamble.title, constitution.preamble.translation, 'translation', constitution.preamble);
   constitution.articles.forEach(a => a.sections.forEach(s => {
-    add('Constitution', `Art. ${a.number}: ${s.title}`, s.original, 'original', s);
-    add('Constitution', `Art. ${a.number}: ${s.title}`, s.translation, 'translation', s);
-    if (s.rights) add('Constitution', `Art. ${a.number}: ${s.title}`, s.rights, 'rights', s);
+    add(labels.constitution, `Art. ${a.number}: ${s.title}`, s.original, 'original', s);
+    add(labels.constitution, `Art. ${a.number}: ${s.title}`, s.translation, 'translation', s);
+    if (s.rights) add(labels.constitution, `Art. ${a.number}: ${s.title}`, s.rights, 'rights', s);
   }));
 
   billOfRights.amendments.forEach(a => {
-    add('Bill of Rights', `Amd. ${a.number}: ${a.title}`, a.original, 'original', a);
-    add('Bill of Rights', `Amd. ${a.number}: ${a.title}`, a.translation, 'translation', a);
-    if (a.rights) add('Bill of Rights', `Amd. ${a.number}: ${a.title}`, a.rights, 'rights', a);
+    add(labels.billOfRights, `Amd. ${a.number}: ${a.title}`, a.original, 'original', a);
+    add(labels.billOfRights, `Amd. ${a.number}: ${a.title}`, a.translation, 'translation', a);
+    if (a.rights) add(labels.billOfRights, `Amd. ${a.number}: ${a.title}`, a.rights, 'rights', a);
   });
 
   laterAmendments.amendments.forEach(a => {
-    add('Amendments', `Amd. ${a.number}: ${a.title}`, a.original, 'original', a);
-    add('Amendments', `Amd. ${a.number}: ${a.title}`, a.translation, 'translation', a);
-    if (a.rights) add('Amendments', `Amd. ${a.number}: ${a.title}`, a.rights, 'rights', a);
+    add(labels.amendments, `Amd. ${a.number}: ${a.title}`, a.original, 'original', a);
+    add(labels.amendments, `Amd. ${a.number}: ${a.title}`, a.translation, 'translation', a);
+    if (a.rights) add(labels.amendments, `Amd. ${a.number}: ${a.title}`, a.rights, 'rights', a);
   });
 
-  glossary.forEach(g => add('Glossary', g.term, `${g.term}: ${g.definition}`, 'glossary', g));
-  situations.forEach(s => add('Rights Guide', s.title, `${s.title} ${s.description} ${s.rights.map(r => r.right).join(' ')}`, 'situation', s));
+  glossary.forEach(g => add(labels.glossary, g.term, `${g.term}: ${g.definition}`, 'glossary', g));
+  situations.forEach(s => add(labels.rights, s.title, `${s.title} ${s.description} ${s.rights.map(r => r.right).join(' ')}`, 'situation', s));
 
   return entries;
 }
@@ -221,11 +225,12 @@ function highlightText(text, query) {
 // ============================================================
 
 function BottomNav({ activeView, setActiveView }) {
+  const { t } = useApp();
   const items = [
-    { id: 'home', label: 'Home', icon: <Icon.Home /> },
-    { id: 'library', label: 'Library', icon: <Icon.Book /> },
-    { id: 'rights', label: 'Rights', icon: <Icon.Shield /> },
-    { id: 'glossary', label: 'Glossary', icon: <Icon.Scale /> },
+    { id: 'home', label: t.nav.home, icon: <Icon.Home /> },
+    { id: 'library', label: t.nav.library, icon: <Icon.Book /> },
+    { id: 'rights', label: t.nav.rights, icon: <Icon.Shield /> },
+    { id: 'glossary', label: t.nav.glossary, icon: <Icon.Scale /> },
   ];
   return (
     <nav className="bottom-nav no-print" style={{ boxShadow: '0 -2px 16px rgba(0,0,0,0.04)' }}>
@@ -254,11 +259,23 @@ function BottomNav({ activeView, setActiveView }) {
 // ============================================================
 
 function TopBar({ darkMode, setDarkMode, onSearchOpen, onAboutOpen }) {
+  const { lang, setLang } = useApp();
   return (
     <div className="no-print" style={{ background: 'var(--bg-primary)', paddingTop: 'env(safe-area-inset-top, 0px)' }}>
       <div className="max-w-lg mx-auto px-5 pt-3 pb-2 flex items-center justify-between">
         <div />
         <div className="flex items-center gap-1">
+          <button
+            onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
+            className="px-2.5 py-1.5 rounded-xl flex items-center gap-1.5"
+            style={{ color: 'var(--text-secondary)' }}
+            aria-label={lang === 'es' ? 'Switch to English' : 'Cambiar a español'}
+          >
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <span style={{ fontSize: '12px', fontWeight: '700', letterSpacing: '0.03em' }}>{lang === 'es' ? 'EN' : 'ES'}</span>
+          </button>
           <button onClick={onSearchOpen} className="p-2 rounded-xl" style={{ color: 'var(--text-secondary)' }}>
             <Icon.Search size={19} />
           </button>
@@ -279,6 +296,7 @@ function TopBar({ darkMode, setDarkMode, onSearchOpen, onAboutOpen }) {
 // ============================================================
 
 function HomeView({ setActiveView, setActiveDoc, setReadingSection }) {
+  const { t, data } = useApp();
   return (
     <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
       {/* Title */}
@@ -286,19 +304,19 @@ function HomeView({ setActiveView, setActiveDoc, setReadingSection }) {
         We The People
       </h1>
       <p className="fade-in-up visible" style={{ fontSize: '13px', color: 'var(--text-tertiary)', marginTop: '2px', letterSpacing: '0.02em' }}>
-        No parties. Just law.
+        {t.tagline}
       </p>
 
       {/* Documents */}
       <h2 className="fade-in-up" style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginTop: '32px', marginBottom: '16px', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
-        Founding Documents
+        {t.foundingDocs}
       </h2>
       <div className="grid grid-cols-2 gap-4 fade-in-up">
         {[
-          { id: 'declaration', title: 'Declaration of Independence', sub: 'July 4, 1776', sections: declaration.sections.length + ' sections' },
-          { id: 'constitution', title: 'The Constitution', sub: 'September 17, 1787', sections: constitution.articles.length + ' articles' },
-          { id: 'bill-of-rights', title: 'Bill of Rights', sub: 'December 15, 1791', sections: '10 amendments' },
-          { id: 'amendments', title: 'Amendments 11-27', sub: '1795 - 1992', sections: laterAmendments.amendments.length + ' amendments' },
+          { id: 'declaration', title: t.docs.declaration.title, sub: t.docs.declaration.sub, sections: t.docs.declaration.count(data.declaration.sections.length) },
+          { id: 'constitution', title: t.docs.constitution.title, sub: t.docs.constitution.sub, sections: t.docs.constitution.count(data.constitution.articles.length) },
+          { id: 'bill-of-rights', title: t.docs['bill-of-rights'].title, sub: t.docs['bill-of-rights'].sub, sections: t.docs['bill-of-rights'].count() },
+          { id: 'amendments', title: t.docs.amendments.title, sub: t.docs.amendments.sub, sections: t.docs.amendments.count(data.laterAmendments.amendments.length) },
         ].map(doc => (
           <button
             key={doc.id}
@@ -328,10 +346,10 @@ function HomeView({ setActiveView, setActiveDoc, setReadingSection }) {
 
       {/* Know Your Rights Quick Access */}
       <h2 className="fade-in-up" style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginTop: '32px', marginBottom: '16px', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
-        Know Your Rights
+        {t.knowYourRights}
       </h2>
       <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 fade-in-up">
-        {situations.slice(0, 4).map(s => (
+        {data.situations.slice(0, 4).map(s => (
           <button
             key={s.id}
             onClick={() => setActiveView('rights')}
@@ -354,7 +372,8 @@ function HomeView({ setActiveView, setActiveDoc, setReadingSection }) {
 // LIBRARY VIEW (continuous document reader)
 // ============================================================
 
-function getDocSections(docId) {
+function getDocSections(docId, data, t) {
+  const { declaration, constitution, billOfRights, laterAmendments } = data;
   switch (docId) {
     case 'declaration':
       return declaration.sections.map(s => ({ ...s, _docLabel: null }));
@@ -362,7 +381,7 @@ function getDocSections(docId) {
       const all = [{ ...constitution.preamble, _docLabel: null }];
       constitution.articles.forEach(art => {
         art.sections.forEach(s => {
-          all.push({ ...s, _docLabel: `Article ${art.number}`, _articleTitle: art.title });
+          all.push({ ...s, _docLabel: `${t.article} ${art.number}`, _articleTitle: art.title });
         });
       });
       return all;
@@ -376,7 +395,8 @@ function getDocSections(docId) {
   }
 }
 
-function getDocMeta(docId) {
+function getDocMeta(docId, data) {
+  const { declaration, constitution, billOfRights, laterAmendments } = data;
   const meta = {
     declaration: { title: declaration.title, date: declaration.date, summary: declaration.summary },
     constitution: { title: constitution.title, date: constitution.date, summary: constitution.summary },
@@ -387,11 +407,12 @@ function getDocMeta(docId) {
 }
 
 function LibraryView({ activeDoc, setActiveDoc, setActiveView, onOpenCase }) {
+  const { t, data } = useApp();
   const [view, setView] = useState('original');
   const [tocOpen, setTocOpen] = useState(false);
 
-  const sections = useMemo(() => getDocSections(activeDoc), [activeDoc]);
-  const meta = useMemo(() => getDocMeta(activeDoc), [activeDoc]);
+  const sections = useMemo(() => getDocSections(activeDoc, data, t), [activeDoc, data, t]);
+  const meta = useMemo(() => getDocMeta(activeDoc, data), [activeDoc, data]);
 
   const scrollToSection = (idx) => {
     const el = document.getElementById(`section-${idx}`);
@@ -406,10 +427,10 @@ function LibraryView({ activeDoc, setActiveDoc, setActiveView, onOpenCase }) {
       {/* Document selector tabs */}
       <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
         {[
-          { id: 'declaration', label: 'Declaration' },
-          { id: 'constitution', label: 'Constitution' },
-          { id: 'bill-of-rights', label: 'Bill of Rights' },
-          { id: 'amendments', label: 'Amd. 11-27' },
+          { id: 'declaration', label: t.docTabs.declaration },
+          { id: 'constitution', label: t.docTabs.constitution },
+          { id: 'bill-of-rights', label: t.docTabs['bill-of-rights'] },
+          { id: 'amendments', label: t.docTabs.amendments },
         ].map(d => (
           <button
             key={d.id}
@@ -443,9 +464,9 @@ function LibraryView({ activeDoc, setActiveDoc, setActiveView, onOpenCase }) {
       {/* View toggle */}
       <div className="flex gap-1 p-1 rounded-xl mb-4" style={{ background: 'var(--bg-secondary)' }}>
         {[
-          { id: 'original', label: 'Original' },
-          { id: 'translated', label: 'Plain English' },
-          { id: 'both', label: 'Side by Side' },
+          { id: 'original', label: t.views.original },
+          { id: 'translated', label: t.views.translated },
+          { id: 'both', label: t.views.both },
         ].map(v => (
           <button
             key={v.id}
@@ -469,7 +490,7 @@ function LibraryView({ activeDoc, setActiveDoc, setActiveView, onOpenCase }) {
           className="w-full flex items-center justify-between p-4 text-sm font-semibold"
           style={{ color: 'var(--navy)' }}
         >
-          <span>Table of Contents ({sections.length} sections)</span>
+          <span>{t.toc(sections.length)}</span>
           <Icon.ChevronDown open={tocOpen} />
         </button>
         <div className="card-expand" style={{ maxHeight: tocOpen ? '600px' : '0', opacity: tocOpen ? 1 : 0 }}>
@@ -509,17 +530,12 @@ function LibraryView({ activeDoc, setActiveDoc, setActiveView, onOpenCase }) {
 // ============================================================
 
 function CaseModal({ caseKey, onClose }) {
-  const caseData = cases[caseKey];
+  const { t, lang, data } = useApp();
+  const caseData = data.cases[caseKey];
   if (!caseData) return null;
 
   const docType = caseData.type || 'case';
-  const typeLabels = {
-    case: { badge: 'Court Case', outcome: 'Outcome', link: 'Read Full Court Opinion' },
-    statute: { badge: 'Federal Law', outcome: 'Key Provisions', link: 'Read Official Text' },
-    report: { badge: 'Official Report', outcome: 'Key Findings', link: 'Read Full Report' },
-    book: { badge: 'Source Text', outcome: 'Core Ideas', link: 'Read Full Text' },
-  };
-  const labels = typeLabels[docType] || typeLabels.case;
+  const labels = t.caseTypes[docType] || t.caseTypes.case;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center" onClick={onClose}>
@@ -534,7 +550,7 @@ function CaseModal({ caseKey, onClose }) {
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <span className="amendment-badge" style={{ width: '24px', height: '24px', fontSize: '9px' }}>{caseData.amendment}</span>
+                <span className="amendment-badge" style={{ width: '24px', height: '24px', fontSize: '9px' }}>{fmtBadge(caseData.amendment, lang)}</span>
                 <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{caseData.year}</span>
                 {docType !== 'case' && (
                   <span style={{ fontSize: '9px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.05em', background: 'var(--crimson-bg)', padding: '2px 6px', borderRadius: '4px' }}>
@@ -568,7 +584,7 @@ function CaseModal({ caseKey, onClose }) {
 
           {/* Significance */}
           <div className="p-4 rounded-xl mb-4" style={{ background: 'var(--gold-bg)', border: '1px solid var(--gold)' }}>
-            <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Why This Matters</p>
+            <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>{t.whyMatters}</p>
             <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>{caseData.significance}</p>
           </div>
 
@@ -596,7 +612,8 @@ function CaseModal({ caseKey, onClose }) {
 // ============================================================
 
 function CaseReference({ caseKey, children, onOpenCase }) {
-  const hasCase = cases[caseKey];
+  const { data } = useApp();
+  const hasCase = data.cases[caseKey];
   if (!hasCase) return <span>{children || caseKey}</span>;
 
   return (
@@ -628,6 +645,8 @@ function CaseReference({ caseKey, children, onOpenCase }) {
 // ============================================================
 
 function TextWithCases({ text, onOpenCase }) {
+  const { data } = useApp();
+  const cases = data.cases;
   if (!onOpenCase) return <>{text}</>;
 
   // Build regex from all case keys
@@ -662,14 +681,14 @@ function TextWithCases({ text, onOpenCase }) {
 // HELPER: Find amendment data for bridging Rights to Library
 // ============================================================
 
-function findAmendmentData(amendmentNum) {
+function findAmendmentData(amendmentNum, data) {
   const num = parseInt(amendmentNum);
   if (isNaN(num)) return null;
   if (num >= 1 && num <= 10) {
-    return billOfRights.amendments.find(a => a.number === num);
+    return data.billOfRights.amendments.find(a => a.number === num);
   }
   if (num >= 11) {
-    return laterAmendments.amendments.find(a => a.number === num);
+    return data.laterAmendments.amendments.find(a => a.number === num);
   }
   return null;
 }
@@ -679,6 +698,7 @@ function findAmendmentData(amendmentNum) {
 // ============================================================
 
 function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
+  const { t, data } = useApp();
   const [showDetails, setShowDetails] = useState(false);
 
   return (
@@ -702,7 +722,7 @@ function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
       {/* Amendment number */}
       {section._isAmendment && section.number && (
         <p className="text-center" style={{ fontSize: '12px', fontWeight: '600', color: 'var(--crimson)', letterSpacing: '0.03em', marginBottom: '4px' }}>
-          Amendment {section.number}
+          {t.amendmentWord(section.number)}
         </p>
       )}
 
@@ -719,7 +739,7 @@ function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
       </h2>
 
       {section.year && (
-        <p className="text-center" style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>Ratified {section.year}</p>
+        <p className="text-center" style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>{t.ratified(section.year)}</p>
       )}
 
       {/* Small dot divider under title */}
@@ -755,11 +775,11 @@ function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
       {view === 'both' && (
         <div className="space-y-4">
           <div className="p-4 rounded-xl" style={{ background: 'var(--bg-secondary)' }}>
-            <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>Original Text</p>
+            <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>{t.originalText}</p>
             <p style={{ fontFamily: "'Libre Baskerville', Georgia, serif", fontSize: '14px', lineHeight: '1.8', color: 'var(--text-secondary)', whiteSpace: 'pre-line' }}>{section.original}</p>
           </div>
           <div className="p-4 rounded-xl" style={{ background: 'var(--crimson-lighter)', border: '1px solid rgba(178,34,52,0.15)' }}>
-            <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>Plain English</p>
+            <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>{t.plainLabel}</p>
             <p style={{ fontSize: '14px', lineHeight: '1.8', color: 'var(--text-secondary)' }}>{section.translation}</p>
           </div>
         </div>
@@ -785,7 +805,7 @@ function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
             }}
           >
             <Icon.ChevronDown open={showDetails} />
-            {showDetails ? 'Hide Details' : 'Rights, Examples & References'}
+            {showDetails ? t.hideDetails : t.showDetails}
           </button>
 
           <div className="card-expand" style={{ maxHeight: showDetails ? '3000px' : '0', opacity: showDetails ? 1 : 0 }}>
@@ -794,7 +814,7 @@ function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
                 {section.rights && (
                   <div className="p-4 rounded-xl border" style={{ background: 'var(--gold-bg)', borderColor: 'var(--gold)', borderWidth: '1px' }}>
                     <div className="stars-decoration" />
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>How This Protects You</p>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>{t.protectsYou}</p>
                     <p style={{ fontSize: '14px', lineHeight: '1.7', color: 'var(--text-primary)' }}>
                       <TextWithCases text={section.rights} onOpenCase={onOpenCase} />
                     </p>
@@ -803,7 +823,7 @@ function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
 
                 {section.examples?.length > 0 && (
                   <div className="p-4 rounded-xl border" style={{ background: 'var(--crimson-bg)', borderColor: 'rgba(178,34,52,0.2)', borderWidth: '1px' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Real-World Infringements</p>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>{t.infringements}</p>
                     {section.examples.map((ex, i) => (
                       <div key={i} className="flex gap-3 items-start mb-2 last:mb-0">
                         <span style={{ color: 'var(--crimson)', fontSize: '11px', fontWeight: '800', marginTop: '3px', flexShrink: 0 }}>{i + 1}</span>
@@ -817,12 +837,12 @@ function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
 
                 {section.references?.length > 0 && (
                   <div className="p-4 rounded-xl" style={{ background: 'var(--bg-secondary)' }}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Legal References</p>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>{t.legalRefs}</p>
                     {section.references.map((ref, i) => {
                       // Try to match the case name from the text
                       const caseMatch = ref.text.match(/^(.+?\(\d{4}\))/);
                       const caseKey = caseMatch ? caseMatch[1].trim() : null;
-                      const hasCase = caseKey && cases[caseKey];
+                      const hasCase = caseKey && data.cases[caseKey];
                       const restOfText = caseKey ? ref.text.slice(caseMatch[0].length) : null;
 
                       return (
@@ -853,12 +873,83 @@ function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
 }
 
 // ============================================================
+// DIGITAL RED CARD (full-screen, shown through a window/door)
+// ============================================================
+
+function RedCardModal({ card, onClose }) {
+  const { t } = useApp();
+
+  // Lock body scroll while the card is displayed
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-[200] flex flex-col" style={{ background: 'linear-gradient(160deg, #b22234 0%, #7d1622 100%)' }}>
+      {/* Warning: never hand over the phone */}
+      <div style={{ background: '#1b2a4a', paddingTop: 'calc(env(safe-area-inset-top, 0px) + 10px)', paddingBottom: '10px' }} className="px-4">
+        <div className="max-w-md mx-auto flex items-start gap-3">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8c55a" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '1px' }}>
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <p style={{ fontSize: '12px', fontWeight: '700', color: '#e8c55a', lineHeight: '1.45', letterSpacing: '0.01em' }}>
+            {t.cardWarning}
+          </p>
+          <button onClick={onClose} aria-label="Close" style={{ color: 'rgba(255,255,255,0.9)', flexShrink: 0, padding: '2px' }}>
+            <Icon.X />
+          </button>
+        </div>
+      </div>
+
+      {/* Card face (always in English so the agent can read it) */}
+      <div className="flex-1 overflow-y-auto px-6 py-6" onClick={onClose}>
+        <div className="max-w-md mx-auto">
+          <p style={{ fontSize: '11px', fontWeight: '800', color: 'rgba(255,255,255,0.75)', textTransform: 'uppercase', letterSpacing: '0.14em', textAlign: 'center' }}>
+            To the Agent
+          </p>
+          <div className="dot-indicator my-3">
+            <span style={{ background: 'rgba(255,255,255,0.35)' }} />
+            <span style={{ background: '#e8c55a', width: '18px', borderRadius: '3px' }} />
+            <span style={{ background: 'rgba(255,255,255,0.35)' }} />
+          </div>
+          <p style={{ fontFamily: "'Libre Baskerville', Georgia, serif", fontSize: '19px', lineHeight: '1.65', color: 'white', fontWeight: '700', textShadow: '0 1px 3px rgba(0,0,0,0.25)' }}>
+            {card.statement}
+          </p>
+          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.9)', marginTop: '20px', textAlign: 'center', fontWeight: '600', letterSpacing: '0.02em' }}>
+            {card.footer}
+          </p>
+
+          {/* Plain-language rendering for the holder (Spanish mode) */}
+          {card.statementTranslation && (
+            <div className="mt-6 p-4 rounded-xl" style={{ background: 'rgba(0,0,0,0.22)' }}>
+              <p style={{ fontSize: '10px', fontWeight: '800', color: '#e8c55a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
+                {t.cardMeaning}
+              </p>
+              <p style={{ fontSize: '13px', lineHeight: '1.65', color: 'rgba(255,255,255,0.95)', fontStyle: 'italic' }}>
+                {card.statementTranslation}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
 // RIGHTS GUIDE (enriched with amendment content + case links)
 // ============================================================
 
 function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
-  const [active, setActive] = useState(null);
+  const { t, lang, data } = useApp();
+  const [activeId, setActiveId] = useState(null);
   const [expandedRight, setExpandedRight] = useState(null);
+  const [cardOpen, setCardOpen] = useState(false);
+
+  // Look up by id so the open scenario re-renders in the new language on toggle
+  const active = activeId ? data.situations.find(s => s.id === activeId) : null;
 
   if (active) {
     // Collect unique amendments referenced in this scenario
@@ -866,8 +957,9 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
 
     return (
       <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
-        <button onClick={() => { setActive(null); setExpandedRight(null); }} className="flex items-center gap-1 mb-6" style={{ color: 'var(--text-tertiary)', fontSize: '14px' }}>
-          <Icon.ChevronLeft /> Back
+        {cardOpen && active.card && <RedCardModal card={active.card} onClose={() => setCardOpen(false)} />}
+        <button onClick={() => { setActiveId(null); setExpandedRight(null); }} className="flex items-center gap-1 mb-6" style={{ color: 'var(--text-tertiary)', fontSize: '14px' }}>
+          <Icon.ChevronLeft /> {t.back}
         </button>
 
         <div className="flex items-center gap-4 mb-2">
@@ -884,17 +976,39 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
         <div className="flex flex-wrap gap-2 mt-4 mb-6">
           {referencedAmendments.map(a => (
             <span key={a} className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: 'var(--navy-lighter)', color: 'var(--navy)' }}>
-              {isNaN(parseInt(a)) ? a : `${a} Amendment`}
+              {t.amendmentChip(a)}
             </span>
           ))}
         </div>
 
-        <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Your Constitutional Rights</p>
+        {/* Digital red card launcher */}
+        {active.card && (
+          <button
+            onClick={() => setCardOpen(true)}
+            className="w-full mb-6 p-4 rounded-2xl text-left flex items-center gap-4"
+            style={{ background: 'linear-gradient(145deg, #b22234 0%, #8b1a28 100%)', boxShadow: 'var(--shadow-lg)' }}
+          >
+            <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(255,255,255,0.15)', color: 'white' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15h4M7 11h10"/>
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p style={{ fontSize: '15px', fontWeight: '800', color: 'white', letterSpacing: '0.01em' }}>{t.showCard}</p>
+              <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.85)', marginTop: '2px', lineHeight: '1.4' }}>{active.card.instruction}</p>
+            </div>
+            <span style={{ color: 'rgba(255,255,255,0.8)' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+          </button>
+        )}
+
+        <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>{t.yourRights}</p>
         <div className="space-y-3 mb-8">
           {active.rights.map((r, i) => {
             const isExpanded = expandedRight === i;
-            const amendmentData = findAmendmentData(r.amendment);
-            const caseData = cases[r.ref];
+            const amendmentData = findAmendmentData(r.amendment, data);
+            const caseData = data.cases[r.ref];
 
             return (
               <div key={i} className="rounded-xl border overflow-hidden" style={{ background: 'var(--bg-card)', borderColor: isExpanded ? 'var(--navy)' : 'var(--border)', transition: 'border-color 0.2s' }}>
@@ -904,7 +1018,7 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
                   className="w-full text-left p-4"
                 >
                   <div className="flex items-start gap-3">
-                    <div className="amendment-badge" style={{ width: '28px', height: '28px', fontSize: '10px', marginTop: '1px' }}>{r.amendment}</div>
+                    <div className="amendment-badge" style={{ width: '28px', height: '28px', fontSize: '10px', marginTop: '1px' }}>{fmtBadge(r.amendment, lang)}</div>
                     <div className="flex-1">
                       <p style={{ fontSize: '13px', lineHeight: '1.7', color: 'var(--text-primary)' }}>{r.right}</p>
                       {caseData ? (
@@ -930,7 +1044,7 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
                       {/* Case quick summary */}
                       {caseData && (
                         <div className="p-3 rounded-lg" style={{ background: 'var(--bg-secondary)' }}>
-                          <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Key Case</p>
+                          <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>{t.keyCase}</p>
                           <p style={{ fontSize: '12px', lineHeight: '1.6', color: 'var(--text-secondary)' }}>
                             {caseData.summary.length > 200 ? caseData.summary.slice(0, 200) + '...' : caseData.summary}
                           </p>
@@ -939,7 +1053,7 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
                             className="mt-2 text-xs font-semibold flex items-center gap-1"
                             style={{ color: 'var(--navy)' }}
                           >
-                            Read full case details
+                            {t.readCase}
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
                           </button>
                         </div>
@@ -949,7 +1063,7 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
                       {amendmentData && (
                         <div className="p-3 rounded-lg" style={{ background: 'var(--gold-bg)', border: '1px solid var(--gold)' }}>
                           <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>
-                            From the {r.amendment} Amendment
+                            {t.fromAmendment(r.amendment)}
                           </p>
                           <p style={{ fontSize: '12px', lineHeight: '1.6', color: 'var(--text-secondary)', fontFamily: "'Libre Baskerville', Georgia, serif", fontStyle: 'italic' }}>
                             "{amendmentData.original.length > 200 ? amendmentData.original.slice(0, 200) + '...' : amendmentData.original}"
@@ -968,7 +1082,7 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
                             className="mt-2 text-xs font-semibold flex items-center gap-1"
                             style={{ color: 'var(--gold)' }}
                           >
-                            Read full amendment
+                            {t.readAmendment}
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
                           </button>
                         </div>
@@ -984,7 +1098,7 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
         {/* Practical Tips */}
         <div className="p-5 rounded-xl border" style={{ background: 'var(--gold-bg)', borderColor: 'var(--gold)', borderWidth: '1px' }}>
           <div className="stars-decoration" />
-          <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Practical Tips</p>
+          <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>{t.practicalTips}</p>
           {active.tips.map((t, i) => (
             <div key={i} className="flex gap-3 items-start mb-2.5 last:mb-0">
               <span style={{ color: 'var(--gold)', fontSize: '14px', lineHeight: '1.4' }}>&#9733;</span>
@@ -995,7 +1109,7 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
 
         {/* Related documents CTA */}
         <div className="mt-6 p-4 rounded-xl text-center" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '8px' }}>Want the full picture?</p>
+          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '8px' }}>{t.fullPicture}</p>
           <button
             onClick={() => {
               const firstNum = parseInt(active.rights[0]?.amendment);
@@ -1011,7 +1125,7 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
             className="px-4 py-2 rounded-xl text-sm font-semibold"
             style={{ background: 'var(--navy)', color: 'white' }}
           >
-            Read the Source Documents
+            {t.readSource}
           </button>
         </div>
       </div>
@@ -1021,21 +1135,21 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
   return (
     <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
       <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
-        Know Your Rights
+        {t.knowYourRights}
       </h1>
       <p className="fade-in-up visible" style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px', lineHeight: '1.6' }}>
-        Real situations. Real rights. Tap a scenario to learn exactly which constitutional protections apply to you.
+        {t.rightsIntro}
       </p>
 
       <p className="fade-in-up visible" style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '16px', marginBottom: '8px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-        {situations.length} scenarios covered
+        {t.scenariosCovered(data.situations.length)}
       </p>
 
       <div className="space-y-3 stagger-in">
-        {situations.map(s => (
+        {data.situations.map(s => (
           <button
             key={s.id}
-            onClick={() => { setActive(s); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            onClick={() => { setActiveId(s.id); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             className="w-full text-left p-4 rounded-2xl border flex items-center gap-4"
             style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-sm)' }}
           >
@@ -1044,7 +1158,7 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
             </div>
             <div className="flex-1 min-w-0">
               <p style={{ fontSize: '14px', fontWeight: '700', color: 'var(--text-primary)' }}>{s.title}</p>
-              <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '2px' }}>{s.rights.length} rights covered</p>
+              <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '2px' }}>{t.rightsCovered(s.rights.length)}</p>
             </div>
             <span style={{ color: 'var(--text-tertiary)' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
@@ -1061,18 +1175,19 @@ function RightsView({ onOpenCase, setActiveView, setActiveDoc }) {
 // ============================================================
 
 function AboutView() {
+  const { t } = useApp();
   const handleShare = async () => {
     const shareData = {
       title: 'We The People',
-      text: 'Carry and learn your constitutional rights. Free, ad-free, and always available. Check out We The People.',
-      url: 'https://we-the-people-bice.vercel.app',
+      text: t.about.shareText,
+      url: 'https://apps.apple.com/us/app/we-the-people-your-rights/id6770393978',
     };
     try {
       if (navigator.share) {
         await navigator.share(shareData);
       } else {
         await navigator.clipboard.writeText(shareData.url);
-        alert('Link copied to clipboard!');
+        alert(t.about.copied);
       }
     } catch (err) {
       // user cancelled share
@@ -1082,10 +1197,10 @@ function AboutView() {
   return (
     <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
       <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
-        About
+        {t.about.title}
       </h1>
       <p className="fade-in-up visible" style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-        By the people, for the people.
+        {t.about.sub}
       </p>
 
       {/* Mission statement */}
@@ -1095,22 +1210,15 @@ function AboutView() {
             <Icon.Flag />
           </div>
           <h2 style={{ fontSize: '17px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
-            These Words Belong to You
+            {t.about.h1}
           </h2>
         </div>
         <div style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.8' }}>
           <p>
-            The Declaration of Independence, the Constitution, the Bill of Rights, and every
-            amendment that followed are not the property of any app, company,
-            or political party. They belong to <strong style={{ color: 'var(--text-primary)' }}>We The People</strong>, the
-            citizens of the United States of America.
+            {t.about.p1a}<strong style={{ color: 'var(--text-primary)' }}>We The People</strong>{t.about.p1b}
           </p>
           <p style={{ marginTop: '14px' }}>
-            But ownership alone is not enough. Beyond the rights described within these founding
-            documents, We The People also have an inherent duty and responsibility to
-            actually <em>know</em> our rights. A right you don't know about is a right that can be
-            taken from you without your knowledge, and that is something no free people should
-            ever accept.
+            {t.about.p2a}<em>{t.about.p2em}</em>{t.about.p2b}
           </p>
         </div>
       </div>
@@ -1122,18 +1230,14 @@ function AboutView() {
             <Icon.Heart />
           </div>
           <h2 style={{ fontSize: '17px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
-            Why This App Exists
+            {t.about.h2}
           </h2>
         </div>
         <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.8' }}>
-          This app was created after noticing something surprising: there wasn't a single
-          ad-free, subscription-free resource on the App Store for We The People to carry and
-          learn our constitutional rights anywhere and everywhere we go. The documents that
-          define our freedoms were locked behind paywalls, cluttered with ads, or buried in
-          apps that cared more about profit than civic education.
+          {t.about.p3}
         </p>
         <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.8', marginTop: '14px' }}>
-          That felt wrong. So we built this: free, forever, for everyone.
+          {t.about.p4}
         </p>
       </div>
 
@@ -1144,30 +1248,28 @@ function AboutView() {
             <Icon.Share />
           </div>
           <h2 style={{ fontSize: '17px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
-            Spread the Word
+            {t.about.h3}
           </h2>
         </div>
         <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.8', marginBottom: '16px' }}>
-          The more people who understand their rights, the stronger those rights become for
-          all of us. Share this app with your family, friends, and loved ones so they too can
-          better understand their rights as citizens.
+          {t.about.p5}
         </p>
         <button
           onClick={handleShare}
           className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold w-full justify-center"
           style={{ background: 'var(--navy)', color: 'white' }}
         >
-          <Icon.Share /> Share We The People
+          <Icon.Share /> {t.about.shareBtn}
         </button>
       </div>
 
       {/* Footer */}
       <div className="fade-in-up mt-8 text-center" style={{ fontSize: '12px', color: 'var(--text-tertiary)', lineHeight: '1.7' }}>
         <p style={{ fontFamily: "'Libre Baskerville', Georgia, serif", fontStyle: 'italic', fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '8px' }}>
-          "We the People of the United States, in Order to form a more perfect Union..."
+          {t.about.quote}
         </p>
-        <p>Made with love for this country and its people.</p>
-        <p style={{ marginTop: '4px' }}>No ads. No subscriptions. No politics. Just your rights.</p>
+        <p>{t.about.madeWith}</p>
+        <p style={{ marginTop: '4px' }}>{t.about.noAds}</p>
       </div>
     </div>
   );
@@ -1178,22 +1280,24 @@ function AboutView() {
 // ============================================================
 
 function GlossaryView() {
+  const { t, data } = useApp();
+  const glossary = data.glossary;
   const [filter, setFilter] = useState('');
   const [expandedTerm, setExpandedTerm] = useState(null);
 
-  const letters = useMemo(() => [...new Set(glossary.map(g => g.term[0].toUpperCase()))].sort(), []);
+  const letters = useMemo(() => [...new Set(glossary.map(g => g.term[0].toUpperCase()))].sort(), [glossary]);
   const filtered = useMemo(() => {
     if (!filter) return glossary;
     return glossary.filter(g => g.term.toLowerCase().includes(filter.toLowerCase()) || g.definition.toLowerCase().includes(filter.toLowerCase()));
-  }, [filter]);
+  }, [filter, glossary]);
 
   return (
     <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
       <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: "'Libre Baskerville', Georgia, serif" }}>
-        Glossary
+        {t.glossaryTitle}
       </h1>
       <p className="fade-in-up visible" style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-        240+ essential terms in plain language.
+        {t.glossarySubtitle}
       </p>
 
       {/* Search */}
@@ -1203,7 +1307,7 @@ function GlossaryView() {
         </div>
         <input
           type="text"
-          placeholder="Filter terms..."
+          placeholder={t.filterTerms}
           value={filter}
           onChange={e => setFilter(e.target.value)}
           className="w-full pl-10 pr-4 py-3 rounded-xl border outline-none"
@@ -1263,6 +1367,7 @@ function GlossaryView() {
 // ============================================================
 
 function SearchModal({ isOpen, onClose, searchIndex }) {
+  const { t } = useApp();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const inputRef = useRef(null);
@@ -1293,7 +1398,7 @@ function SearchModal({ isOpen, onClose, searchIndex }) {
         onClick={e => e.stopPropagation()}>
         <div className="flex items-center gap-3 p-4 border-b" style={{ borderColor: 'var(--border)' }}>
           <Icon.Search size={18} />
-          <input ref={inputRef} type="text" placeholder="Search everything..."
+          <input ref={inputRef} type="text" placeholder={t.searchPlaceholder}
             value={query} onChange={e => setQuery(e.target.value)}
             className="flex-1 bg-transparent outline-none text-sm"
             style={{ color: 'var(--text-primary)' }} />
@@ -1302,12 +1407,12 @@ function SearchModal({ isOpen, onClose, searchIndex }) {
         <div className="overflow-y-auto" style={{ maxHeight: 'calc(70vh - 65px)' }}>
           {query.length < 2 && (
             <div className="p-6 text-center" style={{ color: 'var(--text-tertiary)', fontSize: '13px' }}>
-              <p>Search all documents, amendments, glossary, and rights guides.</p>
-              <p className="mt-2" style={{ fontSize: '11px' }}>Try: "free speech", "due process", "search warrant"</p>
+              <p>{t.searchHint}</p>
+              <p className="mt-2" style={{ fontSize: '11px' }}>{t.searchTry}</p>
             </div>
           )}
           {query.length >= 2 && results.length === 0 && (
-            <div className="p-6 text-center" style={{ color: 'var(--text-tertiary)', fontSize: '13px' }}>No results for "{query}"</div>
+            <div className="p-6 text-center" style={{ color: 'var(--text-tertiary)', fontSize: '13px' }}>{t.noResults(query)}</div>
           )}
           {results.map((r, i) => (
             <button key={i} onClick={onClose} className="w-full text-left p-4 border-b" style={{ borderColor: 'var(--border-light)' }}>
@@ -1351,16 +1456,37 @@ function ScrollToTop() {
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState(false);
+  const [lang, setLangState] = useState('en');
   const [activeView, setActiveView] = useState('home');
   const [activeDoc, setActiveDoc] = useState('declaration');
   const [searchOpen, setSearchOpen] = useState(false);
   const [openCase, setOpenCase] = useState(null);
 
-  const searchIndex = useMemo(() => buildSearchIndex(), []);
+  // Detect saved or device language once on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('wtp-lang');
+      if (saved === 'es' || saved === 'en') {
+        setLangState(saved);
+      } else if ((navigator.language || '').toLowerCase().startsWith('es')) {
+        setLangState('es');
+      }
+    } catch (e) { /* storage unavailable */ }
+  }, []);
+
+  const setLang = useCallback((l) => {
+    setLangState(l);
+    try { localStorage.setItem('wtp-lang', l); } catch (e) { /* storage unavailable */ }
+  }, []);
+
+  const t = STRINGS[lang] || STRINGS.en;
+  const data = useMemo(() => getData(lang), [lang]);
+  const searchIndex = useMemo(() => buildSearchIndex(data, t.searchLabels), [data, t]);
+  const app = useMemo(() => ({ lang, setLang, t, data }), [lang, setLang, t, data]);
   const observe = useInView();
 
   useEffect(() => { document.documentElement.classList.toggle('dark', darkMode); }, [darkMode]);
-  useEffect(() => { const t = setTimeout(() => observe(), 100); return () => clearTimeout(t); }, [activeView, activeDoc, observe]);
+  useEffect(() => { const timer = setTimeout(() => observe(), 100); return () => clearTimeout(timer); }, [activeView, activeDoc, lang, observe]);
 
   // Cmd+K shortcut
   useEffect(() => {
@@ -1372,27 +1498,29 @@ export default function Home() {
   const handleOpenCase = useCallback((caseKey) => setOpenCase(caseKey), []);
 
   return (
-    <div className={darkMode ? 'dark' : ''}>
-      <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-primary)', transition: 'background 0.3s, color 0.3s' }}>
-        <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} searchIndex={searchIndex} />
-        {openCase && <CaseModal caseKey={openCase} onClose={() => setOpenCase(null)} />}
-        <TopBar darkMode={darkMode} setDarkMode={setDarkMode} onSearchOpen={() => setSearchOpen(true)} onAboutOpen={() => setActiveView('about')} />
+    <AppCtx.Provider value={app}>
+      <div className={darkMode ? 'dark' : ''}>
+        <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-primary)', transition: 'background 0.3s, color 0.3s' }}>
+          <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} searchIndex={searchIndex} />
+          {openCase && <CaseModal caseKey={openCase} onClose={() => setOpenCase(null)} />}
+          <TopBar darkMode={darkMode} setDarkMode={setDarkMode} onSearchOpen={() => setSearchOpen(true)} onAboutOpen={() => setActiveView('about')} />
 
-        {activeView === 'home' && (
-          <HomeView setActiveView={setActiveView} setActiveDoc={setActiveDoc} />
-        )}
-        {activeView === 'library' && (
-          <LibraryView activeDoc={activeDoc} setActiveDoc={setActiveDoc} setActiveView={setActiveView} onOpenCase={handleOpenCase} />
-        )}
-        {activeView === 'rights' && (
-          <RightsView onOpenCase={handleOpenCase} setActiveView={setActiveView} setActiveDoc={setActiveDoc} />
-        )}
-        {activeView === 'glossary' && <GlossaryView />}
-        {activeView === 'about' && <AboutView />}
+          {activeView === 'home' && (
+            <HomeView setActiveView={setActiveView} setActiveDoc={setActiveDoc} />
+          )}
+          {activeView === 'library' && (
+            <LibraryView activeDoc={activeDoc} setActiveDoc={setActiveDoc} setActiveView={setActiveView} onOpenCase={handleOpenCase} />
+          )}
+          {activeView === 'rights' && (
+            <RightsView onOpenCase={handleOpenCase} setActiveView={setActiveView} setActiveDoc={setActiveDoc} />
+          )}
+          {activeView === 'glossary' && <GlossaryView />}
+          {activeView === 'about' && <AboutView />}
 
-        <BottomNav activeView={activeView} setActiveView={setActiveView} />
-        <ScrollToTop />
+          <BottomNav activeView={activeView} setActiveView={setActiveView} />
+          <ScrollToTop />
+        </div>
       </div>
-    </div>
+    </AppCtx.Provider>
   );
 }

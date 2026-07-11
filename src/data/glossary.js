@@ -286,6 +286,37 @@ export const glossary = [
 
 export const situations = [
   {
+    id: "ice-at-door",
+    title: "ICE at Your Door",
+    icon: "home",
+    description: "An administrative ICE form is not a judicial warrant. Your door stays closed unless a judge signed one with your name on it.",
+    card: {
+      label: "Digital Red Card",
+      instruction: "Show this screen through a window or hold it up to the door viewer. Never hand your phone to an agent.",
+      statement: "I do not wish to speak with you, answer your questions, or sign or hand you any documents, based on my 5th Amendment rights under the United States Constitution. I do not give you permission to enter my home, based on my 4th Amendment rights, unless you have a warrant to enter, signed by a judge or magistrate, with my name on it, that you slide under the door. I do not give you permission to search any of my belongings, based on my 4th Amendment rights. I choose to exercise my constitutional rights.",
+      footer: "These rights belong to citizens and noncitizens alike."
+    },
+    rights: [
+      { amendment: "4th", right: "You do not have to open your door. ICE administrative warrants (Form I-200 or Form I-205) are signed by immigration officers, not judges, and they do not authorize agents to enter your home without your consent.", ref: "Immigration and Nationality Act § 287 (1952)" },
+      { amendment: "4th", right: "Only a judicial warrant, signed by a judge or magistrate and listing your correct name and address, authorizes entry into your home. Ask agents to slide it under the door or hold it against a window so you can inspect it before anything else happens.", ref: "Payton v. New York (1980)" },
+      { amendment: "4th", right: "Even a valid arrest warrant for another person does not allow agents to enter and search your home looking for that person. Entering a third party's home requires a search warrant for that address.", ref: "Steagald v. United States (1981)" },
+      { amendment: "4th", right: "Agents knocking on your door have no more rights there than any stranger. You have no obligation to open the door or to speak, and declining to answer is not evidence of anything.", ref: "Kentucky v. King (2011)" },
+      { amendment: "4th", right: "Your porch and doorstep are constitutionally protected space. Officers may approach, knock, and wait briefly like any visitor, but they cannot use your doorstep to conduct an investigation without a warrant.", ref: "Florida v. Jardines (2013)" },
+      { amendment: "5th", right: "You have the right to remain silent about where you were born, how you entered the country, and your immigration status. This right belongs to every person on U.S. soil, citizen and noncitizen alike.", ref: "Wong Wing v. United States (1896)" },
+      { amendment: "5th", right: "Do not sign anything without speaking to a lawyer first. Forms like 'stipulated removal' or 'voluntary departure' can permanently waive your right to a hearing before a judge.", ref: "Zadvydas v. Davis (2001)" },
+      { amendment: "4th", right: "If agents violate your rights during a home entry, immigration courts usually will not exclude the resulting evidence, because the exclusionary rule rarely applies in removal proceedings. Exercising your rights before the door opens is your strongest protection.", ref: "INS v. Lopez-Mendoza (1984)" }
+    ],
+    tips: [
+      "Do not open the door. Opening it even a crack can be claimed as consent. Speak through the closed door or show the red card through a window.",
+      "Never hand your phone to an agent. If you use the digital card, hold your phone up to the window and keep it in your hands the entire time.",
+      "If they say they have a warrant, say: 'Slide it under the door.' Then check: Is it signed by a judge or magistrate? Was it issued by a court? Is your name and address correct? Forms I-200 and I-205 are not judicial warrants.",
+      "Everyone in the home has the right to remain silent, including children. Agree on a household plan before anything ever happens.",
+      "Memorize the phone number of a lawyer or a local rapid response hotline. Do not depend on your phone's contact list.",
+      "If agents force their way in anyway, do not physically resist. Say clearly: 'I do not consent to this entry or search.' Write down names, badge numbers, and details as soon as you can.",
+      "If you are outside your home, ask: 'Am I free to leave?' If the answer is yes, walk away calmly."
+    ]
+  },
+  {
     id: "pulled-over",
     title: "Pulled Over by Police",
     icon: "car",

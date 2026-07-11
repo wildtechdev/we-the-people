@@ -40,6 +40,17 @@ export const cases = {
     significance: "Despite its intent, the War Powers Resolution has been largely ineffective. Presidents of both parties have either ignored it, claimed it is unconstitutional, or found workarounds. The U.S. has engaged in military operations in Libya, Syria, Yemen, and elsewhere with minimal Congressional involvement. No president has ever conceded the law's constitutionality.",
     url: "https://uscode.house.gov/view.xhtml?path=/prelim@title50/chapter33&edition=prelim"
   },
+  "Immigration and Nationality Act § 287 (1952)": {
+    name: "Immigration and Nationality Act § 287: Powers of Immigration Officers",
+    year: 1952,
+    citation: "8 U.S.C. § 1357",
+    amendment: "4th",
+    type: "statute",
+    summary: "The federal statute that defines what immigration officers can and cannot legally do. It allows officers to question people they believe to be noncitizens and to make arrests without a warrant only when the person is likely to escape before a warrant can be obtained. Critically, the 'warrants' ICE typically carries (Form I-200 Warrant for Arrest of Alien and Form I-205 Warrant of Removal) are administrative documents signed by immigration officers or supervisors, not by judges.",
+    outcome: "Even under this statute, immigration officers have no authority to enter a private home without consent unless they hold a judicial warrant signed by a judge or magistrate. The statute permits warrantless access to private lands within 25 miles of a border, but it expressly excludes dwellings. An administrative form does not satisfy the 4th Amendment's warrant requirement for entering a home.",
+    significance: "This is the legal foundation of the 'red card' advice: an ICE administrative warrant is not a judicial warrant. If agents cannot show a warrant signed by a judge, with the correct name and address, residents may lawfully keep the door closed and remain silent. Knowing the difference between Form I-200/I-205 and a judicial warrant is the single most important protection during a home encounter with immigration enforcement.",
+    url: "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title8-section1357&num=0&edition=prelim"
+  },
   "DOJ Ferguson Report (2015)": {
     name: "DOJ Investigation of the Ferguson Police Department",
     year: 2015,
@@ -520,6 +531,56 @@ export const cases = {
     outcome: "Indefinite detention was ruled unconstitutional. Six months is a presumptively reasonable detention period.",
     significance: "Applied due process protections to immigration detention. Even non-citizens ordered deported have a constitutional right against indefinite detention by the government.",
     url: "https://supreme.justia.com/cases/federal/us/533/678/"
+  },
+  "Steagald v. United States (1981)": {
+    name: "Steagald v. United States",
+    year: 1981,
+    citation: "451 U.S. 204",
+    amendment: "4th",
+    summary: "DEA agents had an arrest warrant for a fugitive named Ricky Lyons. Acting on a tip, they entered the home of Gary Steagald, a third party, to search for Lyons. They never found Lyons, but they found cocaine and prosecuted Steagald. The Supreme Court ruled that an arrest warrant for one person does not authorize agents to enter and search a different person's home. To do that, they need a search warrant for the home itself.",
+    outcome: "The evidence against Steagald was suppressed. An arrest warrant alone cannot justify entering a third party's home without consent or exigent circumstances.",
+    significance: "Directly relevant to immigration enforcement: even when agents hold a valid judicial arrest warrant for someone, that warrant does not let them enter YOUR home to look for that person. A resident may lawfully refuse entry unless agents produce a search warrant for the address, signed by a judge.",
+    url: "https://supreme.justia.com/cases/federal/us/451/204/"
+  },
+  "Kentucky v. King (2011)": {
+    name: "Kentucky v. King",
+    year: 2011,
+    citation: "563 U.S. 452",
+    amendment: "4th",
+    summary: "Police chasing a drug suspect smelled marijuana at an apartment door, knocked loudly, announced themselves, and after hearing movement inside broke down the door claiming evidence was being destroyed. In deciding when such 'exigent circumstances' justify warrantless entry, the Supreme Court stated a principle central to every knock at your door: officers without a warrant have no greater right at your door than any private citizen, and occupants have no obligation to open the door or to speak.",
+    outcome: "The Court held the exigent circumstances exception applies as long as police do not create the emergency by violating the 4th Amendment, and it remanded the case. The lasting language: 'the occupant has no obligation to open the door or to speak.'",
+    significance: "The Supreme Court's clearest modern statement that you do not have to open your door to law enforcement who lack a warrant. Declining to open the door and remaining silent are lawful exercises of your rights, not evidence of a crime. This is the constitutional backbone of 'do not open the door' guidance.",
+    url: "https://supreme.justia.com/cases/federal/us/563/452/"
+  },
+  "Florida v. Jardines (2013)": {
+    name: "Florida v. Jardines",
+    year: 2013,
+    citation: "569 U.S. 1",
+    amendment: "4th",
+    summary: "Police brought a drug-sniffing dog onto Joelis Jardines' front porch to sniff at his door, then used the alert to get a search warrant. The Supreme Court ruled the dog sniff was itself a search. The area immediately around a home (the 'curtilage') is protected, and the implied license that lets anyone approach a front door is narrow: approach, knock, wait briefly, and leave. Using that approach to gather evidence exceeds the license.",
+    outcome: "The evidence was suppressed. Bringing an investigative tool onto the porch without a warrant violated the 4th Amendment.",
+    significance: "Your porch and doorstep are constitutionally protected space. Officers standing at your door have only the same permission a delivery driver or neighbor would have. They cannot lawfully use the doorstep to conduct an investigation without a warrant, and you may end the encounter by simply not answering.",
+    url: "https://supreme.justia.com/cases/federal/us/569/1/"
+  },
+  "INS v. Lopez-Mendoza (1984)": {
+    name: "INS v. Lopez-Mendoza",
+    year: 1984,
+    citation: "468 U.S. 1032",
+    amendment: "4th",
+    summary: "Two men arrested by immigration agents argued that evidence of their status should be suppressed because their arrests violated the 4th Amendment. The Supreme Court held that deportation proceedings are civil, not criminal, so the exclusionary rule (which throws out illegally obtained evidence in criminal trials) generally does not apply in immigration court. The Court left open an exception for 'egregious violations' of the 4th Amendment.",
+    outcome: "Evidence obtained during the challenged arrests remained admissible in the deportation proceedings. Suppression in immigration court is available only in cases of egregious or widespread constitutional violations, a standard lower courts apply inconsistently.",
+    significance: "A hard truth that makes prevention essential: if agents violate your rights during a home entry, immigration courts often will not exclude the resulting evidence. Because the usual remedy for an illegal search barely exists in removal proceedings, the strongest protection is exercising your rights up front: keep the door closed, stay silent, and do not consent.",
+    url: "https://supreme.justia.com/cases/federal/us/468/1032/"
+  },
+  "Wong Wing v. United States (1896)": {
+    name: "Wong Wing v. United States",
+    year: 1896,
+    citation: "163 U.S. 228",
+    amendment: "5th",
+    summary: "A federal law allowed Chinese nationals found unlawfully present to be sentenced to up to a year of hard labor without a jury trial before deportation. The Supreme Court unanimously struck it down, holding that all 'persons' within the territory of the United States, citizens and noncitizens alike, are entitled to 5th and 6th Amendment protections. The government cannot impose criminal punishment on anyone without a judicial trial.",
+    outcome: "The hard-labor provision was ruled unconstitutional. Deportation itself may be administered civilly, but punishment requires the full protections of a criminal trial.",
+    significance: "One of the oldest and clearest holdings that constitutional rights are not reserved for citizens. When the red card says 'these rights belong to citizens and noncitizens alike,' this case is why. Anyone on U.S. soil can invoke the 5th Amendment and refuse to answer questions.",
+    url: "https://supreme.justia.com/cases/federal/us/163/228/"
   },
   "District of Columbia v. Heller (2008)": {
     name: "District of Columbia v. Heller",

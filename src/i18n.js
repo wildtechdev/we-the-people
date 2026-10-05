@@ -7,21 +7,38 @@
 export const STRINGS = {
   en: {
     // Bottom nav
-    nav: { home: 'Home', library: 'Library', rights: 'Rights', glossary: 'Glossary' },
+    nav: { home: 'Home', library: 'Library', rights: 'Rights', cases: 'Cases', glossary: 'Glossary' },
+
+    // Accessibility labels
+    a11y: { search: 'Search', darkOn: 'Switch to dark mode', darkOff: 'Switch to light mode', about: 'About this app', close: 'Close', scrollTop: 'Back to top', language: 'Cambiar a español' },
 
     // Home
     tagline: 'No parties. Just law.',
     foundingDocs: 'Founding Documents',
     knowYourRights: 'Know Your Rights',
+    seeAllScenarios: (n) => `See all ${n} scenarios`,
+    landmarkCases: 'Landmark Cases',
+    browseCases: (n) => `Browse ${n} court cases, laws, and sources`,
     docs: {
       declaration: { title: 'Declaration of Independence', sub: 'July 4, 1776', count: (n) => `${n} sections` },
       constitution: { title: 'The Constitution', sub: 'September 17, 1787', count: (n) => `${n} articles` },
       'bill-of-rights': { title: 'Bill of Rights', sub: 'December 15, 1791', count: () => '10 amendments' },
       amendments: { title: 'Amendments 11-27', sub: '1795 - 1992', count: (n) => `${n} amendments` },
+      unratified: { title: 'Proposed but Never Ratified', sub: '1789 - 1978', count: (n) => `${n} amendments` },
     },
 
     // Library
-    docTabs: { declaration: 'Declaration', constitution: 'Constitution', 'bill-of-rights': 'Bill of Rights', amendments: 'Amd. 11-27' },
+    amendmentsDate: 'Ratified 1795 to 1992',
+    wouldHaveDone: 'What It Would Have Done',
+    whatHappened: 'What Happened',
+    note: 'Note',
+    textSize: 'Text size',
+    textSmaller: 'Smaller text',
+    textLarger: 'Larger text',
+    signers: 'Signers',
+    signersCount: (n) => `${n} signers`,
+    presidentLabel: 'President',
+    docTabs: { declaration: 'Declaration', constitution: 'Constitution', 'bill-of-rights': 'Bill of Rights', amendments: 'Amd. 11-27', unratified: 'Unratified' },
     toc: (n) => `Table of Contents (${n} sections)`,
     views: { original: 'Original', translated: 'Plain English', both: 'Side by Side' },
     article: 'Article',
@@ -61,12 +78,27 @@ export const STRINGS = {
 
     // Red card
     showCard: 'Show Red Card',
-    cardWarning: 'DO NOT hand your phone to the agent. Hold the screen up to a window or door viewer and keep the phone in your hands.',
+    showNamedCard: (label) => `Show ${label}`,
+    hasCard: 'Includes a digital card',
+    cardWarning: 'DO NOT hand your phone to an officer or agent. Hold the screen up where they can read it, through a window or door viewer if you are at home, and keep the phone in your hands.',
     cardMeaning: '',
+    cardDisclaimer: 'General information, not legal advice.',
+
+    // Case library
+    casesTitle: 'Case Library',
+    casesSubtitle: (n) => `${n} landmark court cases, laws, and sources, explained in plain language.`,
+    filterCases: 'Filter by name, topic, or year...',
+    allFilter: 'All',
+    citedIn: 'Where This Appears in the App',
+    noCases: 'No matching cases.',
+    casesShown: (n) => `${n} shown`,
+    sortLabel: 'Sort cases',
+    sortAZ: 'A to Z',
+    sortNewest: 'Newest',
 
     // Glossary
     glossaryTitle: 'Glossary',
-    glossarySubtitle: '240+ essential terms in plain language.',
+    glossarySubtitle: (n) => `${n} essential terms in plain language.`,
     filterTerms: 'Filter terms...',
 
     // Search
@@ -74,7 +106,15 @@ export const STRINGS = {
     searchHint: 'Search all documents, amendments, glossary, and rights guides.',
     searchTry: 'Try: "free speech", "due process", "search warrant"',
     noResults: (q) => `No results for "${q}"`,
-    searchLabels: { declaration: 'Declaration', constitution: 'Constitution', billOfRights: 'Bill of Rights', amendments: 'Amendments', glossary: 'Glossary', rights: 'Rights Guide' },
+    searchLabels: { declaration: 'Declaration', constitution: 'Constitution', billOfRights: 'Bill of Rights', amendments: 'Amendments', glossary: 'Glossary', rights: 'Rights Guide', cases: 'Case Library', unratified: 'Unratified' },
+    searchArt: (n) => `Art. ${n}`,
+    searchAmd: (n) => `Amd. ${n}`,
+
+    // Legal notice
+    disclaimer: {
+      title: 'Not Legal Advice',
+      short: 'This guide explains constitutional rights in general terms. It is not legal advice. Laws, court rulings, and state rules differ and change. If you are facing a legal situation, talk to a lawyer.',
+    },
 
     // About
     about: {
@@ -93,6 +133,13 @@ export const STRINGS = {
       p5: 'The more people who understand their rights, the stronger those rights become for all of us. Share this app with your family, friends, and loved ones so they too can better understand their rights as citizens.',
       shareBtn: 'Share We The People',
       quote: '"We the People of the United States, in Order to form a more perfect Union..."',
+      h4: 'Not Legal Advice',
+      p6: 'This app explains the founding documents and constitutional rights in general terms for education. It is not legal advice and does not create an attorney-client relationship. Laws, court rulings, and state rules differ and change over time. If you are facing a legal situation, talk to a lawyer or a legal aid organization.',
+      h5: 'Sources',
+      p7: 'The text of the Declaration of Independence, the Constitution, and every amendment follows the National Archives transcriptions, including the original spelling. Plain-language explanations, case summaries, and the Know Your Rights guide were written for this app and link to the full court opinions and official sources.',
+      updated: 'Content last updated: October 2026',
+      h6: 'Your Privacy',
+      p8: 'This app collects no personal data, has no accounts, and contains no ads or tracking. Your language and display settings are stored only on your device.',
       madeWith: 'Made with love for this country and its people.',
       noAds: 'No ads. No subscriptions. No politics. Just your rights.',
       copied: 'Link copied to clipboard!',
@@ -102,21 +149,38 @@ export const STRINGS = {
 
   es: {
     // Bottom nav
-    nav: { home: 'Inicio', library: 'Biblioteca', rights: 'Derechos', glossary: 'Glosario' },
+    nav: { home: 'Inicio', library: 'Biblioteca', rights: 'Derechos', cases: 'Casos', glossary: 'Glosario' },
+
+    // Etiquetas de accesibilidad
+    a11y: { search: 'Buscar', darkOn: 'Activar modo oscuro', darkOff: 'Activar modo claro', about: 'Acerca de esta aplicación', close: 'Cerrar', scrollTop: 'Volver arriba', language: 'Switch to English' },
 
     // Home
     tagline: 'Sin partidos. Solo ley.',
     foundingDocs: 'Documentos fundacionales',
     knowYourRights: 'Conozca sus derechos',
+    seeAllScenarios: (n) => `Ver los ${n} escenarios`,
+    landmarkCases: 'Casos históricos',
+    browseCases: (n) => `Explore ${n} casos judiciales, leyes y fuentes`,
     docs: {
       declaration: { title: 'Declaración de Independencia', sub: '4 de julio de 1776', count: (n) => `${n} secciones` },
       constitution: { title: 'La Constitución', sub: '17 de septiembre de 1787', count: (n) => `${n} artículos` },
       'bill-of-rights': { title: 'Carta de Derechos', sub: '15 de diciembre de 1791', count: () => '10 enmiendas' },
       amendments: { title: 'Enmiendas 11-27', sub: '1795 - 1992', count: (n) => `${n} enmiendas` },
+      unratified: { title: 'Propuestas que nunca se ratificaron', sub: '1789 - 1978', count: (n) => `${n} enmiendas` },
     },
 
     // Library
-    docTabs: { declaration: 'Declaración', constitution: 'Constitución', 'bill-of-rights': 'Carta de Derechos', amendments: 'Enm. 11-27' },
+    amendmentsDate: 'Ratificadas entre 1795 y 1992',
+    wouldHaveDone: 'Lo que habría hecho',
+    whatHappened: 'Lo que pasó',
+    note: 'Nota',
+    textSize: 'Tamaño del texto',
+    textSmaller: 'Texto más pequeño',
+    textLarger: 'Texto más grande',
+    signers: 'Firmantes',
+    signersCount: (n) => `${n} firmantes`,
+    presidentLabel: 'Presidente',
+    docTabs: { declaration: 'Declaración', constitution: 'Constitución', 'bill-of-rights': 'Carta de Derechos', amendments: 'Enm. 11-27', unratified: 'No ratificadas' },
     toc: (n) => `Índice (${n} secciones)`,
     views: { original: 'Original', translated: 'Español claro', both: 'Lado a lado' },
     article: 'Artículo',
@@ -162,12 +226,27 @@ export const STRINGS = {
 
     // Red card
     showCard: 'Mostrar tarjeta roja',
-    cardWarning: 'NO entregue su teléfono al agente. Muestre la pantalla a través de una ventana o mirilla y mantenga el teléfono en sus manos.',
+    showNamedCard: (label) => `Mostrar: ${label}`,
+    hasCard: 'Incluye una tarjeta digital',
+    cardWarning: 'NO entregue su teléfono a un oficial o agente. Muestre la pantalla donde puedan leerla, a través de una ventana o mirilla si está en casa, y mantenga el teléfono en sus manos.',
     cardMeaning: 'Lo que dice esta tarjeta:',
+    cardDisclaimer: 'Información general, no asesoría legal.',
+
+    // Case library
+    casesTitle: 'Biblioteca de casos',
+    casesSubtitle: (n) => `${n} casos judiciales, leyes y fuentes clave, explicados en lenguaje claro.`,
+    filterCases: 'Filtrar por nombre, tema o año...',
+    allFilter: 'Todos',
+    citedIn: 'Dónde aparece en la aplicación',
+    noCases: 'No hay casos que coincidan.',
+    casesShown: (n) => `${n} mostrados`,
+    sortLabel: 'Ordenar casos',
+    sortAZ: 'A a la Z',
+    sortNewest: 'Más recientes',
 
     // Glossary
     glossaryTitle: 'Glosario',
-    glossarySubtitle: 'Más de 240 términos esenciales en lenguaje claro.',
+    glossarySubtitle: (n) => `${n} términos esenciales en lenguaje claro.`,
     filterTerms: 'Filtrar términos...',
 
     // Search
@@ -175,7 +254,15 @@ export const STRINGS = {
     searchHint: 'Busque en todos los documentos, enmiendas, glosario y guías de derechos.',
     searchTry: 'Pruebe: "libertad de expresión", "debido proceso", "orden de registro"',
     noResults: (q) => `Sin resultados para "${q}"`,
-    searchLabels: { declaration: 'Declaración', constitution: 'Constitución', billOfRights: 'Carta de Derechos', amendments: 'Enmiendas', glossary: 'Glosario', rights: 'Guía de derechos' },
+    searchLabels: { declaration: 'Declaración', constitution: 'Constitución', billOfRights: 'Carta de Derechos', amendments: 'Enmiendas', glossary: 'Glosario', rights: 'Guía de derechos', cases: 'Biblioteca de casos', unratified: 'No ratificadas' },
+    searchArt: (n) => `Art. ${n}`,
+    searchAmd: (n) => `Enm. ${n}`,
+
+    // Aviso legal
+    disclaimer: {
+      title: 'No es asesoría legal',
+      short: 'Esta guía explica los derechos constitucionales en términos generales. No es asesoría legal. Las leyes, los fallos judiciales y las normas estatales varían y cambian. Si enfrenta una situación legal, hable con un abogado.',
+    },
 
     // About
     about: {
@@ -194,6 +281,13 @@ export const STRINGS = {
       p5: 'Cuantas más personas entienden sus derechos, más fuertes se vuelven esos derechos para todos. Comparta esta aplicación con su familia, amigos y seres queridos para que ellos también puedan entender mejor sus derechos como ciudadanos.',
       shareBtn: 'Compartir We The People',
       quote: '"Nosotros, el Pueblo de los Estados Unidos, a fin de formar una Unión más perfecta..."',
+      h4: 'No es asesoría legal',
+      p6: 'Esta aplicación explica los documentos fundacionales y los derechos constitucionales en términos generales con fines educativos. No es asesoría legal ni crea una relación entre abogado y cliente. Las leyes, los fallos judiciales y las normas estatales varían y cambian con el tiempo. Si enfrenta una situación legal, hable con un abogado o con una organización de asistencia legal.',
+      h5: 'Fuentes',
+      p7: 'El texto de la Declaración de Independencia, la Constitución y cada enmienda sigue las transcripciones de los Archivos Nacionales, con su ortografía original en inglés. Las explicaciones en lenguaje claro, los resúmenes de casos y la guía Conozca sus derechos fueron escritos para esta aplicación y enlazan a las opiniones judiciales completas y a las fuentes oficiales.',
+      updated: 'Contenido actualizado por última vez: octubre de 2026',
+      h6: 'Su privacidad',
+      p8: 'Esta aplicación no recopila datos personales, no tiene cuentas y no contiene anuncios ni rastreo. Su idioma y sus ajustes de pantalla se guardan solo en su dispositivo.',
       madeWith: 'Hecho con amor por este país y su gente.',
       noAds: 'Sin anuncios. Sin suscripciones. Sin política partidista. Solo sus derechos.',
       copied: '¡Enlace copiado al portapapeles!',

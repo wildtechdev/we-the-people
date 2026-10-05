@@ -536,7 +536,7 @@ function BottomNav({ activeView, setActiveView }) {
   ];
   return (
     <nav className="bottom-nav no-print" style={{ boxShadow: '0 -2px 16px rgba(0,0,0,0.04)' }}>
-      <div className="max-w-lg mx-auto flex items-center justify-around py-2 px-2">
+      <div className="max-w-lg md:max-w-2xl mx-auto flex items-center justify-around py-2 px-2">
         {items.map(item => (
           <button
             key={item.id}
@@ -573,7 +573,7 @@ function TopBar({ darkMode, setDarkMode, onSearchOpen, onAboutOpen, onHome, canG
   }, []);
   return (
     <header className="no-print sticky top-0 z-40" style={{ background: 'var(--bg-primary)', paddingTop: 'env(safe-area-inset-top, 0px)', borderBottom: scrolled ? '1px solid var(--border-light)' : '1px solid transparent', transition: 'border-color 0.2s' }}>
-      <div className="max-w-lg mx-auto px-5 pt-3 pb-2 flex items-center justify-between">
+      <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pt-3 pb-2 flex items-center justify-between">
         {canGoBack ? (
           <button onClick={onBack} className="flex items-center gap-0.5 py-1.5 pr-3 -ml-1.5 rounded-xl" style={{ color: 'var(--navy)', fontSize: '15px', fontWeight: 600 }} aria-label={t.back}>
             <Icon.ChevronLeft /> {t.back}
@@ -639,7 +639,7 @@ function HomeView({ setActiveView, navigate }) {
   const { t, data } = useApp();
   const caseCount = Object.keys(data.cases).length;
   return (
-    <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
+    <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
       <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: SERIF }}>
         We The People
       </h1>
@@ -664,7 +664,7 @@ function HomeView({ setActiveView, navigate }) {
             className="text-left rounded-2xl overflow-hidden border flex flex-col justify-start"
             style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-sm)' }}
           >
-            <div style={{ width: '100%' }}><DocCover id={doc.id} label={doc.sub} /></div>
+            <div style={{ width: '100%' }}><DocCover id={doc.id} label={doc.sub} height="clamp(150px, 20vw, 200px)" /></div>
             <div className="p-3 flex-1 flex flex-col" style={{ width: '100%' }}>
               <p style={{ fontFamily: SERIF, fontSize: '14px', fontWeight: '700', color: 'var(--text-primary)', lineHeight: '1.3' }}>{doc.title}</p>
               <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: 'auto', paddingTop: '6px' }}>{doc.sections}</p>
@@ -798,7 +798,7 @@ function LibraryView({ activeDoc, selectDoc, onOpenCase, scrollAnchor, clearScro
   }, [meta.signers]);
 
   return (
-    <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
+    <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
       {/* Document selector tabs */}
       <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1" role="tablist">
         {docIds(data).map(id => (
@@ -821,7 +821,7 @@ function LibraryView({ activeDoc, selectDoc, onOpenCase, scrollAnchor, clearScro
       {/* Cover banner */}
       {DOC_COVERS[activeDoc] && (
         <div className="mt-5 rounded-2xl overflow-hidden" style={{ boxShadow: 'var(--shadow-sm)' }}>
-          <DocCover id={activeDoc} height={128} />
+          <DocCover id={activeDoc} height="clamp(128px, 16vw, 170px)" />
         </div>
       )}
 
@@ -994,7 +994,7 @@ function CaseModal({ caseKey, onClose, onOpenCase, navigate }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="case-title"
-        className="relative w-full max-w-md rounded-t-2xl sm:rounded-2xl overflow-hidden"
+        className="relative w-full max-w-md md:max-w-xl rounded-t-2xl sm:rounded-2xl overflow-hidden"
         style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-xl)', maxHeight: '85vh', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         onClick={e => e.stopPropagation()}
       >
@@ -1238,7 +1238,7 @@ function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
       )}
 
       {view === 'both' && (
-        <div className="space-y-4">
+        <div className="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
           <div className="p-4 rounded-xl" style={{ background: 'var(--bg-secondary)' }}>
             <SectionLabel>{t.originalText}</SectionLabel>
             <p lang="en" style={{ fontFamily: SERIF, fontSize: '14px', lineHeight: '1.8', color: 'var(--text-secondary)', whiteSpace: 'pre-line' }}>{section.original}</p>
@@ -1361,7 +1361,7 @@ function RedCardModal({ card, scenarioId, onClose }) {
     <div role="dialog" aria-modal="true" aria-label={card.label || t.showCard} className="fixed inset-0 z-[200] flex flex-col" style={{ background: 'linear-gradient(160deg, #b22234 0%, #7d1622 100%)' }}>
       {/* Warning: never hand over the phone */}
       <div style={{ background: '#1b2a4a', paddingTop: 'calc(env(safe-area-inset-top, 0px) + 10px)', paddingBottom: '10px' }} className="px-4">
-        <div className="max-w-md mx-auto flex items-start gap-3">
+        <div className="max-w-md md:max-w-2xl mx-auto flex items-start gap-3">
           <span style={{ flexShrink: 0, marginTop: '1px' }}><Icon.Alert size={20} color="#e8c55a" /></span>
           <p style={{ fontSize: '12px', fontWeight: '700', color: '#e8c55a', lineHeight: '1.45', letterSpacing: '0.01em' }}>
             {t.cardWarning}
@@ -1373,12 +1373,12 @@ function RedCardModal({ card, scenarioId, onClose }) {
       </div>
 
       {/* Card face */}
-      <div className="flex-1 overflow-y-auto px-6 py-6" onClick={onClose} style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 24px)' }}>
-        <div className="max-w-md mx-auto">
+      <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col" onClick={onClose} style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 24px)' }}>
+        <div className="max-w-md md:max-w-2xl mx-auto w-full my-auto">
           {card.label && (
             <p style={{ fontSize: '10px', fontWeight: '700', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', textAlign: 'center', marginBottom: '6px' }}>{card.label}</p>
           )}
-          <p lang="en" style={{ fontSize: '11px', fontWeight: '800', color: 'rgba(255,255,255,0.8)', textTransform: 'uppercase', letterSpacing: '0.14em', textAlign: 'center' }}>
+          <p lang="en" style={{ fontSize: 'clamp(11px, 1.35vw, 14px)', fontWeight: '800', color: 'rgba(255,255,255,0.8)', textTransform: 'uppercase', letterSpacing: '0.14em', textAlign: 'center' }}>
             {audience}
           </p>
           <div className="dot-indicator my-3" aria-hidden="true">
@@ -1386,10 +1386,10 @@ function RedCardModal({ card, scenarioId, onClose }) {
             <span style={{ background: '#e8c55a', width: '18px', borderRadius: '3px' }} />
             <span style={{ background: 'rgba(255,255,255,0.35)' }} />
           </div>
-          <p lang="en" style={{ fontFamily: SERIF, fontSize: '19px', lineHeight: '1.65', color: 'white', fontWeight: '700', textShadow: '0 1px 3px rgba(0,0,0,0.25)' }}>
+          <p lang="en" style={{ fontFamily: SERIF, fontSize: 'clamp(19px, 2.9vw, 30px)', lineHeight: '1.65', color: 'white', fontWeight: '700', textShadow: '0 1px 3px rgba(0,0,0,0.25)' }}>
             {card.statement}
           </p>
-          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.92)', marginTop: '20px', textAlign: 'center', fontWeight: '600', letterSpacing: '0.02em' }}>
+          <p style={{ fontSize: 'clamp(13px, 1.6vw, 17px)', color: 'rgba(255,255,255,0.92)', marginTop: '20px', textAlign: 'center', fontWeight: '600', letterSpacing: '0.02em' }}>
             {card.footer}
           </p>
 
@@ -1399,7 +1399,7 @@ function RedCardModal({ card, scenarioId, onClose }) {
               <p style={{ fontSize: '10px', fontWeight: '800', color: '#e8c55a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
                 {t.cardMeaning}
               </p>
-              <p style={{ fontSize: '13px', lineHeight: '1.65', color: 'rgba(255,255,255,0.95)', fontStyle: 'italic' }}>
+              <p style={{ fontSize: 'clamp(13px, 1.6vw, 17px)', lineHeight: '1.65', color: 'rgba(255,255,255,0.95)', fontStyle: 'italic' }}>
                 {card.statementTranslation}
               </p>
             </div>
@@ -1429,7 +1429,7 @@ function RightsView({ onOpenCase, navigate, activeId, openScenario }) {
     const referencedAmendments = [...new Set(active.rights.map(r => r.amendment))];
 
     return (
-      <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
+      <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
         {cardOpen && active.card && <RedCardModal card={active.card} scenarioId={active.id} onClose={closeCard} />}
         <div className="flex items-center gap-4 mb-2">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'var(--navy-lighter)', color: 'var(--navy)' }}>
@@ -1569,7 +1569,7 @@ function RightsView({ onOpenCase, navigate, activeId, openScenario }) {
   }
 
   return (
-    <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
+    <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
       <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: SERIF }}>
         {t.knowYourRights}
       </h1>
@@ -1634,7 +1634,7 @@ function CasesView({ onOpenCase }) {
   }, [all, filter, badge, sort]);
 
   return (
-    <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
+    <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
       <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: SERIF }}>{t.casesTitle}</h1>
       <p className="fade-in-up visible" style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px', lineHeight: '1.6' }}>{t.casesSubtitle(all.length)}</p>
 
@@ -1741,7 +1741,7 @@ function AboutView() {
   };
 
   return (
-    <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
+    <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
       <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: SERIF }}>
         {t.about.title}
       </h1>
@@ -1829,7 +1829,7 @@ function GlossaryView({ onOpenCase, focusTerm, clearFocusTerm }) {
   }, [focusTerm, clearFocusTerm]);
 
   return (
-    <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
+    <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
       <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: SERIF }}>
         {t.glossaryTitle}
       </h1>
@@ -1915,7 +1915,7 @@ function SearchModal({ onClose, searchIndex, onSelect }) {
   return (
     <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[8vh] px-4" onClick={onClose}>
       <div className="absolute inset-0" style={{ background: 'rgba(15,22,35,0.45)', backdropFilter: 'blur(4px)' }} />
-      <div role="dialog" aria-modal="true" aria-label={t.a11y.search} className="relative w-full max-w-md rounded-2xl overflow-hidden"
+      <div role="dialog" aria-modal="true" aria-label={t.a11y.search} className="relative w-full max-w-md md:max-w-xl rounded-2xl overflow-hidden"
         style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-xl)', maxHeight: '70vh' }}
         onClick={e => e.stopPropagation()}>
         <div className="flex items-center gap-3 p-4 border-b" style={{ borderColor: 'var(--border)', color: 'var(--text-tertiary)' }}>

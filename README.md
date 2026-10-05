@@ -16,7 +16,9 @@ npm run build        # static export to out/
 npm run build:ios    # check + build + copy into the iOS project (npx cap sync ios)
 ```
 
-After `npm run build:ios`, open `ios/App/App.xcworkspace` in Xcode to archive and submit.
+After `npm run build:ios`, open `ios/App/We The People.xcodeproj` in Xcode to archive and submit.
+Always run `npm run build:ios` before archiving: Xcode ships whatever web build is in
+`ios/App/App/public`, so skipping it ships an old version of the app.
 
 ## Project layout
 

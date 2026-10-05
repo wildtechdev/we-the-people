@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "check": "node scripts/check-content.mjs",
+    "build:ios": "npm run check && next build && npx cap sync ios"
   },
   "dependencies": {
     "@capacitor/cli": "^8.3.4",

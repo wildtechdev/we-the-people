@@ -149,12 +149,136 @@ function SituationIcon({ icon }) {
 // ============================================================
 
 const DOC_COVERS = {
-  declaration: { bg: 'linear-gradient(145deg, #b22234 0%, #8b1a28 100%)', emoji: '🪶', label: '1776' },
-  constitution: { bg: 'linear-gradient(145deg, #1b2a4a 0%, #0f1a30 100%)', emoji: '⚖️', label: '1787' },
-  'bill-of-rights': { bg: 'linear-gradient(145deg, #c5952a 0%, #96711f 100%)', emoji: '🛡️', label: '1791' },
-  amendments: { bg: 'linear-gradient(145deg, #2d4272 0%, #1b2a4a 100%)', emoji: '📜', label: '1795-1992' },
-  unratified: { bg: 'linear-gradient(145deg, #5b6474 0%, #3a4252 100%)', emoji: '📝', label: '1789-1978' },
+  declaration: { bg: 'radial-gradient(120% 90% at 30% 15%, #c4313f 0%, #9c1d2c 55%, #6e1320 100%)', label: '1776' },
+  constitution: { bg: 'radial-gradient(120% 90% at 30% 15%, #2a3d66 0%, #1b2a4a 55%, #0c1528 100%)', label: '1787' },
+  'bill-of-rights': { bg: 'radial-gradient(120% 90% at 30% 15%, #d6a63a 0%, #b0841f 55%, #7f5d14 100%)', label: '1791' },
+  amendments: { bg: 'radial-gradient(120% 90% at 30% 15%, #3b5591 0%, #2a3f6e 55%, #172541 100%)', label: '1795–1992' },
+  unratified: { bg: 'radial-gradient(120% 90% at 30% 15%, #6d7687 0%, #4f586a 55%, #313847 100%)', label: '1789–1978' },
 };
+
+// Engraved-style cover illustrations (cream line art with gold accents)
+const CREAM = '#fbf3e1';
+const GOLD = '#e8c55a';
+
+function Star({ x, y, r = 2.2, fill = GOLD }) {
+  const pts = [];
+  for (let i = 0; i < 10; i++) {
+    const rad = i % 2 === 0 ? r : r * 0.45;
+    const a = -Math.PI / 2 + (i * Math.PI) / 5;
+    pts.push(`${(x + rad * Math.cos(a)).toFixed(2)},${(y + rad * Math.sin(a)).toFixed(2)}`);
+  }
+  return <polygon points={pts.join(' ')} fill={fill} />;
+}
+
+function CoverArt({ id }) {
+  const line = { fill: 'none', stroke: CREAM, strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round' };
+  const thin = { ...line, strokeWidth: 1, opacity: 0.55 };
+  switch (id) {
+    case 'declaration': {
+      // Quill resting in an inkwell beneath an arc of 13 stars
+      const stars = Array.from({ length: 13 }, (_, i) => {
+        const a = Math.PI * (0.92 + (i / 12) * 1.16);
+        return <Star key={i} x={60 + 44 * Math.cos(a)} y={64 + 44 * Math.sin(a)} r={2} />;
+      });
+      return (
+        <svg viewBox="0 0 120 100" width="100%" height="100%" aria-hidden="true">
+          {stars}
+          <path d="M57 63 C 64 44, 76 28, 95 14 C 90 31, 80 45, 64 58 Z" fill={CREAM} fillOpacity="0.16" {...line} />
+          <path d="M58 64 L 93 17" {...line} strokeWidth="1.2" />
+          {[0, 1, 2, 3, 4].map(i => <path key={i} d={`M${66 + i * 5.5} ${53 - i * 7.2} l ${6 - i * 0.4} -2`} {...thin} />)}
+          <path d="M46 70 h28 a3 3 0 0 1 3 3 v9 a5 5 0 0 1-5 5 H48 a5 5 0 0 1-5-5 v-9 a3 3 0 0 1 3-3z" fill={CREAM} fillOpacity="0.12" {...line} />
+          <path d="M51 70 v-4 h18 v4" {...line} />
+          <path d="M49 78 h22" {...thin} />
+        </svg>
+      );
+    }
+    case 'constitution':
+      // Neoclassical temple front
+      return (
+        <svg viewBox="0 0 120 100" width="100%" height="100%" aria-hidden="true">
+          <path d="M22 38 L60 17 L98 38 Z" fill={CREAM} fillOpacity="0.12" {...line} />
+          <Star x={60} y={31} r={3.4} />
+          <rect x="24" y="38" width="72" height="6" fill={CREAM} fillOpacity="0.1" {...line} />
+          {[30, 42, 54, 66, 78, 90].map(x => (
+            <g key={x}>
+              <path d={`M${x - 3} 47 h6 M${x - 3} 76 h6`} {...line} />
+              <path d={`M${x - 2} 47 v29 M${x + 2} 47 v29`} {...line} strokeWidth="1.2" />
+            </g>
+          ))}
+          <rect x="20" y="78" width="80" height="4" fill={CREAM} fillOpacity="0.12" {...line} />
+          <rect x="15" y="84" width="90" height="4" fill={CREAM} fillOpacity="0.12" {...line} />
+        </svg>
+      );
+    case 'bill-of-rights':
+      // Heraldic shield: starred chief over stripes
+      return (
+        <svg viewBox="0 0 120 100" width="100%" height="100%" aria-hidden="true">
+          <defs>
+            <clipPath id="borShield"><path d="M60 13 L90 22 V47 C90 68 77 81 60 89 C43 81 30 68 30 47 V22 Z" /></clipPath>
+          </defs>
+          <g clipPath="url(#borShield)">
+            <rect x="30" y="13" width="60" height="22" fill="#1b2a4a" fillOpacity="0.55" />
+            {[0, 1, 2, 3, 4, 5].map(i => i % 2 === 0 && <rect key={i} x={32 + i * 10} y="35" width="10" height="60" fill={CREAM} fillOpacity="0.22" />)}
+          </g>
+          {[[45, 24], [60, 21], [75, 24], [52, 30], [68, 30]].map(([x, y], i) => <Star key={i} x={x} y={y} r={2.6} />)}
+          <path d="M60 13 L90 22 V47 C90 68 77 81 60 89 C43 81 30 68 30 47 V22 Z" {...line} strokeWidth="1.8" />
+          <path d="M30 35 H90" {...line} strokeWidth="1.2" />
+        </svg>
+      );
+    case 'amendments':
+      // Scroll with lines of text and a wax seal
+      return (
+        <svg viewBox="0 0 120 100" width="100%" height="100%" aria-hidden="true">
+          <path d="M34 20 h52 a6 6 0 0 1 0 12 h-4 v44 a6 6 0 0 1-6 6 H38 a6 6 0 0 1 0-12 h4 V32 h-8 a6 6 0 0 1 0-12z" fill={CREAM} fillOpacity="0.13" {...line} />
+          <path d="M42 32 h44" {...thin} />
+          {[40, 47, 54, 61].map((y, i) => <path key={y} d={`M50 ${y} h${i === 3 ? 18 : 26}`} {...line} strokeWidth="1.1" opacity="0.8" />)}
+          <circle cx="74" cy="70" r="8" fill={GOLD} fillOpacity="0.9" />
+          <circle cx="74" cy="70" r="5.2" fill="none" stroke="#7f5d14" strokeWidth="0.9" />
+          <Star x={74} y={70} r={2.6} fill="#7f5d14" />
+          <path d="M69 77 l-3 10 l5 -3 l3 4 M79 77 l3 10 l-5 -3 l-3 4" fill={GOLD} fillOpacity="0.85" stroke="none" />
+        </svg>
+      );
+    case 'unratified':
+      // Draft page with an unsigned, dashed "pending" seal
+      return (
+        <svg viewBox="0 0 120 100" width="100%" height="100%" aria-hidden="true">
+          <path d="M38 16 h32 l14 14 v54 H38 Z" fill={CREAM} fillOpacity="0.12" {...line} />
+          <path d="M70 16 v14 h14" {...line} />
+          {[38, 45, 52].map((y, i) => <path key={y} d={`M46 ${y} h${i === 2 ? 16 : 28}`} {...line} strokeWidth="1.1" opacity="0.8" />)}
+          <circle cx="66" cy="68" r="10" fill="none" stroke={GOLD} strokeWidth="1.6" strokeDasharray="3 3" />
+          <path d="M46 78 h10" {...line} strokeDasharray="2 3" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
+// Cover with gradient, engraved line texture, illustration and year
+function DocCover({ id, height = 150, compact, label }) {
+  const cover = DOC_COVERS[id];
+  return (
+    <div style={{ position: 'relative', height, background: cover.bg, overflow: 'hidden' }}>
+      <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0, opacity: 0.09 }} aria-hidden="true">
+        <defs>
+          <pattern id={`engrave-${id}`} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+            <line x1="0" y1="0" x2="0" y2="6" stroke={CREAM} strokeWidth="1" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill={`url(#engrave-${id})`} />
+      </svg>
+      <div style={{ position: 'absolute', inset: compact ? '10px' : '18px 14px 26px' }}>
+        <CoverArt id={id} />
+      </div>
+      {!compact && (
+        <p style={{ position: 'absolute', left: 12, right: 12, bottom: 9, fontFamily: SERIF, fontSize: '11px', letterSpacing: '0.08em', color: GOLD, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          {label || cover.label}
+        </p>
+      )}
+      <div style={{ position: 'absolute', inset: 0, boxShadow: 'inset 0 -24px 32px -24px rgba(0,0,0,0.35)', pointerEvents: 'none' }} />
+    </div>
+  );
+}
 
 // Constitutional order for case badges (used by the Case Library filter)
 const BADGE_ORDER = ['Preamble', 'Art. I', 'Art. II', 'Art. III', 'Art. IV', 'Art. V', 'Art. VI', 'Art. VII',
@@ -416,7 +540,7 @@ function BottomNav({ activeView, setActiveView }) {
         {items.map(item => (
           <button
             key={item.id}
-            onClick={() => { setActiveView(item.id); window.scrollTo({ top: 0 }); }}
+            onClick={() => { setActiveView(item.id); window.scrollTo({ top: 0, behavior: 'instant' }); }}
             aria-current={activeView === item.id ? 'page' : undefined}
             className="flex flex-col items-center gap-0.5 py-1.5 px-2.5 rounded-xl"
             style={{
@@ -438,7 +562,7 @@ function BottomNav({ activeView, setActiveView }) {
 // TOP BAR
 // ============================================================
 
-function TopBar({ darkMode, setDarkMode, onSearchOpen, onAboutOpen, onHome }) {
+function TopBar({ darkMode, setDarkMode, onSearchOpen, onAboutOpen, onHome, canGoBack, onBack }) {
   const { lang, setLang, t } = useApp();
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -450,7 +574,13 @@ function TopBar({ darkMode, setDarkMode, onSearchOpen, onAboutOpen, onHome }) {
   return (
     <header className="no-print sticky top-0 z-40" style={{ background: 'var(--bg-primary)', paddingTop: 'env(safe-area-inset-top, 0px)', borderBottom: scrolled ? '1px solid var(--border-light)' : '1px solid transparent', transition: 'border-color 0.2s' }}>
       <div className="max-w-lg mx-auto px-5 pt-3 pb-2 flex items-center justify-between">
-        <button onClick={onHome} aria-hidden={!scrolled} tabIndex={scrolled ? 0 : -1} style={{ fontFamily: SERIF, fontWeight: 700, fontSize: '15px', color: 'var(--text-primary)', opacity: scrolled ? 1 : 0, transition: 'opacity 0.2s' }}>We The People</button>
+        {canGoBack ? (
+          <button onClick={onBack} className="flex items-center gap-0.5 py-1.5 pr-3 -ml-1.5 rounded-xl" style={{ color: 'var(--navy)', fontSize: '15px', fontWeight: 600 }} aria-label={t.back}>
+            <Icon.ChevronLeft /> {t.back}
+          </button>
+        ) : (
+          <button onClick={onHome} aria-hidden={!scrolled} tabIndex={scrolled ? 0 : -1} style={{ fontFamily: SERIF, fontWeight: 700, fontSize: '15px', color: 'var(--text-primary)', opacity: scrolled ? 1 : 0, transition: 'opacity 0.2s' }}>We The People</button>
+        )}
         <div className="flex items-center gap-1">
           <button
             onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
@@ -531,19 +661,13 @@ function HomeView({ setActiveView, navigate }) {
           <button
             key={doc.id}
             onClick={() => navigate({ view: 'library', doc: doc.id })}
-            className="text-left rounded-2xl overflow-hidden border"
+            className="text-left rounded-2xl overflow-hidden border flex flex-col justify-start"
             style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-sm)' }}
           >
-            <div className="flex items-center justify-center" style={{ height: '160px', background: DOC_COVERS[doc.id].bg, position: 'relative' }}>
-              <span style={{ fontSize: '48px', opacity: 0.9 }} aria-hidden="true">{DOC_COVERS[doc.id].emoji}</span>
-              <div style={{ position: 'absolute', bottom: '8px', left: '10px', right: '10px' }}>
-                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.95)', fontWeight: '700', lineHeight: '1.3', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>{doc.title}</p>
-                <p style={{ fontSize: '9px', color: 'rgba(255,255,255,0.75)', marginTop: '1px' }}>{doc.sub}</p>
-              </div>
-            </div>
-            <div className="p-3">
-              <p style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-primary)', lineHeight: '1.3', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.title}</p>
-              <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '2px' }}>{doc.sections}</p>
+            <div style={{ width: '100%' }}><DocCover id={doc.id} label={doc.sub} /></div>
+            <div className="p-3 flex-1 flex flex-col" style={{ width: '100%' }}>
+              <p style={{ fontFamily: SERIF, fontSize: '14px', fontWeight: '700', color: 'var(--text-primary)', lineHeight: '1.3' }}>{doc.title}</p>
+              <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: 'auto', paddingTop: '6px' }}>{doc.sections}</p>
             </div>
           </button>
         ))}
@@ -555,11 +679,11 @@ function HomeView({ setActiveView, navigate }) {
           className="w-full mt-4 rounded-2xl overflow-hidden border text-left flex items-stretch fade-in-up"
           style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-sm)' }}
         >
-          <div className="flex items-center justify-center flex-shrink-0" style={{ width: '88px', background: DOC_COVERS.unratified.bg }}>
-            <span style={{ fontSize: '30px', opacity: 0.9 }} aria-hidden="true">{DOC_COVERS.unratified.emoji}</span>
+          <div className="flex-shrink-0" style={{ width: '96px' }}>
+            <DocCover id="unratified" height={80} compact />
           </div>
-          <div className="p-3 flex-1">
-            <p style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-primary)', lineHeight: '1.3' }}>{t.docs.unratified.title}</p>
+          <div className="p-3 flex-1 flex flex-col justify-center">
+            <p style={{ fontFamily: SERIF, fontSize: '14px', fontWeight: '700', color: 'var(--text-primary)', lineHeight: '1.3' }}>{t.docs.unratified.title}</p>
             <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '2px' }}>{t.docs.unratified.sub} · {t.docs.unratified.count(data.unratified.amendments.length)}</p>
           </div>
         </button>
@@ -614,7 +738,7 @@ function HomeView({ setActiveView, navigate }) {
 // LIBRARY VIEW (continuous document reader)
 // ============================================================
 
-function LibraryView({ activeDoc, setActiveDoc, onOpenCase, scrollAnchor, clearScrollAnchor }) {
+function LibraryView({ activeDoc, selectDoc, onOpenCase, scrollAnchor, clearScrollAnchor }) {
   const { t, data } = useApp();
   const [view, setViewState] = useState('original');
   const [tocOpen, setTocOpen] = useState(false);
@@ -682,7 +806,7 @@ function LibraryView({ activeDoc, setActiveDoc, onOpenCase, scrollAnchor, clearS
             key={id}
             role="tab"
             aria-selected={activeDoc === id}
-            onClick={() => { setActiveDoc(id); setTocOpen(false); window.scrollTo({ top: 0 }); }}
+            onClick={() => { selectDoc(id); setTocOpen(false); window.scrollTo({ top: 0, behavior: 'instant' }); }}
             className="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium"
             style={{
               background: activeDoc === id ? 'var(--navy)' : 'var(--bg-secondary)',
@@ -694,8 +818,15 @@ function LibraryView({ activeDoc, setActiveDoc, onOpenCase, scrollAnchor, clearS
         ))}
       </div>
 
+      {/* Cover banner */}
+      {DOC_COVERS[activeDoc] && (
+        <div className="mt-5 rounded-2xl overflow-hidden" style={{ boxShadow: 'var(--shadow-sm)' }}>
+          <DocCover id={activeDoc} height={128} />
+        </div>
+      )}
+
       {/* Document title */}
-      <div className="text-center mt-8 mb-2">
+      <div className="text-center mt-6 mb-2">
         <h1 style={{ fontSize: '26px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: SERIF, lineHeight: '1.3', textWrap: 'balance' }}>
           {meta.title}
         </h1>
@@ -1284,7 +1415,7 @@ function RedCardModal({ card, scenarioId, onClose }) {
 // RIGHTS GUIDE (enriched with amendment content + case links)
 // ============================================================
 
-function RightsView({ onOpenCase, navigate, activeId, setActiveId }) {
+function RightsView({ onOpenCase, navigate, activeId, openScenario }) {
   const { t, lang, data } = useApp();
   const [expandedRight, setExpandedRight] = useState(null);
   const [cardOpen, setCardOpen] = useState(false);
@@ -1300,10 +1431,6 @@ function RightsView({ onOpenCase, navigate, activeId, setActiveId }) {
     return (
       <div className="max-w-lg mx-auto px-5 pb-32 pt-2">
         {cardOpen && active.card && <RedCardModal card={active.card} scenarioId={active.id} onClose={closeCard} />}
-        <button onClick={() => { setActiveId(null); window.scrollTo({ top: 0 }); }} className="flex items-center gap-1 mb-6" style={{ color: 'var(--text-tertiary)', fontSize: '14px' }}>
-          <Icon.ChevronLeft /> {t.back}
-        </button>
-
         <div className="flex items-center gap-4 mb-2">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'var(--navy-lighter)', color: 'var(--navy)' }}>
             <SituationIcon icon={active.icon} />
@@ -1460,7 +1587,7 @@ function RightsView({ onOpenCase, navigate, activeId, setActiveId }) {
         {data.situations.map(s => (
           <button
             key={s.id}
-            onClick={() => { setActiveId(s.id); window.scrollTo({ top: 0 }); }}
+            onClick={() => { openScenario(s.id); window.scrollTo({ top: 0, behavior: 'instant' }); }}
             className="w-full text-left p-4 rounded-2xl border flex items-center gap-4"
             style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-sm)' }}
           >
@@ -1493,7 +1620,7 @@ function CasesView({ onOpenCase }) {
 
   const all = useMemo(() => Object.entries(data.cases)
     .map(([key, c]) => ({ key, ...c, folded: fold(`${key} ${c.citation} ${c.summary}`) }))
-    .sort((a, b) => a.key.replace(/^The /, '').localeCompare(b.key.replace(/^The /, ''), lang, { sensitivity: 'base' })), [data.cases, lang]);
+    .sort((a, b) => a.name.replace(/^The /, '').localeCompare(b.name.replace(/^The /, ''), lang, { sensitivity: 'base' })), [data.cases, lang]);
 
   const badges = useMemo(() => {
     const present = new Set(all.map(c => c.amendment));
@@ -1900,6 +2027,49 @@ export default function Home() {
     return () => window.removeEventListener('keydown', h);
   }, []);
 
+  // Navigation history: every screen change records where you came from (and your
+  // scroll position) so the Back button can return you there.
+  const historyRef = useRef([]);
+  const [canGoBack, setCanGoBack] = useState(false);
+  const stateRef = useRef({ view: 'home', doc: 'declaration', scenario: null });
+  const pendingScrollRef = useRef(null);
+  stateRef.current = { view: activeView, doc: activeDoc, scenario: activeScenario };
+
+  const pushHistory = useCallback((next) => {
+    const cur = stateRef.current;
+    const same = cur.view === next.view
+      && (next.doc === undefined || cur.doc === next.doc)
+      && (next.scenario === undefined || cur.scenario === next.scenario);
+    if (same) return;
+    historyRef.current.push({ ...cur, scrollY: window.scrollY });
+    if (historyRef.current.length > 50) historyRef.current.shift();
+    setCanGoBack(true);
+  }, []);
+
+  const goBack = useCallback(() => {
+    const prev = historyRef.current.pop();
+    setCanGoBack(historyRef.current.length > 0);
+    if (!prev) return;
+    setOpenCase(null);
+    setSearchOpen(false);
+    setScrollAnchor(null);
+    setActiveDoc(prev.doc);
+    setActiveScenario(prev.scenario);
+    setActiveView(prev.view);
+    pendingScrollRef.current = prev.scrollY;
+  }, []);
+
+  // After going back, restore the scroll position once the screen has rendered
+  useEffect(() => {
+    if (pendingScrollRef.current == null) return;
+    const y = pendingScrollRef.current;
+    pendingScrollRef.current = null;
+    requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo({ top: y, behavior: 'instant' })));
+  }, [activeView, activeDoc, activeScenario]);
+
+  const selectDoc = useCallback((id) => { pushHistory({ view: 'library', doc: id }); setActiveDoc(id); }, [pushHistory]);
+  const openScenario = useCallback((id) => { pushHistory({ view: 'rights', scenario: id }); setActiveScenario(id); }, [pushHistory]);
+
   const handleOpenCase = useCallback((caseKey) => setOpenCase(caseKey), []);
   const closeCase = useCallback(() => setOpenCase(null), []);
   const closeSearch = useCallback(() => setSearchOpen(false), []);
@@ -1910,16 +2080,17 @@ export default function Home() {
   const navigate = useCallback((target) => {
     if (!target) return;
     if (target.caseKey) { setOpenCase(target.caseKey); return; }
+    pushHistory({ view: target.view, doc: target.doc, scenario: target.view === 'rights' ? (target.scenario || null) : undefined });
     if (target.view === 'library') {
       if (target.doc) setActiveDoc(target.doc);
       setActiveView('library');
-      if (target.anchor) setScrollAnchor(target.anchor); else window.scrollTo({ top: 0 });
+      if (target.anchor) setScrollAnchor(target.anchor); else window.scrollTo({ top: 0, behavior: 'instant' });
       return;
     }
     if (target.view === 'rights') {
       setActiveScenario(target.scenario || null);
       setActiveView('rights');
-      window.scrollTo({ top: 0 });
+      window.scrollTo({ top: 0, behavior: 'instant' });
       return;
     }
     if (target.view === 'glossary') {
@@ -1927,14 +2098,18 @@ export default function Home() {
       if (target.term) setFocusTerm(target.term);
       return;
     }
-    if (target.view) { setActiveView(target.view); window.scrollTo({ top: 0 }); }
-  }, []);
+    if (target.view) { setActiveView(target.view); window.scrollTo({ top: 0, behavior: 'instant' }); }
+  }, [pushHistory]);
 
   const handleSearchSelect = useCallback((target) => { setSearchOpen(false); navigate(target); }, [navigate]);
 
   const app = useMemo(() => ({ lang, setLang, t, data, caseRegex, citations }), [lang, setLang, t, data, caseRegex, citations]);
 
-  const goToView = useCallback((v) => { if (v === 'rights') setActiveScenario(null); setActiveView(v); }, []);
+  const goToView = useCallback((v) => {
+    pushHistory({ view: v, scenario: v === 'rights' ? null : undefined });
+    if (v === 'rights') setActiveScenario(null);
+    setActiveView(v);
+  }, [pushHistory]);
 
   return (
     <AppCtx.Provider value={app}>
@@ -1942,15 +2117,15 @@ export default function Home() {
         <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-primary)', transition: 'background 0.3s, color 0.3s' }}>
           {searchOpen && <SearchModal onClose={closeSearch} searchIndex={searchIndex} onSelect={handleSearchSelect} />}
           {openCase && <CaseModal caseKey={openCase} onClose={closeCase} onOpenCase={handleOpenCase} navigate={navigate} />}
-          <TopBar darkMode={darkMode} setDarkMode={setDarkMode} onSearchOpen={() => setSearchOpen(true)} onAboutOpen={() => { setActiveView('about'); window.scrollTo({ top: 0 }); }} onHome={() => { goToView('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />
+          <TopBar darkMode={darkMode} setDarkMode={setDarkMode} onSearchOpen={() => setSearchOpen(true)} onAboutOpen={() => { goToView('about'); window.scrollTo({ top: 0, behavior: 'instant' }); }} onHome={() => { goToView('home'); window.scrollTo({ top: 0, behavior: 'instant' }); }} canGoBack={canGoBack} onBack={goBack} />
 
           <main>
             {activeView === 'home' && <HomeView setActiveView={goToView} navigate={navigate} />}
             {activeView === 'library' && (
-              <LibraryView activeDoc={activeDoc} setActiveDoc={setActiveDoc} onOpenCase={handleOpenCase} scrollAnchor={scrollAnchor} clearScrollAnchor={clearScrollAnchor} />
+              <LibraryView activeDoc={activeDoc} selectDoc={selectDoc} onOpenCase={handleOpenCase} scrollAnchor={scrollAnchor} clearScrollAnchor={clearScrollAnchor} />
             )}
             {activeView === 'rights' && (
-              <RightsView onOpenCase={handleOpenCase} navigate={navigate} activeId={activeScenario} setActiveId={setActiveScenario} />
+              <RightsView onOpenCase={handleOpenCase} navigate={navigate} activeId={activeScenario} openScenario={openScenario} />
             )}
             {activeView === 'cases' && <CasesView onOpenCase={handleOpenCase} />}
             {activeView === 'glossary' && <GlossaryView onOpenCase={handleOpenCase} focusTerm={focusTerm} clearFocusTerm={clearFocusTerm} />}

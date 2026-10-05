@@ -18,12 +18,20 @@ export const metadata = {
   },
 }
 
+// Declared here (not as a <meta> tag) so Next.js emits a single viewport tag.
+// viewport-fit=cover is what makes iOS report the safe-area insets (status bar,
+// home indicator) that the header and bottom navigation pad themselves with.
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#1b2a4a',
+}
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${serif.variable} ${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <meta name="theme-color" content="#1b2a4a" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>

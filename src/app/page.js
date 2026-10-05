@@ -1648,7 +1648,7 @@ function CasesView({ onOpenCase }) {
           value={filter}
           onChange={e => setFilter(e.target.value)}
           className="w-full pl-10 pr-4 py-3 rounded-xl border outline-none"
-          style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', color: 'var(--text-primary)', fontSize: '14px' }}
+          style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', color: 'var(--text-primary)', fontSize: '16px' }}
         />
       </div>
 
@@ -1849,7 +1849,7 @@ function GlossaryView({ onOpenCase, focusTerm, clearFocusTerm }) {
           value={filter}
           onChange={e => setFilter(e.target.value)}
           className="w-full pl-10 pr-4 py-3 rounded-xl border outline-none"
-          style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', color: 'var(--text-primary)', fontSize: '14px' }}
+          style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', color: 'var(--text-primary)', fontSize: '16px' }}
         />
       </div>
 
@@ -1922,8 +1922,8 @@ function SearchModal({ onClose, searchIndex, onSelect }) {
           <Icon.Search size={18} />
           <input id="global-search" ref={inputRef} type="search" placeholder={t.searchPlaceholder} aria-label={t.searchPlaceholder}
             value={query} onChange={e => setQuery(e.target.value)}
-            className="flex-1 bg-transparent outline-none text-sm"
-            style={{ color: 'var(--text-primary)' }} />
+            className="flex-1 bg-transparent outline-none"
+            style={{ color: 'var(--text-primary)', fontSize: '16px' }} />
           <button onClick={onClose} style={{ color: 'var(--text-tertiary)' }} aria-label={t.a11y.close}><Icon.X /></button>
         </div>
         <div className="overflow-y-auto" style={{ maxHeight: 'calc(70vh - 65px)' }}>

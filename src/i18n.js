@@ -10,7 +10,7 @@ export const STRINGS = {
     nav: { home: 'Home', library: 'Library', rights: 'Rights', cases: 'Cases', glossary: 'Glossary' },
 
     // Accessibility labels
-    a11y: { search: 'Search', darkOn: 'Switch to dark mode', darkOff: 'Switch to light mode', about: 'About this app', close: 'Close', scrollTop: 'Back to top', language: 'Cambiar a español' },
+    a11y: { search: 'Search', darkOn: 'Switch to dark mode', darkOff: 'Switch to light mode', about: 'About this app', close: 'Close', scrollTop: 'Back to top', language: 'Cambiar a español', mainNav: 'Main navigation' },
 
     // Home
     tagline: 'No parties. Just law.',
@@ -40,6 +40,7 @@ export const STRINGS = {
     presidentLabel: 'President',
     docTabs: { declaration: 'Declaration', constitution: 'Constitution', 'bill-of-rights': 'Bill of Rights', amendments: 'Amd. 11-27', unratified: 'Unratified' },
     toc: (n) => `Table of Contents (${n} sections)`,
+    contents: 'Contents',
     views: { original: 'Original', translated: 'Plain English', both: 'Side by Side' },
     article: 'Article',
     amendmentWord: (n) => `Amendment ${n}`,
@@ -152,7 +153,7 @@ export const STRINGS = {
     nav: { home: 'Inicio', library: 'Biblioteca', rights: 'Derechos', cases: 'Casos', glossary: 'Glosario' },
 
     // Etiquetas de accesibilidad
-    a11y: { search: 'Buscar', darkOn: 'Activar modo oscuro', darkOff: 'Activar modo claro', about: 'Acerca de esta aplicación', close: 'Cerrar', scrollTop: 'Volver arriba', language: 'Switch to English' },
+    a11y: { search: 'Buscar', darkOn: 'Activar modo oscuro', darkOff: 'Activar modo claro', about: 'Acerca de esta aplicación', close: 'Cerrar', scrollTop: 'Volver arriba', language: 'Switch to English', mainNav: 'Navegación principal' },
 
     // Home
     tagline: 'Sin partidos. Solo ley.',
@@ -182,6 +183,7 @@ export const STRINGS = {
     presidentLabel: 'Presidente',
     docTabs: { declaration: 'Declaración', constitution: 'Constitución', 'bill-of-rights': 'Carta de Derechos', amendments: 'Enm. 11-27', unratified: 'No ratificadas' },
     toc: (n) => `Índice (${n} secciones)`,
+    contents: 'Índice',
     views: { original: 'Original', translated: 'Español claro', both: 'Lado a lado' },
     article: 'Artículo',
     amendmentWord: (n) => `Enmienda ${n}`,

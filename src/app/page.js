@@ -335,6 +335,23 @@ function useInView() {
 
 // Close on Escape, lock background scrolling, and move focus into the modal
 // (returning it to where it was when the modal closes)
+// Layout breakpoints (viewport width in CSS pixels). The iPhone Duo inner
+// display is about 670 wide, so it gets the two-pane layouts.
+const TWO_PANE_QUERY = '(min-width: 640px)';
+const SIDEBAR_QUERY = '(min-width: 900px)';
+
+function useMediaQuery(query) {
+  const [matches, setMatches] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const update = () => setMatches(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, [query]);
+  return matches;
+}
+
 function useModal(onClose, focusRef) {
   useEffect(() => {
     const h = e => { if (e.key === 'Escape') onClose(); };
@@ -525,18 +542,22 @@ function buildCitationIndex(data, t, caseRegex) {
 // BOTTOM NAV (mobile reading-app style)
 // ============================================================
 
-function BottomNav({ activeView, setActiveView }) {
-  const { t } = useApp();
-  const items = [
+function navItems(t) {
+  return [
     { id: 'home', label: t.nav.home, icon: <Icon.Home /> },
     { id: 'library', label: t.nav.library, icon: <Icon.Book /> },
     { id: 'rights', label: t.nav.rights, icon: <Icon.Shield /> },
     { id: 'cases', label: t.nav.cases, icon: <Icon.Gavel /> },
     { id: 'glossary', label: t.nav.glossary, icon: <Icon.BookOpen /> },
   ];
+}
+
+function BottomNav({ activeView, setActiveView }) {
+  const { t } = useApp();
+  const items = navItems(t);
   return (
-    <nav className="bottom-nav no-print" style={{ boxShadow: '0 -2px 16px rgba(0,0,0,0.04)' }}>
-      <div className="max-w-lg md:max-w-2xl mx-auto flex items-center justify-around py-2 px-2">
+    <nav className="bottom-nav no-print" aria-label={t.a11y.mainNav} style={{ boxShadow: '0 -2px 16px rgba(0,0,0,0.04)' }}>
+      <div className="max-w-lg sm:max-w-2xl mx-auto flex items-center justify-around py-2 px-2">
         {items.map(item => (
           <button
             key={item.id}
@@ -559,10 +580,68 @@ function BottomNav({ activeView, setActiveView }) {
 }
 
 // ============================================================
+// SIDE RAIL (short, wide screens: iPhone Duo, iPhone in landscape)
+// Shown instead of the top bar and bottom navigation by CSS. Order
+// follows Apple's guidance for controls on the side: Back first, then
+// actions, with the tabs at the bottom.
+// ============================================================
+
+function SideRail({ activeView, setActiveView, darkMode, setDarkMode, onSearchOpen, onAboutOpen, canGoBack, onBack }) {
+  const { lang, setLang, t } = useApp();
+  const tool = 'w-14 flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl';
+  const toolStyle = { color: 'var(--text-secondary)' };
+  return (
+    <nav className="side-rail no-print" aria-label={t.a11y.mainNav}>
+      <div className="flex flex-col items-center gap-1">
+        {canGoBack && (
+          <button onClick={onBack} className={tool} style={{ color: 'var(--navy)' }} aria-label={t.back}>
+            <Icon.ChevronLeft />
+            <span className="rail-label" style={{ fontSize: '10px', fontWeight: 600 }}>{t.back}</span>
+          </button>
+        )}
+        <button onClick={onSearchOpen} className={tool} style={toolStyle} aria-label={t.a11y.search}>
+          <Icon.Search size={19} />
+        </button>
+        <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className={tool} style={toolStyle} aria-label={t.a11y.language}>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <span style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '0.03em' }} aria-hidden="true">{lang === 'es' ? 'EN' : 'ES'}</span>
+        </button>
+        <button onClick={() => setDarkMode(!darkMode)} className={tool} style={toolStyle} aria-label={darkMode ? t.a11y.darkOff : t.a11y.darkOn}>
+          {darkMode ? <Icon.Sun /> : <Icon.Moon />}
+        </button>
+        <button onClick={onAboutOpen} className={tool} style={toolStyle} aria-label={t.a11y.about}>
+          <Icon.Info />
+        </button>
+      </div>
+      <div className="flex flex-col items-center gap-1">
+        {navItems(t).map(item => (
+          <button
+            key={item.id}
+            onClick={() => { setActiveView(item.id); window.scrollTo({ top: 0, behavior: 'instant' }); }}
+            aria-current={activeView === item.id ? 'page' : undefined}
+            aria-label={item.label}
+            className={tool}
+            style={{
+              color: activeView === item.id ? 'var(--crimson)' : 'var(--text-tertiary)',
+              background: activeView === item.id ? 'var(--crimson-lighter)' : 'transparent',
+            }}
+          >
+            {item.icon}
+            <span className="rail-label" style={{ fontSize: '10px', fontWeight: activeView === item.id ? '600' : '500' }}>{item.label}</span>
+          </button>
+        ))}
+      </div>
+    </nav>
+  );
+}
+
+// ============================================================
 // TOP BAR
 // ============================================================
 
-function TopBar({ darkMode, setDarkMode, onSearchOpen, onAboutOpen, onHome, canGoBack, onBack }) {
+function TopBar({ darkMode, setDarkMode, onSearchOpen, onAboutOpen, onHome, canGoBack, onBack, wide }) {
   const { lang, setLang, t } = useApp();
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -572,8 +651,8 @@ function TopBar({ darkMode, setDarkMode, onSearchOpen, onAboutOpen, onHome, canG
     return () => window.removeEventListener('scroll', h);
   }, []);
   return (
-    <header className="no-print sticky top-0 z-40" style={{ background: 'var(--bg-primary)', paddingTop: 'env(safe-area-inset-top, 0px)', borderBottom: scrolled ? '1px solid var(--border-light)' : '1px solid transparent', transition: 'border-color 0.2s' }}>
-      <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pt-3 pb-2 flex items-center justify-between">
+    <header className="top-bar no-print sticky top-0 z-40" style={{ background: 'var(--bg-primary)', paddingTop: 'env(safe-area-inset-top, 0px)', borderBottom: scrolled ? '1px solid var(--border-light)' : '1px solid transparent', transition: 'border-color 0.2s' }}>
+      <div className={`max-w-lg ${wide ? 'sm:max-w-6xl' : 'sm:max-w-2xl'} mx-auto px-5 sm:px-8 pt-3 pb-2 flex items-center justify-between`}>
         {canGoBack ? (
           <button onClick={onBack} className="flex items-center gap-0.5 py-1.5 pr-3 -ml-1.5 rounded-xl" style={{ color: 'var(--navy)', fontSize: '15px', fontWeight: 600 }} aria-label={t.back}>
             <Icon.ChevronLeft /> {t.back}
@@ -639,7 +718,7 @@ function HomeView({ setActiveView, navigate }) {
   const { t, data } = useApp();
   const caseCount = Object.keys(data.cases).length;
   return (
-    <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
+    <div className="max-w-lg sm:max-w-2xl mx-auto px-5 sm:px-8 pb-nav pt-2">
       <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: SERIF }}>
         We The People
       </h1>
@@ -743,6 +822,7 @@ function LibraryView({ activeDoc, selectDoc, onOpenCase, scrollAnchor, clearScro
   const [view, setViewState] = useState('original');
   const [tocOpen, setTocOpen] = useState(false);
   const [textStep, setTextStep] = useState(1);
+  const sidebar = useMediaQuery(SIDEBAR_QUERY);
 
   useEffect(() => {
     const saved = storageGet('wtp-view');
@@ -797,175 +877,220 @@ function LibraryView({ activeDoc, selectDoc, onOpenCase, scrollAnchor, clearScro
     return groups;
   }, [meta.signers]);
 
-  return (
-    <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
-      {/* Document selector tabs */}
-      <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1" role="tablist">
-        {docIds(data).map(id => (
-          <button
-            key={id}
-            role="tab"
-            aria-selected={activeDoc === id}
-            onClick={() => { selectDoc(id); setTocOpen(false); window.scrollTo({ top: 0, behavior: 'instant' }); }}
-            className="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium"
-            style={{
-              background: activeDoc === id ? 'var(--navy)' : 'var(--bg-secondary)',
-              color: activeDoc === id ? 'var(--on-navy)' : 'var(--text-secondary)',
-            }}
-          >
-            {t.docTabs[id]}
-          </button>
-        ))}
-      </div>
+  // Wide screens: keep the table of contents open in a sidebar and highlight
+  // the section being read
+  const [inView, setInView] = useState(null);
+  useEffect(() => {
+    if (!sidebar) return;
+    const els = [...sections.map((s, i) => sectionAnchor(s) || `section-${i}`), 'signers']
+      .map(id => document.getElementById(id)).filter(Boolean);
+    const io = new IntersectionObserver(entries => {
+      const visible = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible.length) setInView(visible[0].target.id);
+    }, { rootMargin: '-15% 0px -70% 0px' });
+    els.forEach(el => io.observe(el));
+    return () => io.disconnect();
+  }, [sidebar, sections, view]);
 
-      {/* Cover banner */}
-      {DOC_COVERS[activeDoc] && (
-        <div className="mt-5 rounded-2xl overflow-hidden" style={{ boxShadow: 'var(--shadow-sm)' }}>
-          <DocCover id={activeDoc} height="clamp(128px, 16vw, 170px)" />
+  // Keep the highlighted entry visible in a long table of contents
+  const tocRef = useRef(null);
+  useEffect(() => {
+    const box = tocRef.current;
+    const el = box?.querySelector('[aria-current="location"]');
+    if (!el) return;
+    const b = box.getBoundingClientRect(), r = el.getBoundingClientRect();
+    if (r.top < b.top || r.bottom > b.bottom) box.scrollTop += r.top - b.top - b.height / 3;
+  }, [inView]);
+  const tocStyle = (anchor) => (sidebar && inView === anchor
+    ? { color: 'var(--navy)', background: 'var(--navy-bg)', fontWeight: 600 }
+    : { color: 'var(--text-secondary)' });
+
+  const tocList = (
+    <>
+      {sections.map((s, i) => (
+        <div key={i}>
+          {s._article && (
+            <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '10px 12px 2px' }}>
+              {s._docLabel}{s._article.title ? `: ${s._article.title}` : ''}
+            </p>
+          )}
+          <button
+            onClick={() => scrollToSection(sectionAnchor(s) || `section-${i}`)}
+            aria-current={sidebar && inView === (sectionAnchor(s) || `section-${i}`) ? 'location' : undefined}
+            className="w-full text-left py-2 px-3 rounded-lg text-sm flex items-center gap-2 hover:opacity-80"
+            style={tocStyle(sectionAnchor(s) || `section-${i}`)}
+          >
+            {s._isAmendment && s.number && (
+              <span className="amendment-badge" style={{ width: '22px', height: '22px', minWidth: '22px', fontSize: '9px' }}>{s.number}</span>
+            )}
+            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.title}</span>
+          </button>
         </div>
-      )}
-
-      {/* Document title */}
-      <div className="text-center mt-6 mb-2">
-        <h1 style={{ fontSize: '26px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: SERIF, lineHeight: '1.3', textWrap: 'balance' }}>
-          {meta.title}
-        </h1>
-        {meta.date && <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '4px' }}>{meta.date}</p>}
-        {meta.summary && (
-          <p style={{ fontSize: '13px', lineHeight: '1.65', color: 'var(--text-secondary)', marginTop: '12px', fontStyle: 'italic', maxWidth: '34em', marginLeft: 'auto', marginRight: 'auto' }}>
-            {meta.summary}
-          </p>
-        )}
-      </div>
-
-      {/* Dot divider */}
-      <div className="dot-indicator my-3" aria-hidden="true">
-        <span className={view === 'original' ? 'active' : ''} />
-        <span className={view === 'translated' ? 'active' : ''} />
-        <span className={view === 'both' ? 'active' : ''} />
-      </div>
-
-      {/* View toggle */}
-      <div className="flex gap-1 p-1 rounded-xl mb-4" style={{ background: 'var(--bg-secondary)' }} role="radiogroup">
-        {['original', 'translated', 'both'].map(id => (
-          <button
-            key={id}
-            role="radio"
-            aria-checked={view === id}
-            onClick={() => setView(id)}
-            className="flex-1 py-2 rounded-lg text-xs font-medium"
-            style={{
-              background: view === id ? 'var(--bg-card)' : 'transparent',
-              color: view === id ? 'var(--text-primary)' : 'var(--text-tertiary)',
-              boxShadow: view === id ? 'var(--shadow-sm)' : 'none',
-            }}
-          >
-            {t.views[id]}
-          </button>
-        ))}
-      </div>
-
-      {/* Text size */}
-      <div className="flex items-center justify-end gap-1 mb-3" role="group" aria-label={t.textSize}>
-        <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginRight: '6px' }}>{t.textSize}</span>
-        <button onClick={() => changeText(-1)} disabled={textStep === 0} aria-label={t.textSmaller}
-          className="w-8 h-8 rounded-lg flex items-center justify-center font-semibold"
-          style={{ background: 'var(--bg-secondary)', color: 'var(--text-secondary)', fontSize: '12px', opacity: textStep === 0 ? 0.4 : 1 }}>A</button>
-        <button onClick={() => changeText(1)} disabled={textStep === TEXT_SCALES.length - 1} aria-label={t.textLarger}
-          className="w-8 h-8 rounded-lg flex items-center justify-center font-semibold"
-          style={{ background: 'var(--bg-secondary)', color: 'var(--text-secondary)', fontSize: '16px', opacity: textStep === TEXT_SCALES.length - 1 ? 0.4 : 1 }}>A</button>
-      </div>
-
-      {/* Table of Contents (collapsible) */}
-      <div className="mb-6 rounded-xl border overflow-hidden" style={{ background: 'var(--bg-card)', borderColor: 'var(--border)' }}>
-        <button
-          onClick={() => setTocOpen(!tocOpen)}
-          aria-expanded={tocOpen}
-          className="w-full flex items-center justify-between p-4 text-sm font-semibold"
-          style={{ color: 'var(--navy)' }}
-        >
-          <span>{t.toc(sections.length)}</span>
-          <Icon.ChevronDown open={tocOpen} />
+      ))}
+      {meta.signers && (
+        <button onClick={() => scrollToSection('signers')} aria-current={sidebar && inView === 'signers' ? 'location' : undefined} className="w-full text-left py-2 px-3 rounded-lg text-sm hover:opacity-80" style={tocStyle('signers')}>
+          {t.signers}
         </button>
-        <div className="card-expand" style={{ maxHeight: tocOpen ? '600px' : '0', opacity: tocOpen ? 1 : 0 }}>
-          {tocOpen && (
-            <div className="px-4 pb-4 space-y-1 overflow-y-auto" style={{ maxHeight: '400px' }}>
-              {sections.map((s, i) => (
-                <div key={i}>
-                  {s._article && (
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '10px 12px 2px' }}>
-                      {s._docLabel}{s._article.title ? `: ${s._article.title}` : ''}
-                    </p>
-                  )}
-                  <button
-                    onClick={() => scrollToSection(sectionAnchor(s) || `section-${i}`)}
-                    className="w-full text-left py-2 px-3 rounded-lg text-sm flex items-center gap-2 hover:opacity-80"
-                    style={{ color: 'var(--text-secondary)' }}
-                  >
-                    {s._isAmendment && s.number && (
-                      <span className="amendment-badge" style={{ width: '22px', height: '22px', minWidth: '22px', fontSize: '9px' }}>{s.number}</span>
-                    )}
-                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.title}</span>
-                  </button>
+      )}
+    </>
+  );
+
+  return (
+    <div className={`max-w-lg ${sidebar ? 'sm:max-w-6xl' : 'sm:max-w-2xl'} mx-auto px-5 sm:px-8 pb-nav pt-2`}>
+      <div className={sidebar ? 'sidebar-layout' : undefined}>
+        {sidebar && (
+          <aside className="pane-side" aria-label={t.contents}>
+            <SectionLabel style={{ padding: '6px 12px 0' }}>{t.contents}</SectionLabel>
+            <div ref={tocRef} className="pane-scroll space-y-0.5 pb-2">{tocList}</div>
+          </aside>
+        )}
+        <div className="min-w-0">
+          {/* Document selector tabs */}
+          <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1" role="tablist">
+            {docIds(data).map(id => (
+              <button
+                key={id}
+                role="tab"
+                aria-selected={activeDoc === id}
+                onClick={() => { selectDoc(id); setTocOpen(false); window.scrollTo({ top: 0, behavior: 'instant' }); }}
+                className="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium"
+                style={{
+                  background: activeDoc === id ? 'var(--navy)' : 'var(--bg-secondary)',
+                  color: activeDoc === id ? 'var(--on-navy)' : 'var(--text-secondary)',
+                }}
+              >
+                {t.docTabs[id]}
+              </button>
+            ))}
+          </div>
+
+          {/* Cover banner */}
+          {DOC_COVERS[activeDoc] && (
+            <div className="mt-5 rounded-2xl overflow-hidden" style={{ boxShadow: 'var(--shadow-sm)' }}>
+              <DocCover id={activeDoc} height="clamp(128px, 16vw, 170px)" />
+            </div>
+          )}
+
+          {/* Document title */}
+          <div className="text-center mt-6 mb-2">
+            <h1 style={{ fontSize: '26px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: SERIF, lineHeight: '1.3', textWrap: 'balance' }}>
+              {meta.title}
+            </h1>
+            {meta.date && <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '4px' }}>{meta.date}</p>}
+            {meta.summary && (
+              <p style={{ fontSize: '13px', lineHeight: '1.65', color: 'var(--text-secondary)', marginTop: '12px', fontStyle: 'italic', maxWidth: '34em', marginLeft: 'auto', marginRight: 'auto' }}>
+                {meta.summary}
+              </p>
+            )}
+          </div>
+
+          {/* Dot divider */}
+          <div className="dot-indicator my-3" aria-hidden="true">
+            <span className={view === 'original' ? 'active' : ''} />
+            <span className={view === 'translated' ? 'active' : ''} />
+            <span className={view === 'both' ? 'active' : ''} />
+          </div>
+
+          {/* View toggle */}
+          <div className="flex gap-1 p-1 rounded-xl mb-4" style={{ background: 'var(--bg-secondary)' }} role="radiogroup">
+            {['original', 'translated', 'both'].map(id => (
+              <button
+                key={id}
+                role="radio"
+                aria-checked={view === id}
+                onClick={() => setView(id)}
+                className="flex-1 py-2 rounded-lg text-xs font-medium"
+                style={{
+                  background: view === id ? 'var(--bg-card)' : 'transparent',
+                  color: view === id ? 'var(--text-primary)' : 'var(--text-tertiary)',
+                  boxShadow: view === id ? 'var(--shadow-sm)' : 'none',
+                }}
+              >
+                {t.views[id]}
+              </button>
+            ))}
+          </div>
+
+          {/* Text size */}
+          <div className="flex items-center justify-end gap-1 mb-3" role="group" aria-label={t.textSize}>
+            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginRight: '6px' }}>{t.textSize}</span>
+            <button onClick={() => changeText(-1)} disabled={textStep === 0} aria-label={t.textSmaller}
+              className="w-8 h-8 rounded-lg flex items-center justify-center font-semibold"
+              style={{ background: 'var(--bg-secondary)', color: 'var(--text-secondary)', fontSize: '12px', opacity: textStep === 0 ? 0.4 : 1 }}>A</button>
+            <button onClick={() => changeText(1)} disabled={textStep === TEXT_SCALES.length - 1} aria-label={t.textLarger}
+              className="w-8 h-8 rounded-lg flex items-center justify-center font-semibold"
+              style={{ background: 'var(--bg-secondary)', color: 'var(--text-secondary)', fontSize: '16px', opacity: textStep === TEXT_SCALES.length - 1 ? 0.4 : 1 }}>A</button>
+          </div>
+
+          {/* Table of Contents (collapsible; the sidebar replaces it on wide screens) */}
+          {!sidebar && <div className="mb-6 rounded-xl border overflow-hidden" style={{ background: 'var(--bg-card)', borderColor: 'var(--border)' }}>
+            <button
+              onClick={() => setTocOpen(!tocOpen)}
+              aria-expanded={tocOpen}
+              className="w-full flex items-center justify-between p-4 text-sm font-semibold"
+              style={{ color: 'var(--navy)' }}
+            >
+              <span>{t.toc(sections.length)}</span>
+              <Icon.ChevronDown open={tocOpen} />
+            </button>
+            <div className="card-expand" style={{ maxHeight: tocOpen ? '600px' : '0', opacity: tocOpen ? 1 : 0 }}>
+              {tocOpen && (
+                <div className="px-4 pb-4 space-y-1 overflow-y-auto" style={{ maxHeight: '400px' }}>
+                  {tocList}
                 </div>
-              ))}
-              {meta.signers && (
-                <button onClick={() => scrollToSection('signers')} className="w-full text-left py-2 px-3 rounded-lg text-sm hover:opacity-80" style={{ color: 'var(--text-secondary)' }}>
-                  {t.signers}
-                </button>
+              )}
+            </div>
+          </div>}
+
+          {/* Declaration heading ("In Congress, July 4, 1776") */}
+          {meta.heading && (
+            <div className="text-center mb-8">
+              {(view === 'original' || view === 'both') && (
+                <p style={{ fontFamily: SERIF, fontSize: '14px', lineHeight: '1.8', color: 'var(--text-primary)', whiteSpace: 'pre-line', fontStyle: 'italic' }}>{meta.heading}</p>
+              )}
+              {(view === 'translated' || view === 'both') && meta.headingTranslation && (
+                <p style={{ fontSize: '13px', lineHeight: '1.7', color: 'var(--text-secondary)', marginTop: view === 'both' ? '8px' : 0 }}>{meta.headingTranslation}</p>
               )}
             </div>
           )}
-        </div>
-      </div>
 
-      {/* Declaration heading ("In Congress, July 4, 1776") */}
-      {meta.heading && (
-        <div className="text-center mb-8">
-          {(view === 'original' || view === 'both') && (
-            <p style={{ fontFamily: SERIF, fontSize: '14px', lineHeight: '1.8', color: 'var(--text-primary)', whiteSpace: 'pre-line', fontStyle: 'italic' }}>{meta.heading}</p>
-          )}
-          {(view === 'translated' || view === 'both') && meta.headingTranslation && (
-            <p style={{ fontSize: '13px', lineHeight: '1.7', color: 'var(--text-secondary)', marginTop: view === 'both' ? '8px' : 0 }}>{meta.headingTranslation}</p>
-          )}
-        </div>
-      )}
-
-      {/* Continuous document content */}
-      <div style={{ zoom: TEXT_SCALES[textStep] }}>
-        {sections.map((section, idx) => (
-          <ContinuousSection key={`${activeDoc}-${idx}`} section={section} idx={idx} view={view} isFirst={idx === 0} onOpenCase={onOpenCase} />
-        ))}
-      </div>
-
-      {/* Signatures */}
-      {meta.signers && (
-        <div id="signers" style={{ scrollMarginTop: 'calc(env(safe-area-inset-top, 0px) + 72px)' }}>
-          <div className="flex items-center justify-center gap-4 my-10" aria-hidden="true">
-            <div style={{ flex: 1, height: '1px', background: 'var(--border)' }} />
-            <span style={{ color: 'var(--gold)', fontSize: '10px', letterSpacing: '4px' }}>&#9733; &#9733; &#9733;</span>
-            <div style={{ flex: 1, height: '1px', background: 'var(--border)' }} />
-          </div>
-          <h2 className="text-center" style={{ fontSize: '22px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: SERIF }}>{t.signers}</h2>
-          <p className="text-center" style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '4px', marginBottom: '20px' }}>{t.signersCount(signerCount)}</p>
-          {meta.signers.president && (
-            <div className="text-center mb-5">
-              <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t.presidentLabel}</p>
-              <p style={{ fontFamily: SERIF, fontSize: '15px', color: 'var(--text-primary)', marginTop: '2px' }}>{meta.signers.president}</p>
-            </div>
-          )}
-          <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}>
-            {signerGroups.map((g, i) => (
-              <div key={i} className="p-3 rounded-xl" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-light)' }}>
-                <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>{g.state}</p>
-                {g.names.map((n, j) => (
-                  <p key={j} style={{ fontFamily: SERIF, fontSize: '13px', lineHeight: '1.6', color: 'var(--text-secondary)' }}>{n}</p>
-                ))}
-              </div>
+          {/* Continuous document content */}
+          <div style={{ zoom: TEXT_SCALES[textStep] }}>
+            {sections.map((section, idx) => (
+              <ContinuousSection key={`${activeDoc}-${idx}`} section={section} idx={idx} view={view} isFirst={idx === 0} onOpenCase={onOpenCase} />
             ))}
           </div>
+
+          {/* Signatures */}
+          {meta.signers && (
+            <div id="signers" style={{ scrollMarginTop: 'calc(var(--top-offset) + 14px)' }}>
+              <div className="flex items-center justify-center gap-4 my-10" aria-hidden="true">
+                <div style={{ flex: 1, height: '1px', background: 'var(--border)' }} />
+                <span style={{ color: 'var(--gold)', fontSize: '10px', letterSpacing: '4px' }}>&#9733; &#9733; &#9733;</span>
+                <div style={{ flex: 1, height: '1px', background: 'var(--border)' }} />
+              </div>
+              <h2 className="text-center" style={{ fontSize: '22px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: SERIF }}>{t.signers}</h2>
+              <p className="text-center" style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '4px', marginBottom: '20px' }}>{t.signersCount(signerCount)}</p>
+              {meta.signers.president && (
+                <div className="text-center mb-5">
+                  <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t.presidentLabel}</p>
+                  <p style={{ fontFamily: SERIF, fontSize: '15px', color: 'var(--text-primary)', marginTop: '2px' }}>{meta.signers.president}</p>
+                </div>
+              )}
+              <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}>
+                {signerGroups.map((g, i) => (
+                  <div key={i} className="p-3 rounded-xl" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-light)' }}>
+                    <p style={{ fontSize: '10px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>{g.state}</p>
+                    {g.names.map((n, j) => (
+                      <p key={j} style={{ fontFamily: SERIF, fontSize: '13px', lineHeight: '1.6', color: 'var(--text-secondary)' }}>{n}</p>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
@@ -975,17 +1100,8 @@ function LibraryView({ activeDoc, selectDoc, onOpenCase, scrollAnchor, clearScro
 // ============================================================
 
 function CaseModal({ caseKey, onClose, onOpenCase, navigate }) {
-  const { t, lang, data, citations } = useApp();
   const closeRef = useRef(null);
   useModal(onClose, closeRef);
-  const caseData = data.cases[caseKey];
-  const bodyRef = useRef(null);
-  useEffect(() => { if (bodyRef.current) bodyRef.current.scrollTop = 0; }, [caseKey]);
-  if (!caseData) return null;
-
-  const docType = caseData.type || 'case';
-  const labels = t.caseTypes[docType] || t.caseTypes.case;
-  const citedIn = (citations[caseKey] || []).slice(0, 12);
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center" onClick={onClose}>
@@ -994,88 +1110,111 @@ function CaseModal({ caseKey, onClose, onOpenCase, navigate }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="case-title"
-        className="relative w-full max-w-md md:max-w-xl rounded-t-2xl sm:rounded-2xl overflow-hidden"
+        className="relative w-full max-w-md sm:max-w-xl rounded-t-2xl sm:rounded-2xl overflow-hidden"
         style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-xl)', maxHeight: '85vh', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="p-5 pb-3" style={{ borderBottom: '1px solid var(--border)' }}>
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="amendment-badge" style={{ minWidth: '24px', height: '24px', fontSize: '9px', padding: '0 4px', borderRadius: '12px' }}>{fmtBadge(caseData.amendment, lang)}</span>
-                <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{caseData.year}</span>
-                {docType !== 'case' && (
-                  <span style={{ fontSize: '9px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.05em', background: 'var(--crimson-bg)', padding: '2px 6px', borderRadius: '4px' }}>
-                    {labels.badge}
-                  </span>
-                )}
-              </div>
-              <h3 id="case-title" style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: SERIF, lineHeight: '1.3' }}>
-                {caseData.name}
-              </h3>
-              <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '2px', fontFamily: MONO }}>{caseData.citation}</p>
+        <CaseDetail caseKey={caseKey} onOpenCase={onOpenCase} navigate={navigate} onClose={onClose} closeRef={closeRef} />
+      </div>
+    </div>
+  );
+}
+
+// The body of a case: used in the popup, and beside the list in the Case
+// Library on wide screens (where it has no close button and the page scrolls).
+function CaseDetail({ caseKey, onOpenCase, navigate, onClose, closeRef }) {
+  const { t, lang, data, citations } = useApp();
+  const caseData = data.cases[caseKey];
+  const bodyRef = useRef(null);
+  const inModal = Boolean(onClose);
+  useEffect(() => { if (bodyRef.current) bodyRef.current.scrollTop = 0; }, [caseKey]);
+  if (!caseData) return null;
+
+  const docType = caseData.type || 'case';
+  const labels = t.caseTypes[docType] || t.caseTypes.case;
+  const citedIn = (citations[caseKey] || []).slice(0, 12);
+
+  return (
+    <>
+      {/* Header */}
+      <div className="p-5 pb-3" style={{ borderBottom: '1px solid var(--border)' }}>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="amendment-badge" style={{ minWidth: '24px', height: '24px', fontSize: '9px', padding: '0 4px', borderRadius: '12px' }}>{fmtBadge(caseData.amendment, lang)}</span>
+              <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{caseData.year}</span>
+              {docType !== 'case' && (
+                <span style={{ fontSize: '9px', fontWeight: '700', color: 'var(--crimson)', textTransform: 'uppercase', letterSpacing: '0.05em', background: 'var(--crimson-bg)', padding: '2px 6px', borderRadius: '4px' }}>
+                  {labels.badge}
+                </span>
+              )}
             </div>
+            <h3 id={inModal ? 'case-title' : undefined} style={{ fontSize: inModal ? '18px' : '22px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: SERIF, lineHeight: '1.3' }}>
+              {caseData.name}
+            </h3>
+            <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '2px', fontFamily: MONO }}>{caseData.citation}</p>
+          </div>
+          {inModal && (
             <button ref={closeRef} onClick={onClose} className="p-1 rounded-lg" style={{ color: 'var(--text-tertiary)' }} aria-label={t.a11y.close}>
               <Icon.X />
             </button>
-          </div>
-        </div>
-
-        {/* Body */}
-        <div ref={bodyRef} className="p-5 overflow-y-auto" style={{ maxHeight: 'calc(85vh - 100px)' }}>
-          <p style={{ fontSize: '14px', lineHeight: '1.8', color: 'var(--text-secondary)', marginBottom: '16px' }}>
-            <TextWithCases text={caseData.summary} onOpenCase={onOpenCase} exclude={caseKey} />
-          </p>
-
-          <div className="p-4 rounded-xl mb-3" style={{ background: 'var(--navy-bg)', border: '1px solid var(--navy-lighter)' }}>
-            <SectionLabel color="var(--navy)" style={{ marginBottom: '6px' }}>{labels.outcome}</SectionLabel>
-            <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>
-              <TextWithCases text={caseData.outcome} onOpenCase={onOpenCase} exclude={caseKey} />
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl mb-4" style={{ background: 'var(--gold-bg)', border: '1px solid var(--gold)' }}>
-            <SectionLabel color="var(--gold-text)" style={{ marginBottom: '6px' }}>{t.whyMatters}</SectionLabel>
-            <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>
-              <TextWithCases text={caseData.significance} onOpenCase={onOpenCase} exclude={caseKey} />
-            </p>
-          </div>
-
-          {citedIn.length > 0 && (
-            <div className="mb-4">
-              <SectionLabel>{t.citedIn}</SectionLabel>
-              <div className="space-y-1">
-                {citedIn.map((c, i) => (
-                  <button
-                    key={i}
-                    onClick={() => { if (c.target.caseKey) { onOpenCase(c.target.caseKey); } else { onClose(); navigate(c.target); } }}
-                    className="w-full text-left py-2 px-3 rounded-lg flex items-center justify-between gap-2"
-                    style={{ background: 'var(--bg-secondary)', fontSize: '12px', color: 'var(--text-secondary)' }}
-                  >
-                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.label}</span>
-                    <span style={{ color: 'var(--text-tertiary)', flexShrink: 0 }}><Icon.ChevronRight size={12} /></span>
-                  </button>
-                ))}
-              </div>
-            </div>
           )}
-
-          <a
-            href={caseData.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm"
-            style={{ background: 'var(--navy)', color: 'var(--on-navy)' }}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-            </svg>
-            {labels.link}
-          </a>
         </div>
       </div>
-    </div>
+
+      {/* Body */}
+      <div ref={bodyRef} className={inModal ? 'p-5 overflow-y-auto' : 'p-5'} style={inModal ? { maxHeight: 'calc(85vh - 100px)' } : undefined}>
+        <p style={{ fontSize: '14px', lineHeight: '1.8', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+          <TextWithCases text={caseData.summary} onOpenCase={onOpenCase} exclude={caseKey} />
+        </p>
+
+        <div className="p-4 rounded-xl mb-3" style={{ background: 'var(--navy-bg)', border: '1px solid var(--navy-lighter)' }}>
+          <SectionLabel color="var(--navy)" style={{ marginBottom: '6px' }}>{labels.outcome}</SectionLabel>
+          <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>
+            <TextWithCases text={caseData.outcome} onOpenCase={onOpenCase} exclude={caseKey} />
+          </p>
+        </div>
+
+        <div className="p-4 rounded-xl mb-4" style={{ background: 'var(--gold-bg)', border: '1px solid var(--gold)' }}>
+          <SectionLabel color="var(--gold-text)" style={{ marginBottom: '6px' }}>{t.whyMatters}</SectionLabel>
+          <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>
+            <TextWithCases text={caseData.significance} onOpenCase={onOpenCase} exclude={caseKey} />
+          </p>
+        </div>
+
+        {citedIn.length > 0 && (
+          <div className="mb-4">
+            <SectionLabel>{t.citedIn}</SectionLabel>
+            <div className="space-y-1">
+              {citedIn.map((c, i) => (
+                <button
+                  key={i}
+                  onClick={() => { if (c.target.caseKey) { onOpenCase(c.target.caseKey); } else { onClose?.(); navigate(c.target); } }}
+                  className="w-full text-left py-2 px-3 rounded-lg flex items-center justify-between gap-2"
+                  style={{ background: 'var(--bg-secondary)', fontSize: '12px', color: 'var(--text-secondary)' }}
+                >
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.label}</span>
+                  <span style={{ color: 'var(--text-tertiary)', flexShrink: 0 }}><Icon.ChevronRight size={12} /></span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <a
+          href={caseData.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm"
+          style={{ background: 'var(--navy)', color: 'var(--on-navy)' }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+          {labels.link}
+        </a>
+      </div>
+    </>
   );
 }
 
@@ -1158,7 +1297,7 @@ function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
   const hasDetails = section.rights || section.examples?.length > 0 || section.references?.length > 0;
 
   return (
-    <div id={anchor} style={{ scrollMarginTop: 'calc(env(safe-area-inset-top, 0px) + 72px)', borderRadius: '12px' }}>
+    <div id={anchor} style={{ scrollMarginTop: 'calc(var(--top-offset) + 14px)', borderRadius: '12px' }}>
       {/* Section divider (not on first section) */}
       {!isFirst && (
         <div className="flex items-center justify-center gap-4 my-10" aria-hidden="true">
@@ -1238,7 +1377,7 @@ function ContinuousSection({ section, idx, view, isFirst, onOpenCase }) {
       )}
 
       {view === 'both' && (
-        <div className="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
+        <div className="space-y-4 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4">
           <div className="p-4 rounded-xl" style={{ background: 'var(--bg-secondary)' }}>
             <SectionLabel>{t.originalText}</SectionLabel>
             <p lang="en" style={{ fontFamily: SERIF, fontSize: '14px', lineHeight: '1.8', color: 'var(--text-secondary)', whiteSpace: 'pre-line' }}>{section.original}</p>
@@ -1360,8 +1499,8 @@ function RedCardModal({ card, scenarioId, onClose }) {
   return (
     <div role="dialog" aria-modal="true" aria-label={card.label || t.showCard} className="fixed inset-0 z-[200] flex flex-col" style={{ background: 'linear-gradient(160deg, #b22234 0%, #7d1622 100%)' }}>
       {/* Warning: never hand over the phone */}
-      <div style={{ background: '#1b2a4a', paddingTop: 'calc(env(safe-area-inset-top, 0px) + 10px)', paddingBottom: '10px' }} className="px-4">
-        <div className="max-w-md md:max-w-2xl mx-auto flex items-start gap-3">
+      <div style={{ background: '#1b2a4a', paddingTop: 'calc(env(safe-area-inset-top, 0px) + 10px)', paddingBottom: '10px', paddingLeft: 'calc(env(safe-area-inset-left, 0px) + 16px)', paddingRight: 'calc(env(safe-area-inset-right, 0px) + 16px)' }}>
+        <div className="max-w-md sm:max-w-2xl mx-auto flex items-start gap-3">
           <span style={{ flexShrink: 0, marginTop: '1px' }}><Icon.Alert size={20} color="#e8c55a" /></span>
           <p style={{ fontSize: '12px', fontWeight: '700', color: '#e8c55a', lineHeight: '1.45', letterSpacing: '0.01em' }}>
             {t.cardWarning}
@@ -1373,8 +1512,8 @@ function RedCardModal({ card, scenarioId, onClose }) {
       </div>
 
       {/* Card face */}
-      <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col" onClick={onClose} style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 24px)' }}>
-        <div className="max-w-md md:max-w-2xl mx-auto w-full my-auto">
+      <div className="flex-1 overflow-y-auto py-6 flex flex-col" onClick={onClose} style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 24px)', paddingLeft: 'calc(env(safe-area-inset-left, 0px) + 24px)', paddingRight: 'calc(env(safe-area-inset-right, 0px) + 24px)' }}>
+        <div className="max-w-md sm:max-w-2xl mx-auto w-full my-auto">
           {card.label && (
             <p style={{ fontSize: '10px', fontWeight: '700', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', textAlign: 'center', marginBottom: '6px' }}>{card.label}</p>
           )}
@@ -1416,193 +1555,238 @@ function RedCardModal({ card, scenarioId, onClose }) {
 // ============================================================
 
 function RightsView({ onOpenCase, navigate, activeId, openScenario }) {
-  const { t, lang, data } = useApp();
-  const [expandedRight, setExpandedRight] = useState(null);
-  const [cardOpen, setCardOpen] = useState(false);
-  const closeCard = useCallback(() => setCardOpen(false), []);
+  const { t, data } = useApp();
+  const twoPane = useMediaQuery(TWO_PANE_QUERY);
 
   // Look up by id so the open scenario re-renders in the new language on toggle
   const active = activeId ? data.situations.find(s => s.id === activeId) : null;
-  useEffect(() => { setExpandedRight(null); setCardOpen(false); }, [activeId]);
+  // Wide screens always show a scenario beside the list: the first one until you pick
+  const current = active || (twoPane ? data.situations[0] : null);
+  const select = (id) => { openScenario(id); window.scrollTo({ top: 0, behavior: 'instant' }); };
 
-  if (active) {
-    const referencedAmendments = [...new Set(active.rights.map(r => r.amendment))];
-
-    return (
-      <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
-        {cardOpen && active.card && <RedCardModal card={active.card} scenarioId={active.id} onClose={closeCard} />}
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'var(--navy-lighter)', color: 'var(--navy)' }}>
-            <SituationIcon icon={active.icon} />
-          </div>
-          <div>
-            <h2 style={{ fontSize: '22px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: SERIF, lineHeight: '1.3' }}>{active.title}</h2>
-            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>{active.description}</p>
-          </div>
-        </div>
-
-        {/* Amendment chips jump to the amendment text */}
-        <div className="flex flex-wrap gap-2 mt-4 mb-6">
-          {referencedAmendments.map(a => {
-            const target = amendmentTarget(a);
-            return target ? (
-              <button key={a} onClick={() => navigate(target)} className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: 'var(--navy-lighter)', color: 'var(--navy)' }}>
-                {t.amendmentChip(a)}
-              </button>
-            ) : (
-              <span key={a} className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: 'var(--navy-lighter)', color: 'var(--navy)' }}>{t.amendmentChip(a)}</span>
-            );
-          })}
-        </div>
-
-        {/* Digital red card launcher */}
-        {active.card && (
-          <button
-            onClick={() => setCardOpen(true)}
-            className="w-full mb-6 p-4 rounded-2xl text-left flex items-center gap-4"
-            style={{ background: 'linear-gradient(145deg, #b22234 0%, #8b1a28 100%)', boxShadow: 'var(--shadow-lg)' }}
-          >
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(255,255,255,0.15)', color: 'white' }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15h4M7 11h10"/>
-              </svg>
-            </div>
-            <div className="flex-1">
-              <p style={{ fontSize: '15px', fontWeight: '800', color: 'white', letterSpacing: '0.01em' }}>{active.card.label ? t.showNamedCard(active.card.label) : t.showCard}</p>
-              <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.88)', marginTop: '2px', lineHeight: '1.4' }}>{active.card.instruction}</p>
-            </div>
-            <span style={{ color: 'rgba(255,255,255,0.8)' }}><Icon.ChevronRight /></span>
-          </button>
-        )}
-
-        <SectionLabel style={{ marginBottom: '12px' }}>{t.yourRights}</SectionLabel>
-        <div className="space-y-3 mb-8">
-          {active.rights.map((r, i) => {
-            const isExpanded = expandedRight === i;
-            const amendmentData = findAmendmentData(r.amendment, data);
-            const caseData = data.cases[r.ref];
-
-            return (
-              <div key={i} className="rounded-xl border overflow-hidden" style={{ background: 'var(--bg-card)', borderColor: isExpanded ? 'var(--navy)' : 'var(--border)', transition: 'border-color 0.2s' }}>
-                <button onClick={() => setExpandedRight(isExpanded ? null : i)} aria-expanded={isExpanded} className="w-full text-left p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="amendment-badge" style={{ minWidth: '28px', height: '28px', fontSize: '10px', marginTop: '1px', padding: '0 4px', borderRadius: '14px' }}>{fmtBadge(r.amendment, lang)}</div>
-                    <div className="flex-1">
-                      <p style={{ fontSize: '13px', lineHeight: '1.7', color: 'var(--text-primary)' }}>{r.right}</p>
-                      {caseData ? (
-                        <p style={{ fontSize: '11px', fontWeight: '600', color: 'var(--navy)', marginTop: '6px' }}>{caseData.name} ({caseData.year})</p>
-                      ) : (
-                        <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '4px', fontStyle: 'italic' }}>{r.ref}</p>
-                      )}
-                    </div>
-                    <div style={{ color: 'var(--text-tertiary)', flexShrink: 0, marginTop: '2px' }}>
-                      <Icon.ChevronDown open={isExpanded} />
-                    </div>
-                  </div>
-                </button>
-
-                <div className="card-expand" style={{ maxHeight: isExpanded ? '1200px' : '0', opacity: isExpanded ? 1 : 0 }}>
-                  {isExpanded && (
-                    <div className="px-4 pb-4 space-y-3">
-                      {caseData && (
-                        <div className="p-3 rounded-lg" style={{ background: 'var(--bg-secondary)' }}>
-                          <SectionLabel style={{ marginBottom: '6px' }}>{t.keyCase}</SectionLabel>
-                          <p style={{ fontSize: '12px', lineHeight: '1.6', color: 'var(--text-secondary)' }}>
-                            {caseData.summary.length > 200 ? caseData.summary.slice(0, 200).replace(/\s+\S*$/, '') + '...' : caseData.summary}
-                          </p>
-                          <button onClick={(e) => { e.stopPropagation(); onOpenCase(r.ref); }} className="mt-2 text-xs font-semibold flex items-center gap-1" style={{ color: 'var(--navy)' }}>
-                            {t.readCase} <Icon.ChevronRight size={12} />
-                          </button>
-                        </div>
-                      )}
-
-                      {amendmentData && (
-                        <div className="p-3 rounded-lg" style={{ background: 'var(--gold-bg)', border: '1px solid var(--gold)' }}>
-                          <SectionLabel color="var(--gold-text)" style={{ marginBottom: '6px' }}>{t.fromAmendment(r.amendment)}</SectionLabel>
-                          <p lang="en" style={{ fontSize: '12px', lineHeight: '1.6', color: 'var(--text-secondary)', fontFamily: SERIF, fontStyle: 'italic' }}>
-                            "{amendmentData.original.length > 200 ? amendmentData.original.slice(0, 200).replace(/\s+\S*$/, '') + '...' : amendmentData.original}"
-                          </p>
-                          <button
-                            onClick={(e) => { e.stopPropagation(); navigate(amendmentTarget(r.amendment)); }}
-                            className="mt-2 text-xs font-semibold flex items-center gap-1"
-                            style={{ color: 'var(--gold-text)' }}
-                          >
-                            {t.readAmendment} <Icon.ChevronRight size={12} />
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Practical Tips */}
-        <div className="p-5 rounded-xl border" style={{ background: 'var(--gold-bg)', borderColor: 'var(--gold)', borderWidth: '1px' }}>
-          <div className="stars-decoration" />
-          <SectionLabel color="var(--gold-text)" style={{ marginBottom: '12px' }}>{t.practicalTips}</SectionLabel>
-          {active.tips.map((tip, i) => (
-            <div key={i} className="flex gap-3 items-start mb-2.5 last:mb-0">
-              <span style={{ color: 'var(--gold)', fontSize: '14px', lineHeight: '1.4' }} aria-hidden="true">&#9733;</span>
-              <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>{tip}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-6"><LegalNotice /></div>
-
-        {/* Related documents CTA */}
-        <div className="mt-6 p-4 rounded-xl text-center" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '8px' }}>{t.fullPicture}</p>
-          <button
-            onClick={() => navigate(amendmentTarget(active.rights[0]?.amendment) || { view: 'library', doc: 'constitution' })}
-            className="px-4 py-2 rounded-xl text-sm font-semibold"
-            style={{ background: 'var(--navy)', color: 'var(--on-navy)' }}
-          >
-            {t.readSource}
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
+  const intro = (
+    <>
       <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: SERIF }}>
         {t.knowYourRights}
       </h1>
       <p className="fade-in-up visible" style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px', lineHeight: '1.6' }}>
         {t.rightsIntro}
       </p>
+    </>
+  );
 
+  const scenarioCount = (
+    <p className="fade-in-up visible" style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: twoPane ? 0 : '16px', marginBottom: '8px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+      {t.scenariosCovered(data.situations.length)}
+    </p>
+  );
+
+  if (twoPane) {
+    return (
+      <div className="max-w-lg sm:max-w-6xl mx-auto px-5 sm:px-8 pb-nav pt-2">
+        {intro}
+        <div className="two-pane mt-5">
+          <div className="pane-side">
+            {scenarioCount}
+            <div className="pane-scroll space-y-2 pr-1 pb-2">
+              {data.situations.map(s => (
+                <ScenarioRow key={s.id} scenario={s} compact selected={s.id === current.id} onClick={() => select(s.id)} />
+              ))}
+            </div>
+          </div>
+          <ScenarioDetail key={current.id} active={current} onOpenCase={onOpenCase} navigate={navigate} />
+        </div>
+      </div>
+    );
+  }
+
+  if (current) {
+    return (
+      <div className="max-w-lg sm:max-w-2xl mx-auto px-5 sm:px-8 pb-nav pt-2">
+        <ScenarioDetail key={current.id} active={current} onOpenCase={onOpenCase} navigate={navigate} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-lg sm:max-w-2xl mx-auto px-5 sm:px-8 pb-nav pt-2">
+      {intro}
       <div className="mt-4"><LegalNotice compact /></div>
-
-      <p className="fade-in-up visible" style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '16px', marginBottom: '8px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-        {t.scenariosCovered(data.situations.length)}
-      </p>
-
+      {scenarioCount}
       <div className="space-y-3 stagger-in">
         {data.situations.map(s => (
-          <button
-            key={s.id}
-            onClick={() => { openScenario(s.id); window.scrollTo({ top: 0, behavior: 'instant' }); }}
-            className="w-full text-left p-4 rounded-2xl border flex items-center gap-4"
-            style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-sm)' }}
-          >
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'var(--navy-lighter)', color: 'var(--navy)' }}>
-              <SituationIcon icon={s.icon} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p style={{ fontSize: '14px', fontWeight: '700', color: 'var(--text-primary)' }}>{s.title}</p>
-              <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '2px' }}>
-                {t.rightsCovered(s.rights.length)}{s.card ? ` · ${t.hasCard}` : ''}
-              </p>
-            </div>
-            <span style={{ color: 'var(--text-tertiary)' }}><Icon.ChevronRight /></span>
-          </button>
+          <ScenarioRow key={s.id} scenario={s} onClick={() => select(s.id)} />
         ))}
+      </div>
+    </div>
+  );
+}
+
+function ScenarioRow({ scenario: s, onClick, selected, compact }) {
+  const { t } = useApp();
+  return (
+    <button
+      onClick={onClick}
+      aria-current={selected ? 'true' : undefined}
+      className={`w-full text-left ${compact ? 'p-3 rounded-xl gap-3' : 'p-4 rounded-2xl gap-4'} border flex items-center`}
+      style={{ background: selected ? 'var(--navy-bg)' : 'var(--bg-card)', borderColor: selected ? 'var(--navy)' : 'var(--border)', boxShadow: 'var(--shadow-sm)' }}
+    >
+      <div className={`${compact ? 'w-10 h-10' : 'w-12 h-12'} rounded-xl flex items-center justify-center flex-shrink-0`} style={{ background: 'var(--navy-lighter)', color: 'var(--navy)' }}>
+        <SituationIcon icon={s.icon} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p style={{ fontSize: '14px', fontWeight: '700', color: 'var(--text-primary)' }}>{s.title}</p>
+        <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '2px' }}>
+          {t.rightsCovered(s.rights.length)}{s.card ? ` · ${t.hasCard}` : ''}
+        </p>
+      </div>
+      {!compact && <span style={{ color: 'var(--text-tertiary)' }}><Icon.ChevronRight /></span>}
+    </button>
+  );
+}
+
+function ScenarioDetail({ active, onOpenCase, navigate }) {
+  const { t, lang, data } = useApp();
+  const [expandedRight, setExpandedRight] = useState(null);
+  const [cardOpen, setCardOpen] = useState(false);
+  const closeCard = useCallback(() => setCardOpen(false), []);
+  const referencedAmendments = [...new Set(active.rights.map(r => r.amendment))];
+
+  return (
+    <div>
+      {cardOpen && active.card && <RedCardModal card={active.card} scenarioId={active.id} onClose={closeCard} />}
+      <div className="flex items-center gap-4 mb-2">
+        <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'var(--navy-lighter)', color: 'var(--navy)' }}>
+          <SituationIcon icon={active.icon} />
+        </div>
+        <div>
+          <h2 style={{ fontSize: '22px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: SERIF, lineHeight: '1.3' }}>{active.title}</h2>
+          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>{active.description}</p>
+        </div>
+      </div>
+
+      {/* Amendment chips jump to the amendment text */}
+      <div className="flex flex-wrap gap-2 mt-4 mb-6">
+        {referencedAmendments.map(a => {
+          const target = amendmentTarget(a);
+          return target ? (
+            <button key={a} onClick={() => navigate(target)} className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: 'var(--navy-lighter)', color: 'var(--navy)' }}>
+              {t.amendmentChip(a)}
+            </button>
+          ) : (
+            <span key={a} className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: 'var(--navy-lighter)', color: 'var(--navy)' }}>{t.amendmentChip(a)}</span>
+          );
+        })}
+      </div>
+
+      {/* Digital red card launcher */}
+      {active.card && (
+        <button
+          onClick={() => setCardOpen(true)}
+          className="w-full mb-6 p-4 rounded-2xl text-left flex items-center gap-4"
+          style={{ background: 'linear-gradient(145deg, #b22234 0%, #8b1a28 100%)', boxShadow: 'var(--shadow-lg)' }}
+        >
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(255,255,255,0.15)', color: 'white' }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15h4M7 11h10"/>
+            </svg>
+          </div>
+          <div className="flex-1">
+            <p style={{ fontSize: '15px', fontWeight: '800', color: 'white', letterSpacing: '0.01em' }}>{active.card.label ? t.showNamedCard(active.card.label) : t.showCard}</p>
+            <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.88)', marginTop: '2px', lineHeight: '1.4' }}>{active.card.instruction}</p>
+          </div>
+          <span style={{ color: 'rgba(255,255,255,0.8)' }}><Icon.ChevronRight /></span>
+        </button>
+      )}
+
+      <SectionLabel style={{ marginBottom: '12px' }}>{t.yourRights}</SectionLabel>
+      <div className="space-y-3 mb-8">
+        {active.rights.map((r, i) => {
+          const isExpanded = expandedRight === i;
+          const amendmentData = findAmendmentData(r.amendment, data);
+          const caseData = data.cases[r.ref];
+
+          return (
+            <div key={i} className="rounded-xl border overflow-hidden" style={{ background: 'var(--bg-card)', borderColor: isExpanded ? 'var(--navy)' : 'var(--border)', transition: 'border-color 0.2s' }}>
+              <button onClick={() => setExpandedRight(isExpanded ? null : i)} aria-expanded={isExpanded} className="w-full text-left p-4">
+                <div className="flex items-start gap-3">
+                  <div className="amendment-badge" style={{ minWidth: '28px', height: '28px', fontSize: '10px', marginTop: '1px', padding: '0 4px', borderRadius: '14px' }}>{fmtBadge(r.amendment, lang)}</div>
+                  <div className="flex-1">
+                    <p style={{ fontSize: '13px', lineHeight: '1.7', color: 'var(--text-primary)' }}>{r.right}</p>
+                    {caseData ? (
+                      <p style={{ fontSize: '11px', fontWeight: '600', color: 'var(--navy)', marginTop: '6px' }}>{caseData.name} ({caseData.year})</p>
+                    ) : (
+                      <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '4px', fontStyle: 'italic' }}>{r.ref}</p>
+                    )}
+                  </div>
+                  <div style={{ color: 'var(--text-tertiary)', flexShrink: 0, marginTop: '2px' }}>
+                    <Icon.ChevronDown open={isExpanded} />
+                  </div>
+                </div>
+              </button>
+
+              <div className="card-expand" style={{ maxHeight: isExpanded ? '1200px' : '0', opacity: isExpanded ? 1 : 0 }}>
+                {isExpanded && (
+                  <div className="px-4 pb-4 space-y-3">
+                    {caseData && (
+                      <div className="p-3 rounded-lg" style={{ background: 'var(--bg-secondary)' }}>
+                        <SectionLabel style={{ marginBottom: '6px' }}>{t.keyCase}</SectionLabel>
+                        <p style={{ fontSize: '12px', lineHeight: '1.6', color: 'var(--text-secondary)' }}>
+                          {caseData.summary.length > 200 ? caseData.summary.slice(0, 200).replace(/\s+\S*$/, '') + '...' : caseData.summary}
+                        </p>
+                        <button onClick={(e) => { e.stopPropagation(); onOpenCase(r.ref); }} className="mt-2 text-xs font-semibold flex items-center gap-1" style={{ color: 'var(--navy)' }}>
+                          {t.readCase} <Icon.ChevronRight size={12} />
+                        </button>
+                      </div>
+                    )}
+
+                    {amendmentData && (
+                      <div className="p-3 rounded-lg" style={{ background: 'var(--gold-bg)', border: '1px solid var(--gold)' }}>
+                        <SectionLabel color="var(--gold-text)" style={{ marginBottom: '6px' }}>{t.fromAmendment(r.amendment)}</SectionLabel>
+                        <p lang="en" style={{ fontSize: '12px', lineHeight: '1.6', color: 'var(--text-secondary)', fontFamily: SERIF, fontStyle: 'italic' }}>
+                          "{amendmentData.original.length > 200 ? amendmentData.original.slice(0, 200).replace(/\s+\S*$/, '') + '...' : amendmentData.original}"
+                        </p>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); navigate(amendmentTarget(r.amendment)); }}
+                          className="mt-2 text-xs font-semibold flex items-center gap-1"
+                          style={{ color: 'var(--gold-text)' }}
+                        >
+                          {t.readAmendment} <Icon.ChevronRight size={12} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Practical Tips */}
+      <div className="p-5 rounded-xl border" style={{ background: 'var(--gold-bg)', borderColor: 'var(--gold)', borderWidth: '1px' }}>
+        <div className="stars-decoration" />
+        <SectionLabel color="var(--gold-text)" style={{ marginBottom: '12px' }}>{t.practicalTips}</SectionLabel>
+        {active.tips.map((tip, i) => (
+          <div key={i} className="flex gap-3 items-start mb-2.5 last:mb-0">
+            <span style={{ color: 'var(--gold)', fontSize: '14px', lineHeight: '1.4' }} aria-hidden="true">&#9733;</span>
+            <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-primary)' }}>{tip}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6"><LegalNotice /></div>
+
+      {/* Related documents CTA */}
+      <div className="mt-6 p-4 rounded-xl text-center" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
+        <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '8px' }}>{t.fullPicture}</p>
+        <button
+          onClick={() => navigate(amendmentTarget(active.rights[0]?.amendment) || { view: 'library', doc: 'constitution' })}
+          className="px-4 py-2 rounded-xl text-sm font-semibold"
+          style={{ background: 'var(--navy)', color: 'var(--on-navy)' }}
+        >
+          {t.readSource}
+        </button>
       </div>
     </div>
   );
@@ -1612,11 +1796,13 @@ function RightsView({ onOpenCase, navigate, activeId, openScenario }) {
 // CASE LIBRARY VIEW
 // ============================================================
 
-function CasesView({ onOpenCase }) {
+function CasesView({ onOpenCase, navigate }) {
   const { t, lang, data } = useApp();
+  const twoPane = useMediaQuery(TWO_PANE_QUERY);
   const [filter, setFilter] = useState('');
   const [badge, setBadge] = useState(null);
   const [sort, setSort] = useState('az');
+  const [selected, setSelected] = useState(null);
 
   const all = useMemo(() => Object.entries(data.cases)
     .map(([key, c]) => ({ key, ...c, folded: fold(`${key} ${c.citation} ${c.summary}`) }))
@@ -1633,12 +1819,22 @@ function CasesView({ onOpenCase }) {
     return sort === 'newest' ? [...list].sort((a, b) => b.year - a.year) : list;
   }, [all, filter, badge, sort]);
 
-  return (
-    <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
+  // Wide screens show the selected case beside the list. A new search or
+  // filter selects its first result.
+  useEffect(() => { setSelected(null); }, [filter, badge]);
+  const current = selected && data.cases[selected] ? selected : shown[0]?.key;
+  const selectCase = useCallback((key) => { setSelected(key); window.scrollTo({ top: 0, behavior: 'instant' }); }, []);
+
+  const header = (
+    <>
       <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: SERIF }}>{t.casesTitle}</h1>
       <p className="fade-in-up visible" style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px', lineHeight: '1.6' }}>{t.casesSubtitle(all.length)}</p>
+    </>
+  );
 
-      <div className="relative mt-5 mb-3">
+  const controls = (
+    <>
+      <div className="relative mb-3">
         <div style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-tertiary)' }}><Icon.Search size={16} /></div>
         <input
           id="case-filter"
@@ -1677,27 +1873,55 @@ function CasesView({ onOpenCase }) {
           ))}
         </div>
       </div>
+    </>
+  );
 
-      <div className="space-y-2">
-        {shown.map(c => (
-          <button
-            key={c.key}
-            onClick={() => onOpenCase(c.key)}
-            className="w-full text-left p-4 rounded-xl border flex gap-3 items-start"
-            style={{ background: 'var(--bg-card)', borderColor: 'var(--border)' }}
-          >
-            <span className="amendment-badge" style={{ minWidth: '30px', height: '30px', fontSize: '9px', padding: '0 4px', borderRadius: '15px' }}>{fmtBadge(c.amendment, lang)}</span>
-            <div className="flex-1 min-w-0">
-              <p style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-primary)', lineHeight: '1.35' }}>{c.name}</p>
-              <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontFamily: MONO, marginTop: '2px' }}>
-                {c.year} · {c.citation}{c.type && c.type !== 'case' ? ` · ${t.caseTypes[c.type]?.badge || ''}` : ''}
-              </p>
-              <p style={{ fontSize: '12px', lineHeight: '1.55', color: 'var(--text-secondary)', marginTop: '4px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{c.summary}</p>
-            </div>
-          </button>
-        ))}
-        {shown.length === 0 && <p className="text-center py-8" style={{ fontSize: '13px', color: 'var(--text-tertiary)' }}>{t.noCases}</p>}
+  const list = (
+    <>
+      {shown.map(c => (
+        <button
+          key={c.key}
+          onClick={() => (twoPane ? selectCase(c.key) : onOpenCase(c.key))}
+          aria-current={twoPane && c.key === current ? 'true' : undefined}
+          className="w-full text-left p-4 rounded-xl border flex gap-3 items-start"
+          style={{ background: twoPane && c.key === current ? 'var(--navy-bg)' : 'var(--bg-card)', borderColor: twoPane && c.key === current ? 'var(--navy)' : 'var(--border)' }}
+        >
+          <span className="amendment-badge" style={{ minWidth: '30px', height: '30px', fontSize: '9px', padding: '0 4px', borderRadius: '15px' }}>{fmtBadge(c.amendment, lang)}</span>
+          <div className="flex-1 min-w-0">
+            <p style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-primary)', lineHeight: '1.35' }}>{c.name}</p>
+            <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontFamily: MONO, marginTop: '2px' }}>
+              {c.year} · {c.citation}{c.type && c.type !== 'case' ? ` · ${t.caseTypes[c.type]?.badge || ''}` : ''}
+            </p>
+            <p style={{ fontSize: '12px', lineHeight: '1.55', color: 'var(--text-secondary)', marginTop: '4px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{c.summary}</p>
+          </div>
+        </button>
+      ))}
+      {shown.length === 0 && <p className="text-center py-8" style={{ fontSize: '13px', color: 'var(--text-tertiary)' }}>{t.noCases}</p>}
+    </>
+  );
+
+  if (twoPane) {
+    return (
+      <div className="max-w-lg sm:max-w-6xl mx-auto px-5 sm:px-8 pb-nav pt-2">
+        {header}
+        <div className="two-pane mt-5">
+          <div className="pane-side">
+            {controls}
+            <div className="pane-scroll space-y-2 pr-1 pb-2">{list}</div>
+          </div>
+          <div className="rounded-2xl border overflow-hidden" style={{ background: 'var(--bg-card)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-sm)' }}>
+            {current && <CaseDetail caseKey={current} onOpenCase={selectCase} navigate={navigate} />}
+          </div>
+        </div>
       </div>
+    );
+  }
+
+  return (
+    <div className="max-w-lg sm:max-w-2xl mx-auto px-5 sm:px-8 pb-nav pt-2">
+      {header}
+      <div className="mt-5">{controls}</div>
+      <div className="space-y-2">{list}</div>
     </div>
   );
 }
@@ -1741,7 +1965,7 @@ function AboutView() {
   };
 
   return (
-    <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
+    <div className="max-w-lg sm:max-w-2xl mx-auto px-5 sm:px-8 pb-nav pt-2">
       <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: SERIF }}>
         {t.about.title}
       </h1>
@@ -1829,7 +2053,7 @@ function GlossaryView({ onOpenCase, focusTerm, clearFocusTerm }) {
   }, [focusTerm, clearFocusTerm]);
 
   return (
-    <div className="max-w-lg md:max-w-2xl mx-auto px-5 md:px-8 pb-32 pt-2">
+    <div className="max-w-lg sm:max-w-2xl mx-auto px-5 sm:px-8 pb-nav pt-2">
       <h1 className="fade-in-up visible" style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', fontFamily: SERIF }}>
         {t.glossaryTitle}
       </h1>
@@ -1868,7 +2092,7 @@ function GlossaryView({ onOpenCase, focusTerm, clearFocusTerm }) {
           const first = i === 0 || letterOf(filtered[i - 1].term) !== letterOf(g.term);
           const open = expandedTerm === g.term;
           return (
-            <div key={g.term} id={`term-${encodeURIComponent(g.term)}`} style={{ scrollMarginTop: 'calc(env(safe-area-inset-top, 0px) + 72px)' }}>
+            <div key={g.term} id={`term-${encodeURIComponent(g.term)}`} style={{ scrollMarginTop: 'calc(var(--top-offset) + 14px)' }}>
               {first && (
                 <div id={`g-${letterOf(g.term)}`} className="pt-3 pb-1" style={{ scrollMarginTop: 'calc(env(safe-area-inset-top, 0px) + 64px)' }}>
                   <span style={{ fontSize: '16px', fontWeight: '800', color: 'var(--crimson)', fontFamily: SERIF }}>{letterOf(g.term)}</span>
@@ -1915,7 +2139,7 @@ function SearchModal({ onClose, searchIndex, onSelect }) {
   return (
     <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[8vh] px-4" onClick={onClose}>
       <div className="absolute inset-0" style={{ background: 'rgba(15,22,35,0.45)', backdropFilter: 'blur(4px)' }} />
-      <div role="dialog" aria-modal="true" aria-label={t.a11y.search} className="relative w-full max-w-md md:max-w-xl rounded-2xl overflow-hidden"
+      <div role="dialog" aria-modal="true" aria-label={t.a11y.search} className="relative w-full max-w-md sm:max-w-xl rounded-2xl overflow-hidden"
         style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-xl)', maxHeight: '70vh' }}
         onClick={e => e.stopPropagation()}>
         <div className="flex items-center gap-3 p-4 border-b" style={{ borderColor: 'var(--border)', color: 'var(--text-tertiary)' }}>
@@ -1967,7 +2191,7 @@ function ScrollToTop() {
   return (
     <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label={t.a11y.scrollTop}
-      className="fixed right-5 z-40 w-10 h-10 rounded-full flex items-center justify-center no-print"
+      className="scroll-top-btn fixed right-5 z-40 w-10 h-10 rounded-full flex items-center justify-center no-print"
       style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 84px)', background: 'var(--navy)', color: 'var(--on-navy)', boxShadow: 'var(--shadow-lg)' }}>
       <Icon.ArrowUp />
     </button>
@@ -2111,13 +2335,21 @@ export default function Home() {
     setActiveView(v);
   }, [pushHistory]);
 
+  // The top bar widens to line up with two-pane screens
+  const twoPane = useMediaQuery(TWO_PANE_QUERY);
+  const sidebar = useMediaQuery(SIDEBAR_QUERY);
+  const wideTop = (twoPane && (activeView === 'cases' || activeView === 'rights')) || (sidebar && activeView === 'library');
+  const openSearch = useCallback(() => setSearchOpen(true), []);
+  const openAbout = useCallback(() => { goToView('about'); window.scrollTo({ top: 0, behavior: 'instant' }); }, [goToView]);
+
   return (
     <AppCtx.Provider value={app}>
       <div className={darkMode ? 'dark' : ''}>
-        <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-primary)', transition: 'background 0.3s, color 0.3s' }}>
+        <div className="app-shell" style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-primary)', transition: 'background 0.3s, color 0.3s' }}>
           {searchOpen && <SearchModal onClose={closeSearch} searchIndex={searchIndex} onSelect={handleSearchSelect} />}
           {openCase && <CaseModal caseKey={openCase} onClose={closeCase} onOpenCase={handleOpenCase} navigate={navigate} />}
-          <TopBar darkMode={darkMode} setDarkMode={setDarkMode} onSearchOpen={() => setSearchOpen(true)} onAboutOpen={() => { goToView('about'); window.scrollTo({ top: 0, behavior: 'instant' }); }} onHome={() => { goToView('home'); window.scrollTo({ top: 0, behavior: 'instant' }); }} canGoBack={canGoBack} onBack={goBack} />
+          <TopBar darkMode={darkMode} setDarkMode={setDarkMode} onSearchOpen={openSearch} onAboutOpen={openAbout} onHome={() => { goToView('home'); window.scrollTo({ top: 0, behavior: 'instant' }); }} canGoBack={canGoBack} onBack={goBack} wide={wideTop} />
+          <SideRail activeView={activeView} setActiveView={goToView} darkMode={darkMode} setDarkMode={setDarkMode} onSearchOpen={openSearch} onAboutOpen={openAbout} canGoBack={canGoBack} onBack={goBack} />
 
           <main>
             {activeView === 'home' && <HomeView setActiveView={goToView} navigate={navigate} />}
@@ -2127,7 +2359,7 @@ export default function Home() {
             {activeView === 'rights' && (
               <RightsView onOpenCase={handleOpenCase} navigate={navigate} activeId={activeScenario} openScenario={openScenario} />
             )}
-            {activeView === 'cases' && <CasesView onOpenCase={handleOpenCase} />}
+            {activeView === 'cases' && <CasesView onOpenCase={handleOpenCase} navigate={navigate} />}
             {activeView === 'glossary' && <GlossaryView onOpenCase={handleOpenCase} focusTerm={focusTerm} clearFocusTerm={clearFocusTerm} />}
             {activeView === 'about' && <AboutView />}
           </main>

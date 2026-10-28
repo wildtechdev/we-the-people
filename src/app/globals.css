@@ -235,6 +235,116 @@ mark {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/* ------------------------------------------------------------
+   Adaptive layout (iPhone, iPhone Duo, iPad, desktop)
+
+   --top-offset / --bottom-offset: space taken by the top bar and the
+   bottom navigation, used by sticky panes and scroll targets.
+
+   Rail mode: on short, wide screens (iPhone Duo outer display, Duo
+   inner display in landscape, any iPhone in landscape) the navigation
+   moves from the bottom bar to a vertical rail on the trailing edge,
+   following Apple's iPhone Duo guidance, so content keeps the height.
+   ------------------------------------------------------------ */
+:root {
+  --rail-w: 76px;
+  --top-offset: calc(env(safe-area-inset-top, 0px) + 58px);
+  --bottom-offset: calc(env(safe-area-inset-bottom, 0px) + 68px);
+}
+
+.app-shell {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+.bottom-nav {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* Bottom padding that keeps content clear of the bottom navigation */
+.pb-nav { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 112px); }
+
+.side-rail { display: none; }
+
+@media (min-aspect-ratio: 3/5) and (max-height: 760px) {
+  :root {
+    --top-offset: calc(env(safe-area-inset-top, 0px) + 12px);
+    --bottom-offset: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  }
+  .app-shell {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
+    padding-right: calc(env(safe-area-inset-right, 0px) + var(--rail-w));
+  }
+  .top-bar, .bottom-nav { display: none !important; }
+  .side-rail { display: flex; }
+  .pb-nav { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 40px); }
+  .scroll-top-btn {
+    right: calc(env(safe-area-inset-right, 0px) + var(--rail-w) + 16px) !important;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 20px) !important;
+  }
+}
+
+.side-rail {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: env(safe-area-inset-right, 0px);
+  width: var(--rail-w);
+  z-index: 50;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) 0 calc(env(safe-area-inset-bottom, 0px) + 10px);
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+}
+
+/* Very short screens (an iPhone in landscape): icons only */
+@media (max-height: 500px) {
+  .side-rail { padding-top: calc(env(safe-area-inset-top, 0px) + 6px); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 6px); }
+  .side-rail > div { gap: 0; }
+  .side-rail button { padding-top: 6px; padding-bottom: 6px; }
+  .side-rail .rail-label { display: none; }
+}
+
+/* Two panes side by side: a sticky list on the leading side, details on
+   the trailing side. Even split on Duo-sized screens so the halves line
+   up with the fold; a narrower list on larger screens. */
+.two-pane {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+@media (min-width: 1000px) {
+  .two-pane { grid-template-columns: minmax(300px, 2fr) minmax(0, 3fr); }
+}
+/* Document reader with a table-of-contents sidebar (wide screens) */
+.sidebar-layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+.pane-side {
+  position: sticky;
+  top: var(--top-offset);
+  max-height: calc(100vh - var(--top-offset) - var(--bottom-offset) - 8px);
+  max-height: calc(100dvh - var(--top-offset) - var(--bottom-offset) - 8px);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.pane-side > * { flex-shrink: 0; }
+.pane-side > .pane-scroll {
+  overflow-y: auto;
+  min-height: 0;
+  flex: 1 1 auto;
+  overscroll-behavior: contain;
+}
+
 /* Amendment badge */
 .amendment-badge {
   display: inline-flex;

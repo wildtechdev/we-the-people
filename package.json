@@ -10,9 +10,9 @@
     "build:ios": "npm run check && next build && npx cap sync ios"
   },
   "dependencies": {
-    "@capacitor/cli": "^8.3.4",
-    "@capacitor/core": "^8.3.4",
-    "@capacitor/ios": "^8.3.4",
+    "@capacitor/cli": "^8.6.2",
+    "@capacitor/core": "^8.6.2",
+    "@capacitor/ios": "^8.6.2",
     "next": "^14.2.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0"

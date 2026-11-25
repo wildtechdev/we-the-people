@@ -109,6 +109,11 @@ const Icon = {
       <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
     </svg>
   ),
+  More: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/>
+    </svg>
+  ),
   Alert: ({ size = 18, color = 'currentColor' }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
@@ -303,6 +308,11 @@ function fold(str) {
 const escapeHtml = (s) => s.replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 
 // Stable DOM anchor for a document section
+// Keep number ranges like "11-27" on one line (display only; search uses the plain text)
+function keepRange(text) {
+  return typeof text === 'string' ? text.replace(/(\d)-(\d)/g, '$1\u2011$2') : text;
+}
+
 function sectionAnchor(section) {
   if (section.id) return `sec-${section.id}`;
   if (section.number) return `amd-${section.number}`;
@@ -350,6 +360,44 @@ function useMediaQuery(query) {
     return () => mq.removeEventListener('change', update);
   }, [query]);
   return matches;
+}
+
+// iPhone Duo: where the fold is, as the iOS app reports it (MainViewController
+// sets window.__wtpGeometry and fires 'wtp-geometry'). Only a fold that runs
+// top to bottom matters for side-by-side panes; null everywhere else.
+function readVerticalFold() {
+  const g = typeof window !== 'undefined' ? window.__wtpGeometry : null;
+  if (!g || g['--ios-fold-axis'] !== 'x') return null;
+  const start = parseFloat(g['--ios-fold-start']);
+  const end = parseFloat(g['--ios-fold-end']);
+  return Number.isFinite(start) && Number.isFinite(end) ? { start, end } : null;
+}
+
+// Two-pane screens put the gap between their panes on the fold, so neither
+// pane's text runs across the crease. Returns a style for the .two-pane grid,
+// or undefined to keep the default columns (no fold, or panes too narrow).
+// `enabled` is true while the screen shows its two panes.
+function useFoldColumns(ref, enabled) {
+  const [style, setStyle] = useState(undefined);
+  useEffect(() => {
+    const update = () => {
+      const el = ref.current;
+      const fold = enabled ? readVerticalFold() : null;
+      if (!el || !fold) { setStyle(undefined); return; }
+      const box = el.getBoundingClientRect();
+      const center = (fold.start + fold.end) / 2;
+      const half = Math.max(12, (fold.end - fold.start) / 2 + 6);
+      const left = Math.round(center - half - box.left);
+      const right = Math.round(box.right - (center + half));
+      if (left < 220 || right < 260) { setStyle(undefined); return; }
+      setStyle({ gridTemplateColumns: `${left}px ${right}px`, columnGap: `${Math.round(half * 2)}px` });
+    };
+    update();
+    window.addEventListener('wtp-geometry', update);
+    window.addEventListener('resize', update);
+    return () => { window.removeEventListener('wtp-geometry', update); window.removeEventListener('resize', update); };
+  }, [ref, enabled]);
+  return style;
 }
 
 function useModal(onClose, focusRef) {
@@ -583,13 +631,43 @@ function BottomNav({ activeView, setActiveView }) {
 // SIDE RAIL (short, wide screens: iPhone Duo, iPhone in landscape)
 // Shown instead of the top bar and bottom navigation by CSS. Order
 // follows Apple's guidance for controls on the side: Back first, then
-// actions, with the tabs at the bottom.
+// actions, with the tabs at the bottom. On iPhone Duo the rail fills the
+// column the system's clock already sits in, starting below the clock,
+// so there is no room for every top-bar button: language, dark mode and
+// About go in an overflow menu, the way the system collapses toolbars.
 // ============================================================
 
 function SideRail({ activeView, setActiveView, darkMode, setDarkMode, onSearchOpen, onAboutOpen, canGoBack, onBack }) {
   const { lang, setLang, t } = useApp();
+  const [menuTop, setMenuTop] = useState(null);
+  const moreRef = useRef(null);
+  const menuRef = useRef(null);
   const tool = 'w-14 flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl';
   const toolStyle = { color: 'var(--text-secondary)' };
+
+  const closeMenu = useCallback((refocus) => {
+    setMenuTop(null);
+    if (refocus) moreRef.current?.focus();
+  }, []);
+  const toggleMenu = () => {
+    if (menuTop != null) { closeMenu(false); return; }
+    setMenuTop(moreRef.current.getBoundingClientRect().top);
+  };
+
+  // Close on Escape or a tap outside; move focus into the menu when it opens
+  useEffect(() => {
+    if (menuTop == null) return;
+    menuRef.current?.querySelector('button')?.focus();
+    const onKey = (e) => { if (e.key === 'Escape') closeMenu(true); };
+    const onDown = (e) => { if (!menuRef.current?.contains(e.target) && !moreRef.current?.contains(e.target)) closeMenu(false); };
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('pointerdown', onDown);
+    return () => { window.removeEventListener('keydown', onKey); window.removeEventListener('pointerdown', onDown); };
+  }, [menuTop, closeMenu]);
+
+  const menuItem = 'w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 text-sm font-medium';
+  const run = (action) => () => { closeMenu(false); action(); };
+
   return (
     <nav className="side-rail no-print" aria-label={t.a11y.mainNav}>
       <div className="flex flex-col items-center gap-1">
@@ -602,19 +680,29 @@ function SideRail({ activeView, setActiveView, darkMode, setDarkMode, onSearchOp
         <button onClick={onSearchOpen} className={tool} style={toolStyle} aria-label={t.a11y.search}>
           <Icon.Search size={19} />
         </button>
-        <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className={tool} style={toolStyle} aria-label={t.a11y.language}>
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-          </svg>
-          <span style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '0.03em' }} aria-hidden="true">{lang === 'es' ? 'EN' : 'ES'}</span>
-        </button>
-        <button onClick={() => setDarkMode(!darkMode)} className={tool} style={toolStyle} aria-label={darkMode ? t.a11y.darkOff : t.a11y.darkOn}>
-          {darkMode ? <Icon.Sun /> : <Icon.Moon />}
-        </button>
-        <button onClick={onAboutOpen} className={tool} style={toolStyle} aria-label={t.a11y.about}>
-          <Icon.Info />
+        <button ref={moreRef} onClick={toggleMenu} className={tool} style={{ ...toolStyle, background: menuTop != null ? 'var(--bg-secondary)' : 'transparent' }}
+          aria-label={t.a11y.more} aria-haspopup="menu" aria-expanded={menuTop != null}>
+          <Icon.More />
         </button>
       </div>
+      {menuTop != null && (
+        <div ref={menuRef} role="menu" aria-label={t.a11y.more} className="rail-menu" style={{ top: menuTop }}>
+          <button role="menuitem" className={menuItem} style={{ color: 'var(--text-primary)' }} onClick={run(() => setLang(lang === 'es' ? 'en' : 'es'))}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <span lang={lang === 'es' ? 'en' : 'es'}>{t.a11y.language}</span>
+          </button>
+          <button role="menuitem" className={menuItem} style={{ color: 'var(--text-primary)' }} onClick={run(() => setDarkMode(!darkMode))}>
+            {darkMode ? <Icon.Sun /> : <Icon.Moon />}
+            <span>{darkMode ? t.a11y.darkOff : t.a11y.darkOn}</span>
+          </button>
+          <button role="menuitem" className={menuItem} style={{ color: 'var(--text-primary)' }} onClick={run(onAboutOpen)}>
+            <Icon.Info size={18} />
+            <span>{t.a11y.about}</span>
+          </button>
+        </div>
+      )}
       <div className="flex flex-col items-center gap-1">
         {navItems(t).map(item => (
           <button
@@ -745,7 +833,7 @@ function HomeView({ setActiveView, navigate }) {
           >
             <div style={{ width: '100%' }}><DocCover id={doc.id} label={doc.sub} height="clamp(150px, 20vw, 200px)" /></div>
             <div className="p-3 flex-1 flex flex-col" style={{ width: '100%' }}>
-              <p style={{ fontFamily: SERIF, fontSize: '14px', fontWeight: '700', color: 'var(--text-primary)', lineHeight: '1.3' }}>{doc.title}</p>
+              <p style={{ fontFamily: SERIF, fontSize: '14px', fontWeight: '700', color: 'var(--text-primary)', lineHeight: '1.3' }}>{keepRange(doc.title)}</p>
               <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: 'auto', paddingTop: '6px' }}>{doc.sections}</p>
             </div>
           </button>
@@ -974,7 +1062,7 @@ function LibraryView({ activeDoc, selectDoc, onOpenCase, scrollAnchor, clearScro
           {/* Document title */}
           <div className="text-center mt-6 mb-2">
             <h1 style={{ fontSize: '26px', fontWeight: '700', color: 'var(--text-primary)', fontFamily: SERIF, lineHeight: '1.3', textWrap: 'balance' }}>
-              {meta.title}
+              {keepRange(meta.title)}
             </h1>
             {meta.date && <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '4px' }}>{meta.date}</p>}
             {meta.summary && (
@@ -1104,7 +1192,7 @@ function CaseModal({ caseKey, onClose, onOpenCase, navigate }) {
   useModal(onClose, closeRef);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center" onClick={onClose}>
+    <div className="modal-frame fixed inset-0 z-[100] flex items-end sm:items-center justify-center" onClick={onClose}>
       <div className="absolute inset-0" style={{ background: 'rgba(15,22,35,0.55)', backdropFilter: 'blur(4px)' }} />
       <div
         role="dialog"
@@ -1563,6 +1651,8 @@ function RightsView({ onOpenCase, navigate, activeId, openScenario }) {
   // Wide screens always show a scenario beside the list: the first one until you pick
   const current = active || (twoPane ? data.situations[0] : null);
   const select = (id) => { openScenario(id); window.scrollTo({ top: 0, behavior: 'instant' }); };
+  const paneRef = useRef(null);
+  const foldColumns = useFoldColumns(paneRef, twoPane);
 
   const intro = (
     <>
@@ -1585,7 +1675,7 @@ function RightsView({ onOpenCase, navigate, activeId, openScenario }) {
     return (
       <div className="max-w-lg sm:max-w-6xl mx-auto px-5 sm:px-8 pb-nav pt-2">
         {intro}
-        <div className="two-pane mt-5">
+        <div ref={paneRef} className="two-pane mt-5" style={foldColumns}>
           <div className="pane-side">
             {scenarioCount}
             <div className="pane-scroll space-y-2 pr-1 pb-2">
@@ -1824,6 +1914,8 @@ function CasesView({ onOpenCase, navigate }) {
   useEffect(() => { setSelected(null); }, [filter, badge]);
   const current = selected && data.cases[selected] ? selected : shown[0]?.key;
   const selectCase = useCallback((key) => { setSelected(key); window.scrollTo({ top: 0, behavior: 'instant' }); }, []);
+  const paneRef = useRef(null);
+  const foldColumns = useFoldColumns(paneRef, twoPane);
 
   const header = (
     <>
@@ -1904,7 +1996,7 @@ function CasesView({ onOpenCase, navigate }) {
     return (
       <div className="max-w-lg sm:max-w-6xl mx-auto px-5 sm:px-8 pb-nav pt-2">
         {header}
-        <div className="two-pane mt-5">
+        <div ref={paneRef} className="two-pane mt-5" style={foldColumns}>
           <div className="pane-side">
             {controls}
             <div className="pane-scroll space-y-2 pr-1 pb-2">{list}</div>
@@ -1941,6 +2033,9 @@ function AboutCard({ icon, iconBg, iconColor, title, children }) {
     </div>
   );
 }
+
+// Where people report mistakes (the app's support page on the App Store)
+const CONTACT_URL = 'https://wildtechdev.com/contact';
 
 function AboutView() {
   const { t } = useApp();
@@ -1991,6 +2086,19 @@ function AboutView() {
       <AboutCard icon={<Icon.Book size={18} />} iconBg="var(--navy-lighter)" iconColor="var(--navy)" title={t.about.h5}>
         <p>{t.about.p7}</p>
         <p style={{ marginTop: '10px', fontSize: '12px', color: 'var(--text-tertiary)' }}>{t.about.updated}</p>
+      </AboutCard>
+
+      <AboutCard icon={<Icon.Alert size={18} />} iconBg="var(--gold-lighter)" iconColor="var(--gold-text)" title={t.about.h7}>
+        <p style={{ marginBottom: '16px' }}>{t.about.p9}</p>
+        <a
+          href={CONTACT_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold w-full justify-center border"
+          style={{ background: 'var(--bg-card)', color: 'var(--navy)', borderColor: 'var(--border)' }}
+        >
+          {t.about.reportBtn} <Icon.ChevronRight size={14} />
+        </a>
       </AboutCard>
 
       <AboutCard icon={<Icon.Lock />} iconBg="var(--bg-tertiary)" iconColor="var(--text-primary)" title={t.about.h6}>
@@ -2137,7 +2245,7 @@ function SearchModal({ onClose, searchIndex, onSelect }) {
   }, [query, searchIndex]);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[8vh] px-4" onClick={onClose}>
+    <div className="modal-frame modal-frame-pad fixed inset-0 z-[100] flex items-start justify-center pt-[8vh]" onClick={onClose}>
       <div className="absolute inset-0" style={{ background: 'rgba(15,22,35,0.45)', backdropFilter: 'blur(4px)' }} />
       <div role="dialog" aria-modal="true" aria-label={t.a11y.search} className="relative w-full max-w-md sm:max-w-xl rounded-2xl overflow-hidden"
         style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-xl)', maxHeight: '70vh' }}

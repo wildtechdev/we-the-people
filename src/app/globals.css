@@ -245,12 +245,24 @@ mark {
    inner display in landscape, any iPhone in landscape) the navigation
    moves from the bottom bar to a vertical rail on the trailing edge,
    following Apple's iPhone Duo guidance, so content keeps the height.
+
+   On iPhone Duo the system already puts its clock and camera in a
+   column down that edge (the right safe-area inset), so the rail fills
+   that column: it is at least as wide as the inset, and its controls
+   start below the clock (--ios-status-bottom, set by the iOS app's
+   MainViewController). Elsewhere the variable is unset and the rail
+   starts at the top.
    ------------------------------------------------------------ */
 :root {
   --rail-w: 76px;
+  --rail-col: max(var(--rail-w), env(safe-area-inset-right, 0px));
   --top-offset: calc(env(safe-area-inset-top, 0px) + 58px);
   --bottom-offset: calc(env(safe-area-inset-bottom, 0px) + 68px);
 }
+
+/* The app sets its background on <html> as well as <body>, so iOS reads
+   the page colour correctly (status bar text, overscroll). */
+html { background: var(--bg-primary); }
 
 .app-shell {
   padding-left: env(safe-area-inset-left, 0px);
@@ -274,13 +286,13 @@ mark {
   }
   .app-shell {
     padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
-    padding-right: calc(env(safe-area-inset-right, 0px) + var(--rail-w));
+    padding-right: var(--rail-col);
   }
   .top-bar, .bottom-nav { display: none !important; }
   .side-rail { display: flex; }
   .pb-nav { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 40px); }
   .scroll-top-btn {
-    right: calc(env(safe-area-inset-right, 0px) + var(--rail-w) + 16px) !important;
+    right: calc(var(--rail-col) + 16px) !important;
     bottom: calc(env(safe-area-inset-bottom, 0px) + 20px) !important;
   }
 }
@@ -289,13 +301,15 @@ mark {
   position: fixed;
   top: 0;
   bottom: 0;
-  right: env(safe-area-inset-right, 0px);
-  width: var(--rail-w);
+  right: 0;
+  width: var(--rail-col);
   z-index: 50;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   gap: 8px;
-  padding: calc(env(safe-area-inset-top, 0px) + 10px) 0 calc(env(safe-area-inset-bottom, 0px) + 10px);
+  padding-top: max(calc(env(safe-area-inset-top, 0px) + 10px), calc(var(--ios-status-bottom, 0px) + 8px));
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
   background: var(--bg-card);
   border-left: 1px solid var(--border);
   overflow-y: auto;
@@ -303,10 +317,34 @@ mark {
 
 /* Very short screens (an iPhone in landscape): icons only */
 @media (max-height: 500px) {
-  .side-rail { padding-top: calc(env(safe-area-inset-top, 0px) + 6px); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 6px); }
+  .side-rail { padding-top: max(calc(env(safe-area-inset-top, 0px) + 6px), calc(var(--ios-status-bottom, 0px) + 6px)); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 6px); }
   .side-rail > div { gap: 0; }
   .side-rail button { padding-top: 6px; padding-bottom: 6px; }
   .side-rail .rail-label { display: none; }
+}
+
+/* Full-screen dialogs keep their content clear of side system bars
+   (the iPhone Duo status column) */
+.modal-frame {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+.modal-frame-pad {
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Overflow menu on the side rail */
+.rail-menu {
+  position: fixed;
+  right: calc(var(--rail-col) + 8px);
+  z-index: 60;
+  min-width: 200px;
+  padding: 6px;
+  border-radius: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xl);
 }
 
 /* Two panes side by side: a sticky list on the leading side, details on

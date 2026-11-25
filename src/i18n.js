@@ -10,7 +10,7 @@ export const STRINGS = {
     nav: { home: 'Home', library: 'Library', rights: 'Rights', cases: 'Cases', glossary: 'Glossary' },
 
     // Accessibility labels
-    a11y: { search: 'Search', darkOn: 'Switch to dark mode', darkOff: 'Switch to light mode', about: 'About this app', close: 'Close', scrollTop: 'Back to top', language: 'Cambiar a español' },
+    a11y: { search: 'Search', darkOn: 'Switch to dark mode', darkOff: 'Switch to light mode', about: 'About this app', close: 'Close', scrollTop: 'Back to top', language: 'Cambiar a español', mainNav: 'Main navigation', more: 'More options' },
 
     // Home
     tagline: 'No parties. Just law.',
@@ -40,6 +40,7 @@ export const STRINGS = {
     presidentLabel: 'President',
     docTabs: { declaration: 'Declaration', constitution: 'Constitution', 'bill-of-rights': 'Bill of Rights', amendments: 'Amd. 11-27', unratified: 'Unratified' },
     toc: (n) => `Table of Contents (${n} sections)`,
+    contents: 'Contents',
     views: { original: 'Original', translated: 'Plain English', both: 'Side by Side' },
     article: 'Article',
     amendmentWord: (n) => `Amendment ${n}`,
@@ -137,7 +138,10 @@ export const STRINGS = {
       p6: 'This app explains the founding documents and constitutional rights in general terms for education. It is not legal advice and does not create an attorney-client relationship. Laws, court rulings, and state rules differ and change over time. If you are facing a legal situation, talk to a lawyer or a legal aid organization.',
       h5: 'Sources',
       p7: 'The text of the Declaration of Independence, the Constitution, and every amendment follows the National Archives transcriptions, including the original spelling. Plain-language explanations, case summaries, and the Know Your Rights guide were written for this app and link to the full court opinions and official sources.',
-      updated: 'Content last updated: October 2026',
+      updated: 'Content last updated: November 2026',
+      h7: 'Found a Mistake?',
+      p9: 'Accuracy matters. If you spot an error in the text, a case summary, or the Know Your Rights guide, please let us know so we can fix it.',
+      reportBtn: 'Report a mistake',
       h6: 'Your Privacy',
       p8: 'This app collects no personal data, has no accounts, and contains no ads or tracking. Your language and display settings are stored only on your device.',
       madeWith: 'Made with love for this country and its people.',
@@ -152,7 +156,7 @@ export const STRINGS = {
     nav: { home: 'Inicio', library: 'Biblioteca', rights: 'Derechos', cases: 'Casos', glossary: 'Glosario' },
 
     // Etiquetas de accesibilidad
-    a11y: { search: 'Buscar', darkOn: 'Activar modo oscuro', darkOff: 'Activar modo claro', about: 'Acerca de esta aplicación', close: 'Cerrar', scrollTop: 'Volver arriba', language: 'Switch to English' },
+    a11y: { search: 'Buscar', darkOn: 'Activar modo oscuro', darkOff: 'Activar modo claro', about: 'Acerca de esta aplicación', close: 'Cerrar', scrollTop: 'Volver arriba', language: 'Switch to English', mainNav: 'Navegación principal', more: 'Más opciones' },
 
     // Home
     tagline: 'Sin partidos. Solo ley.',
@@ -182,6 +186,7 @@ export const STRINGS = {
     presidentLabel: 'Presidente',
     docTabs: { declaration: 'Declaración', constitution: 'Constitución', 'bill-of-rights': 'Carta de Derechos', amendments: 'Enm. 11-27', unratified: 'No ratificadas' },
     toc: (n) => `Índice (${n} secciones)`,
+    contents: 'Índice',
     views: { original: 'Original', translated: 'Español claro', both: 'Lado a lado' },
     article: 'Artículo',
     amendmentWord: (n) => `Enmienda ${n}`,
@@ -285,7 +290,10 @@ export const STRINGS = {
       p6: 'Esta aplicación explica los documentos fundacionales y los derechos constitucionales en términos generales con fines educativos. No es asesoría legal ni crea una relación entre abogado y cliente. Las leyes, los fallos judiciales y las normas estatales varían y cambian con el tiempo. Si enfrenta una situación legal, hable con un abogado o con una organización de asistencia legal.',
       h5: 'Fuentes',
       p7: 'El texto de la Declaración de Independencia, la Constitución y cada enmienda sigue las transcripciones de los Archivos Nacionales, con su ortografía original en inglés. Las explicaciones en lenguaje claro, los resúmenes de casos y la guía Conozca sus derechos fueron escritos para esta aplicación y enlazan a las opiniones judiciales completas y a las fuentes oficiales.',
-      updated: 'Contenido actualizado por última vez: octubre de 2026',
+      updated: 'Contenido actualizado por última vez: noviembre de 2026',
+      h7: '¿Encontró un error?',
+      p9: 'La exactitud es importante. Si encuentra un error en el texto, en el resumen de un caso o en la guía Conozca sus derechos, avísenos para que podamos corregirlo.',
+      reportBtn: 'Reportar un error',
       h6: 'Su privacidad',
       p8: 'Esta aplicación no recopila datos personales, no tiene cuentas y no contiene anuncios ni rastreo. Su idioma y sus ajustes de pantalla se guardan solo en su dispositivo.',
       madeWith: 'Hecho con amor por este país y su gente.',

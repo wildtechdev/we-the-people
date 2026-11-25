@@ -20,6 +20,40 @@ After `npm run build:ios`, open `ios/App/We The People.xcodeproj` in Xcode to ar
 Always run `npm run build:ios` before archiving: Xcode ships whatever web build is in
 `ios/App/App/public`, so skipping it ships an old version of the app.
 
+Build with Xcode 27.1 or later (the iOS 27 SDK). Older SDKs run the app in a letterboxed
+window on iPhone Duo's inner screen.
+
+`ios/App/App.xcodeproj` is a link to `We The People.xcodeproj`: Capacitor's tools look for a
+project with that name, so keep the link if the project is renamed again.
+
+## iPhone Duo and other screen sizes
+
+The layout adapts by screen shape, not by device:
+
+- Short, wide screens (iPhone Duo's front screen, its inner screen held sideways) move the top
+  bar and tab bar into a side rail on the right. On iPhone Duo the rail fills the column the
+  system's clock already sits in.
+- Screens 640px wide and up show lists and details side by side (Case Library, Know Your
+  Rights); 900px and up add a table-of-contents sidebar to the reader.
+- The iOS app's `MainViewController.swift` tells the page what WebKit does not: where the clock
+  column ends (`--ios-status-bottom`) and where the fold is (`--ios-fold-*`, also sent as a
+  `wtp-geometry` event). Two-pane screens put the gap between panes on the fold. While the
+  device is partly folded, like an open book, the reader puts its contents on one side of the
+  fold and the text on the other.
+
+To screenshot the simulator without tapping, Debug builds run the script in
+`WTP_DEBUG_SCRIPT` after each page load:
+
+```bash
+SIMCTL_CHILD_WTP_DEBUG_SCRIPT="document.querySelectorAll('.bottom-nav button')[3].click()" xcrun simctl launch booted WildTech.WeThePeople
+```
+
+On iPhone Duo, take each screen separately: `xcrun simctl io <device> enumerate` lists the
+displays (front 1398x2034, inner 2853x2007 once open), then
+`xcrun simctl io <device> screenshot --display=<UUID> out.png`. Opening the hinge needs
+DeviceHub (inside Xcode.app/Contents/Applications): Closed, Partially Open and Open are under
+the device. Debug builds log `WTP geometry` with the fold and clock values on every change.
+
 ## Project layout
 
 ```

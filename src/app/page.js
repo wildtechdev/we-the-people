@@ -1620,7 +1620,8 @@ function RedCardModal({ card, scenarioId, onClose }) {
             <span style={{ background: '#e8c55a', width: '18px', borderRadius: '3px' }} />
             <span style={{ background: 'rgba(255,255,255,0.35)' }} />
           </div>
-          <p lang="en" style={{ fontFamily: SERIF, fontSize: 'clamp(19px, 2.9vw, 30px)', lineHeight: '1.65', color: 'white', fontWeight: '700', textShadow: '0 1px 3px rgba(0,0,0,0.25)' }}>
+          {/* Sized by the shorter side too, so the statement fits without scrolling on wide, short screens (iPhone Duo open, phones held sideways) */}
+          <p lang="en" style={{ fontFamily: SERIF, fontSize: 'clamp(19px, min(2.9vw, 3.2vh), 30px)', lineHeight: '1.65', color: 'white', fontWeight: '700', textShadow: '0 1px 3px rgba(0,0,0,0.25)' }}>
             {card.statement}
           </p>
           <p style={{ fontSize: 'clamp(13px, 1.6vw, 17px)', color: 'rgba(255,255,255,0.92)', marginTop: '20px', textAlign: 'center', fontWeight: '600', letterSpacing: '0.02em' }}>

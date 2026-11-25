@@ -365,25 +365,29 @@ function useMediaQuery(query) {
 // iPhone Duo: where the fold is, as the iOS app reports it (MainViewController
 // sets window.__wtpGeometry and fires 'wtp-geometry'). Only a fold that runs
 // top to bottom matters for side-by-side panes; null everywhere else.
+// `folded` is true while the device is partly folded, like an open book.
 function readVerticalFold() {
   const g = typeof window !== 'undefined' ? window.__wtpGeometry : null;
   if (!g || g['--ios-fold-axis'] !== 'x') return null;
   const start = parseFloat(g['--ios-fold-start']);
   const end = parseFloat(g['--ios-fold-end']);
-  return Number.isFinite(start) && Number.isFinite(end) ? { start, end } : null;
+  if (!Number.isFinite(start) || !Number.isFinite(end)) return null;
+  return { start, end, folded: g['--ios-fold-active'] === '1' };
 }
 
 // Two-pane screens put the gap between their panes on the fold, so neither
-// pane's text runs across the crease. Returns a style for the .two-pane grid,
+// pane's text runs across the crease. Returns a style for the two-column grid,
 // or undefined to keep the default columns (no fold, or panes too narrow).
-// `enabled` is true while the screen shows its two panes.
-function useFoldColumns(ref, enabled) {
+// `enabled` is true while the screen shows its two panes. With `foldedOnly`
+// the columns move only while the device is partly folded; lying flat, the
+// grid keeps its own columns.
+function useFoldColumns(ref, enabled, foldedOnly = false) {
   const [style, setStyle] = useState(undefined);
   useEffect(() => {
     const update = () => {
       const el = ref.current;
       const fold = enabled ? readVerticalFold() : null;
-      if (!el || !fold) { setStyle(undefined); return; }
+      if (!el || !fold || (foldedOnly && !fold.folded)) { setStyle(undefined); return; }
       const box = el.getBoundingClientRect();
       const center = (fold.start + fold.end) / 2;
       const half = Math.max(12, (fold.end - fold.start) / 2 + 6);
@@ -396,7 +400,7 @@ function useFoldColumns(ref, enabled) {
     window.addEventListener('wtp-geometry', update);
     window.addEventListener('resize', update);
     return () => { window.removeEventListener('wtp-geometry', update); window.removeEventListener('resize', update); };
-  }, [ref, enabled]);
+  }, [ref, enabled, foldedOnly]);
   return style;
 }
 
@@ -911,6 +915,9 @@ function LibraryView({ activeDoc, selectDoc, onOpenCase, scrollAnchor, clearScro
   const [tocOpen, setTocOpen] = useState(false);
   const [textStep, setTextStep] = useState(1);
   const sidebar = useMediaQuery(SIDEBAR_QUERY);
+  // iPhone Duo held like a book: contents on the left page, text on the right
+  const layoutRef = useRef(null);
+  const foldColumns = useFoldColumns(layoutRef, sidebar, true);
 
   useEffect(() => {
     const saved = storageGet('wtp-view');
@@ -1025,7 +1032,7 @@ function LibraryView({ activeDoc, selectDoc, onOpenCase, scrollAnchor, clearScro
 
   return (
     <div className={`max-w-lg ${sidebar ? 'sm:max-w-6xl' : 'sm:max-w-2xl'} mx-auto px-5 sm:px-8 pb-nav pt-2`}>
-      <div className={sidebar ? 'sidebar-layout' : undefined}>
+      <div ref={layoutRef} className={sidebar ? 'sidebar-layout' : undefined} style={foldColumns}>
         {sidebar && (
           <aside className="pane-side" aria-label={t.contents}>
             <SectionLabel style={{ padding: '6px 12px 0' }}>{t.contents}</SectionLabel>

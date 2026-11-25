@@ -37,7 +37,9 @@ The layout adapts by screen shape, not by device:
   Rights); 900px and up add a table-of-contents sidebar to the reader.
 - The iOS app's `MainViewController.swift` tells the page what WebKit does not: where the clock
   column ends (`--ios-status-bottom`) and where the fold is (`--ios-fold-*`, also sent as a
-  `wtp-geometry` event). Two-pane screens put the gap between panes on the fold.
+  `wtp-geometry` event). Two-pane screens put the gap between panes on the fold. While the
+  device is partly folded, like an open book, the reader puts its contents on one side of the
+  fold and the text on the other.
 
 To screenshot the simulator without tapping, Debug builds run the script in
 `WTP_DEBUG_SCRIPT` after each page load:
@@ -47,9 +49,10 @@ SIMCTL_CHILD_WTP_DEBUG_SCRIPT="document.querySelectorAll('.bottom-nav button')[3
 ```
 
 On iPhone Duo, take each screen separately: `xcrun simctl io <device> enumerate` lists the
-displays (front 1398x2034, inner 2007x2853), then
+displays (front 1398x2034, inner 2853x2007 once open), then
 `xcrun simctl io <device> screenshot --display=<UUID> out.png`. Opening the hinge needs
-DeviceHub (inside Xcode.app/Contents/Applications).
+DeviceHub (inside Xcode.app/Contents/Applications): Closed, Partially Open and Open are under
+the device. Debug builds log `WTP geometry` with the fold and clock values on every change.
 
 ## Project layout
 

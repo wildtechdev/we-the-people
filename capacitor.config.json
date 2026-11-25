@@ -3,7 +3,7 @@
   "appName": "We The People: Your Rights",
   "webDir": "out",
   "ios": {
-    "contentInset": "always",
+    "contentInset": "never",
     "backgroundColor": "#faf8f5",
     "preferredContentMode": "mobile",
     "allowsLinkPreview": false,

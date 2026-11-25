@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
-
 :root {
   --bg-primary: #faf8f5;
   --bg-secondary: #f3efe9;
@@ -12,7 +10,7 @@
   --bg-card-hover: #fffdfb;
   --text-primary: #1b2a4a;
   --text-secondary: #4a5568;
-  --text-tertiary: #8b96a9;
+  --text-tertiary: #66717f;
   --text-accent: #1b2a4a;
   --border: #e2ddd5;
   --border-light: #ede9e3;
@@ -31,6 +29,14 @@
   --gold-lighter: #fdf8ec;
   --gold-bg: #fffcf5;
   --white: #ffffff;
+  /* Text color for use on top of a filled navy/crimson/gold surface */
+  --on-navy: #ffffff;
+  --on-crimson: #ffffff;
+  --on-gold: #ffffff;
+  --gold-text: #8a6414;
+  --serif: var(--font-serif), 'Libre Baskerville', Georgia, serif;
+  --sans: var(--font-sans), 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: var(--font-mono), 'JetBrains Mono', ui-monospace, Menlo, monospace;
   --shadow-sm: 0 1px 3px rgba(27,42,74,0.04);
   --shadow-md: 0 4px 16px rgba(27,42,74,0.06);
   --shadow-lg: 0 8px 32px rgba(27,42,74,0.08);
@@ -49,7 +55,7 @@
   --bg-card-hover: #1f2b3d;
   --text-primary: #e8ecf4;
   --text-secondary: #94a3b8;
-  --text-tertiary: #5a6a80;
+  --text-tertiary: #8391a6;
   --text-accent: #93b4f5;
   --border: #253044;
   --border-light: #1e293b;
@@ -68,6 +74,10 @@
   --gold-lighter: #2a2515;
   --gold-bg: #1f1c10;
   --white: #1a2332;
+  --on-navy: #0f1623;
+  --on-crimson: #1a0d10;
+  --on-gold: #1f1c10;
+  --gold-text: #e8c55a;
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
   --shadow-md: 0 4px 16px rgba(0,0,0,0.25);
   --shadow-lg: 0 8px 32px rgba(0,0,0,0.3);
@@ -87,7 +97,7 @@ html {
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--sans);
   background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.7;
@@ -142,7 +152,7 @@ mark {
 /* Drop cap */
 .drop-cap::first-letter {
   float: left;
-  font-family: 'Libre Baskerville', Georgia, serif;
+  font-family: var(--serif);
   font-size: 3.8em;
   line-height: 0.8;
   padding-right: 12px;
@@ -156,7 +166,7 @@ mark {
   border-left: 3px solid var(--crimson);
   padding: 20px 24px;
   margin: 24px 0;
-  font-family: 'Libre Baskerville', Georgia, serif;
+  font-family: var(--serif);
   font-style: italic;
   font-size: 16px;
   line-height: 1.7;
@@ -234,7 +244,7 @@ mark {
   height: 32px;
   border-radius: 50%;
   background: var(--navy);
-  color: white;
+  color: var(--on-navy);
   font-size: 12px;
   font-weight: 700;
   flex-shrink: 0;
@@ -273,3 +283,36 @@ mark {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Respect the system "Reduce Motion" setting */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .fade-in-up { opacity: 1; transform: none; }
+  .stagger-in > * { opacity: 1; }
+}
+
+/* Visually hidden but available to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Brief highlight when a link jumps to a section */
+@keyframes flashTarget {
+  0% { box-shadow: 0 0 0 0 transparent; background: transparent; }
+  20% { box-shadow: 0 0 0 8px var(--gold-lighter); background: var(--gold-lighter); }
+  100% { box-shadow: 0 0 0 0 transparent; background: transparent; }
+}
+.flash-target { animation: flashTarget 1.8s ease-out; }
